@@ -54,6 +54,6 @@ RUN php artisan view:clear || true
 # Expose port (Railway uses PORT env variable)
 EXPOSE 8080
 
-# Use PHP built-in server directly to avoid Laravel ServeCommand type issue
-WORKDIR /app/public
-CMD php -S 0.0.0.0:${PORT:-8080} /app/public/index.php
+# Start PHP built-in server from app directory, serving public folder
+WORKDIR /app
+CMD php -S 0.0.0.0:${PORT:-8080} -t public public/index.php
