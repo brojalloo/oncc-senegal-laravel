@@ -54,5 +54,6 @@ RUN php artisan view:clear || true
 # Expose port (Railway uses PORT env variable)
 EXPOSE 8080
 
-# Start Laravel server with explicit port conversion
-CMD sh -c "php artisan serve --host=0.0.0.0 --port=$PORT"
+# Use PHP built-in server directly to avoid Laravel ServeCommand type issue
+WORKDIR /app/public
+CMD php -S 0.0.0.0:${PORT:-8080} /app/public/index.php
