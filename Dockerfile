@@ -1,5 +1,4 @@
-# Dockerfile for Laravel application
-FROM php:8.2-fpm
+FROM php:8.2-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -11,64 +10,49 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
-    nginx \
     nodejs \
-    npm
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    npm \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install Composer from official image
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /app
 
-# Copy application files
-COPY . /app
-
-# Create necessary directories
-RUN mkdir -p /var/log/nginx && mkdir -p /var/cache/nginx
+# Copy composer files first for better caching
+COPY composer.json composer.lock ./
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+RUN composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-reqs
+
+# Copy all application files
+COPY . .
+
+# Run composer scripts after copying all files
+RUN composer dump-autoload --optimize
 
 # Install Node dependencies and build assets
-RUN npm install && npm run build || true
+RUN npm install && (npm run build || true)
 
-# Set permissions
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
-RUN chmod -R 775 /app/storage /app/bootstrap/cache
+# Create storage directories and set permissions
+RUN mkdir -p storage/framework/cache/data \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-# Copy nginx configuration
-RUN echo 'server { \n\
-    listen 80; \n\
-    root /app/public; \n\
-    index index.php; \n\
-    location / { \n\
-        try_files $uri $uri/ /index.php?$query_string; \n\
-    } \n\
-    location ~ \.php$ { \n\
-        fastcgi_pass 127.0.0.1:9000; \n\
-        fastcgi_index index.php; \n\
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; \n\
-        include fastcgi_params; \n\
-    } \n\
-}' > /etc/nginx/sites-available/default
+# Cache Laravel config
+RUN php artisan config:clear || true
+RUN php artisan view:clear || true
 
-# Create start script
-RUN echo '#!/bin/bash \n\
-php artisan config:cache \n\
-php artisan route:cache || true \n\
-php artisan view:cache \n\
-php-fpm -D \n\
-nginx -g "daemon off;"' > /app/start.sh && chmod +x /app/start.sh
+# Expose port (Railway uses PORT env variable)
+EXPOSE 8080
 
-# Expose port
-EXPOSE 80
-
-# Start command
-CMD ["/app/start.sh"]
+# Start Laravel server
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
