@@ -21,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Fix pour MySQL < 5.7.7 et MariaDB < 10.2.2
-        Schema::defaultStringLength(191);
+        // Seulement si on n'est pas en train de cacher la config
+        if (!$this->app->runningInConsole() || !in_array('config:cache', $_SERVER['argv'] ?? [])) {
+            Schema::defaultStringLength(191);
+        }
     }
 }
