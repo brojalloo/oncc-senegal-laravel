@@ -8,7 +8,9 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^10.48",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "tijsverkoyen/css-to-inline-styles": "^2.2.6",
+        "symfony/css-selector": "^6.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
