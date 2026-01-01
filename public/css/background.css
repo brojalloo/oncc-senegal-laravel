@@ -1,0 +1,24 @@
+body {
+    background: url('/oncc-senegal/public/img/bg-senegal-smart.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: #eaf6fb;
+}
+
+/* Overlay plus opaque pour une meilleure lisibilité */
+.bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255,255,255,0.30); /* Augmenté à 0.30 */
+    z-index: 0;
+    pointer-events: none;
+}
+
+main, .container, .card, .footer-bg-full {
+    background: rgba(255,255,255,0.96); /* Plus opaque */
+    border-radius: 12px;
+    z-index: 1;
+}
