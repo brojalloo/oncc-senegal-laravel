@@ -1,0 +1,5 @@
+[phases.setup]
+nixpkgs = ['php84', 'php84Extensions.curl', 'php84Extensions.dom', 'php84Extensions.fileinfo', 'php84Extensions.filter', 'php84Extensions.hash', 'php84Extensions.mbstring', 'php84Extensions.openssl', 'php84Extensions.pcre', 'php84Extensions.pdo', 'php84Extensions.session', 'php84Extensions.tokenizer', 'php84Extensions.xml', 'php84Extensions.zip', 'nodejs_22', 'npm-9_x']
+
+[variables]
+PHP_VERSION = "8.4"
