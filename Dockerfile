@@ -51,9 +51,9 @@ RUN mkdir -p storage/framework/cache/data \
 RUN php artisan config:clear || true
 RUN php artisan view:clear || true
 
-# Expose port (Railway uses PORT env variable)
+# Expose port
 EXPOSE 8080
 
 # Start PHP built-in server from app directory, serving public folder
 WORKDIR /app
-CMD php -S 0.0.0.0:${PORT:-8080} -t public public/index.php
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public", "public/index.php"]
