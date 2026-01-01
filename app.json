@@ -1,0 +1,13 @@
+{
+  "engines": {
+    "php": "^8.2",
+    "node": "18.x"
+  },
+  "scripts": {
+    "build": [
+      "php artisan config:cache",
+      "php artisan route:cache",
+      "php artisan view:cache"
+    ]
+  }
+}

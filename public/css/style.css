@@ -1,0 +1,1241 @@
+/* Style moderne et professionnel pour ONCC-SN */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Palette moderne */
+    --primary-color: #0f766e;
+    --primary-light: #14b8a6;
+    --primary-dark: #0d5858;
+    --secondary-color: #0ea5e9;
+    --accent-color: #f59e0b;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --info-color: #3b82f6;
+    
+    /* Couleurs neutres modernes */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    
+    /* Variables pour le thème clair */
+    --bg-color: var(--gray-50);
+    --bg-secondary: #ffffff;
+    --text-color: var(--gray-800);
+    --text-muted: var(--gray-500);
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-hover-bg: rgba(255, 255, 255, 0.98);
+    --border-color: var(--gray-200);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --navbar-bg: var(--primary-color);
+    --navbar-text: #ffffff;
+    --input-bg: #ffffff;
+    --input-border: var(--gray-300);
+    --input-focus: var(--primary-color);
+    
+    /* Typographie */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    /* Espacements */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    /* Rayons de bordure */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease-in-out;
+    --transition-medium: 250ms ease-in-out;
+    --transition-slow: 400ms ease-in-out;
+}
+
+/* Mode sombre moderne */
+[data-theme="dark"] {
+    --bg-color: var(--gray-900);
+    --bg-secondary: var(--gray-800);
+    --text-color: var(--gray-100);
+    --text-muted: var(--gray-400);
+    --card-bg: rgba(31, 41, 55, 0.95);
+    --card-hover-bg: rgba(55, 65, 81, 0.95);
+    --border-color: var(--gray-700);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    --navbar-bg: var(--gray-800);
+    --navbar-text: var(--gray-100);
+    --input-bg: var(--gray-700);
+    --input-border: var(--gray-600);
+    --input-focus: var(--primary-light);
+}
+
+[data-theme="dark"] body {
+    background: 
+        /* Overlay sombre pour le mode nuit */
+        linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.8) 0%, 
+            rgba(31, 41, 55, 0.75) 25%,
+            rgba(55, 65, 81, 0.7) 50%,
+            rgba(17, 24, 39, 0.85) 75%,
+            rgba(17, 24, 39, 0.9) 100%),
+        /* Même image d'arrière-plan avec effet sombre */
+        url('../img/africa-sunset.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: var(--text-color);
+}
+
+/* Mode sombre pour chaque arrière-plan */
+[data-theme="dark"] body.bg-baobab {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.8) 0%, 
+            rgba(31, 41, 55, 0.75) 25%,
+            rgba(55, 65, 81, 0.7) 50%,
+            rgba(17, 24, 39, 0.85) 75%,
+            rgba(17, 24, 39, 0.9) 100%),
+        url('../img/senegal-baobab.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+[data-theme="dark"] body.bg-sunset {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.8) 0%, 
+            rgba(31, 41, 55, 0.75) 25%,
+            rgba(55, 65, 81, 0.7) 50%,
+            rgba(17, 24, 39, 0.85) 75%,
+            rgba(17, 24, 39, 0.9) 100%),
+        url('../img/africa-sunset.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+[data-theme="dark"] body.bg-drought {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.8) 0%, 
+            rgba(31, 41, 55, 0.75) 25%,
+            rgba(55, 65, 81, 0.7) 50%,
+            rgba(17, 24, 39, 0.85) 75%,
+            rgba(17, 24, 39, 0.9) 100%),
+        url('../img/drought-climate.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+[data-theme="dark"] body.bg-agriculture {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.8) 0%, 
+            rgba(31, 41, 55, 0.75) 25%,
+            rgba(55, 65, 81, 0.7) 50%,
+            rgba(17, 24, 39, 0.85) 75%,
+            rgba(17, 24, 39, 0.9) 100%),
+        url('../img/agriculture-field.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+[data-theme="dark"] body.bg-nature {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.8) 0%, 
+            rgba(31, 41, 55, 0.75) 25%,
+            rgba(55, 65, 81, 0.7) 50%,
+            rgba(17, 24, 39, 0.85) 75%,
+            rgba(17, 24, 39, 0.9) 100%),
+        url('../img/nature-landscape.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* Overlay spécial pour le mode sombre */
+[data-theme="dark"] body::before {
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(15, 118, 110, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(17, 24, 39, 0.1) 100%);
+}
+
+/* Éléments de texte en mode sombre */
+[data-theme="dark"] .text-dark {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, 
+[data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] p, [data-theme="dark"] div, [data-theme="dark"] span {
+    color: var(--text-color);
+}
+
+
+/* Styles de base modernes */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.6;
+    background: 
+        /* Overlay dégradé pour améliorer la lisibilité */
+        linear-gradient(135deg, 
+            rgba(15, 118, 110, 0.15) 0%, 
+            rgba(20, 184, 166, 0.1) 25%,
+            rgba(255, 255, 255, 0.75) 50%,
+            rgba(249, 250, 251, 0.85) 75%,
+            rgba(255, 255, 255, 0.9) 100%),
+        /* Image d'arrière-plan - Coucher de soleil africain */
+        url('../img/africa-sunset.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: var(--text-color);
+    transition: all var(--transition-medium);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Classes pour changer l'arrière-plan */
+body.bg-baobab {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(15, 118, 110, 0.15) 0%, 
+            rgba(20, 184, 166, 0.1) 25%,
+            rgba(255, 255, 255, 0.75) 50%,
+            rgba(249, 250, 251, 0.85) 75%,
+            rgba(255, 255, 255, 0.9) 100%),
+        url('../img/senegal-baobab.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+body.bg-sunset {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(15, 118, 110, 0.15) 0%, 
+            rgba(20, 184, 166, 0.1) 25%,
+            rgba(255, 255, 255, 0.75) 50%,
+            rgba(249, 250, 251, 0.85) 75%,
+            rgba(255, 255, 255, 0.9) 100%),
+        url('../img/africa-sunset.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+body.bg-drought {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(15, 118, 110, 0.15) 0%, 
+            rgba(20, 184, 166, 0.1) 25%,
+            rgba(255, 255, 255, 0.75) 50%,
+            rgba(249, 250, 251, 0.85) 75%,
+            rgba(255, 255, 255, 0.9) 100%),
+        url('../img/drought-climate.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+body.bg-agriculture {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(15, 118, 110, 0.15) 0%, 
+            rgba(20, 184, 166, 0.1) 25%,
+            rgba(255, 255, 255, 0.75) 50%,
+            rgba(249, 250, 251, 0.85) 75%,
+            rgba(255, 255, 255, 0.9) 100%),
+        url('../img/agriculture-field.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+body.bg-nature {
+    background-image: 
+        linear-gradient(135deg, 
+            rgba(15, 118, 110, 0.15) 0%, 
+            rgba(20, 184, 166, 0.1) 25%,
+            rgba(255, 255, 255, 0.75) 50%,
+            rgba(249, 250, 251, 0.85) 75%,
+            rgba(255, 255, 255, 0.9) 100%),
+        url('../img/nature-landscape.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* Effet de parallaxe subtil */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(15, 118, 110, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.03) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Typographie moderne */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-md);
+}
+
+h1 { font-size: 2.5rem; font-weight: 700; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1.125rem; }
+
+p {
+    color: var(--text-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.lead {
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+/* Cartes modernes avec design glass-morphism */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    color: var(--text-color);
+    transition: all var(--transition-medium);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Amélioration du verre pour une meilleure visibilité */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.02);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Bordure gradient animée */
+.card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light), var(--secondary-color));
+    opacity: 0;
+    transition: opacity var(--transition-medium);
+}
+
+.card:hover {
+    background: var(--card-hover-bg);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+}
+
+.card:hover::after {
+    opacity: 1;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    border-bottom: none;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(30px, -30px);
+}
+
+.card-header h5, .card-header h6 {
+    color: white;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: var(--spacing-xl);
+    color: var(--text-color);
+}
+
+.card-title {
+    color: var(--text-color);
+    font-family: var(--font-display);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+}
+
+.card-text {
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.alert {
+    background-color: var(--card-bg);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.table {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    backdrop-filter: blur(10px);
+    color: var(--text-color);
+}
+
+/* Bouton de basculement de thème */
+#theme-toggle {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+#theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* Mode sombre pour les éléments spécifiques */
+[data-theme="dark"] .navbar-dark {
+    background-color: rgba(10, 46, 56, 0.95) !important;
+}
+
+[data-theme="dark"] .text-dark {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .bg-light {
+    background-color: rgba(60, 60, 60, 0.8) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .border {
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .form-control {
+    background-color: rgba(60, 60, 60, 0.8);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .form-control:focus {
+    background-color: rgba(60, 60, 60, 0.9);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.2rem rgba(30, 111, 92, 0.25);
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+
+.footer-bg-full {
+    margin-top: auto !important;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    background-color: #212529 !important;
+    box-shadow: 0 -1px 4px rgba(0,0,0,0.04);
+}
+
+.footer-bg-full .bg-dark {
+    background: none !important;
+}
+
+/* Navigation */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-brand i {
+    color: var(--accent-color);
+}
+
+/* Cartes */
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+    font-weight: 600;
+}
+
+/* Boutons */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+/* Tableaux */
+.table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(30, 111, 92, 0.05);
+}
+
+/* Formulaire */
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(30, 111, 92, 0.25);
+}
+
+/* Carte Leaflet */
+#map {
+    border-radius: 8px;
+    z-index: 1;
+}
+
+.leaflet-popup-content {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Badges */
+.badge {
+    border-radius: 20px;
+    padding: 0.35em 0.65em;
+    font-weight: 500;
+}
+
+/* Alertes */
+.alert {
+    border-radius: 8px;
+    border: none;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* ========================================
+   BACKGROUND SELECTOR STYLES
+   ======================================== */
+
+.bg-selector .dropdown-menu {
+    min-width: 200px;
+    padding: 0.5rem;
+}
+
+.bg-option {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.bg-option:hover {
+    background-color: rgba(46, 125, 50, 0.1);
+}
+
+.bg-option.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.bg-option.active i {
+    color: white !important;
+}
+
+.bg-option i {
+    width: 20px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+/* Animation de transition pour les arrière-plans */
+body {
+    transition: background-image 0.5s ease-in-out;
+}
+
+/* Style pour l'icône du sélecteur */
+.bg-selector .btn {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.bg-selector .btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+[data-theme="dark"] .bg-selector .btn {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .bg-selector .btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Responsive */
+@media (max-width: 768px) {
+    .display-6 {
+        font-size: 1.5rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Animation de chargement */
+.spinner-border {
+    color: var(--primary-color);
+}
+
+/* Personnalisation des indicateurs */
+.indicator-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.indicator-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+/* Navigation moderne */
+.navbar {
+    background: var(--navbar-bg) !important;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow: var(--shadow-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-md) 0;
+    transition: all var(--transition-medium);
+    position: relative;
+}
+
+/* Amélioration de la lisibilité de la navbar sur l'image */
+.navbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 118, 110, 0.05);
+    pointer-events: none;
+}
+
+.navbar-brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--navbar-text) !important;
+}
+
+.navbar-nav .nav-link {
+    color: var(--navbar-text) !important;
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm) !important;
+    margin: 0 1px;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    position: relative;
+    font-size: 0.9rem;
+}
+
+.navbar-nav .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+.navbar-nav .nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Boutons modernes */
+.btn {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border: none;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left var(--transition-slow);
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--secondary-color), #38bdf8);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success-color), #34d399);
+    color: white;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning-color), #fbbf24);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color), #f87171);
+    color: white;
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-sm {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.875rem;
+}
+
+.btn-lg {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1.125rem;
+}
+
+/* Formulaires modernes */
+.form-control, .form-select {
+    background: var(--input-bg);
+    border: 2px solid var(--input-border);
+    border-radius: var(--radius-md);
+    color: var(--text-color);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+}
+
+.form-control:focus, .form-select:focus {
+    background: var(--input-bg);
+    border-color: var(--input-focus);
+    color: var(--text-color);
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-label {
+    color: var(--text-color);
+    font-weight: 500;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Badges et alertes modernes */
+.badge {
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+}
+
+.alert {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    color: var(--text-color);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Animations et micro-interactions */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.pulse-on-hover:hover {
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* Footer */
+.footer-bg-full {
+    width: 100%;
+    left: 0;
+    right: 0;
+    position: relative;
+    margin-top: auto;
+    background: linear-gradient(135deg, #1a1a2e, #16213e) !important;
+    box-sizing: border-box;
+    padding: var(--spacing-2xl) 0 var(--spacing-xl);
+}
+
+.footer-bg-full .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.footer-bg-full,
+.footer-bg-full * {
+    color: #ffffff !important;
+}
+
+.footer-bg-full h5,
+.footer-bg-full h6 {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.footer-bg-full p,
+.footer-bg-full .small {
+    color: #e0e0e0 !important;
+}
+
+.footer-bg-full a {
+    color: #90caf9 !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-bg-full a:hover {
+    color: #ffffff !important;
+    text-decoration: underline;
+}
+
+.footer-bg-full .text-white-50 {
+    color: #b0b0b0 !important;
+}
+
+.footer-bg-full .text-white-50:hover {
+    color: #ffffff !important;
+}
+
+.footer-bg-full hr {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    opacity: 0.5;
+}
+
+.footer-bg-full .bg-dark {
+    background: transparent !important;
+}
+
+/* Scrollbar personnalisée moderne */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+}
+
+/* Cartes statistiques spéciales */
+.card.bg-primary, .card.bg-success, .card.bg-warning, .card.bg-danger, .card.bg-info {
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.card.bg-primary::after, .card.bg-success::after, .card.bg-warning::after, 
+.card.bg-danger::after, .card.bg-info::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(30px, -30px);
+}
+
+.card.bg-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light)) !important;
+}
+
+.card.bg-success {
+    background: linear-gradient(135deg, var(--success-color), #34d399) !important;
+}
+
+.card.bg-warning {
+    background: linear-gradient(135deg, var(--warning-color), #fbbf24) !important;
+}
+
+.card.bg-danger {
+    background: linear-gradient(135deg, var(--danger-color), #f87171) !important;
+}
+
+.card.bg-info {
+    background: linear-gradient(135deg, var(--info-color), #60a5fa) !important;
+}
+
+/* Tables modernes */
+.table {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.table thead th {
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: var(--spacing-lg);
+}
+
+.table tbody tr {
+    transition: all var(--transition-fast);
+}
+
+.table tbody tr:hover {
+    background: var(--card-hover-bg);
+    transform: scale(1.01);
+}
+
+.table tbody td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+/* Graphiques et visualisations */
+.chart-container {
+    position: relative;
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Indicateurs de statut améliorés */
+.badge.bg-success {
+    background: linear-gradient(135deg, var(--success-color), #34d399) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, var(--danger-color), #f87171) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, var(--warning-color), #fbbf24) !important;
+    color: var(--gray-800) !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, var(--info-color), #60a5fa) !important;
+}
+
+.badge.bg-secondary {
+    background: linear-gradient(135deg, var(--gray-500), var(--gray-400)) !important;
+}
+
+/* Responsive et media queries */
+@media (max-width: 768px) {
+    /* Optimisation mobile pour l'arrière-plan */
+    body {
+        background-attachment: scroll; /* Meilleure performance sur mobile */
+    }
+    
+    .card:hover {
+        transform: none;
+    }
+    
+    .btn:hover {
+        transform: none;
+    }
+    
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+    
+    .card-body {
+        padding: var(--spacing-lg);
+    }
+    
+    .navbar-nav .nav-link {
+        margin: var(--spacing-xs) 0;
+    }
+    
+    /* Amélioration du blur sur mobile */
+    .card {
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+}
+
+/* Très grands écrans */
+@media (min-width: 1920px) {
+    body {
+        background-size: cover;
+        background-position: center center;
+    }
+}
+
+/* Mode impression - supprimer l'arrière-plan */
+@media print {
+    body {
+        background: white !important;
+    }
+    
+    body::before {
+        display: none !important;
+    }
+}
