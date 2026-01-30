@@ -1,0 +1,28 @@
+[nixpacks]
+providers = ["php", "node"]
+
+[phases.setup]
+nixPkgs = ["php82", "php82Extensions.pdo", "php82Extensions.pdo_sqlite", "php82Extensions.sqlite3", "php82Extensions.mbstring", "php82Extensions.xml", "php82Extensions.curl", "php82Extensions.openssl", "php82Extensions.tokenizer", "php82Extensions.fileinfo", "nodejs-18_x", "npm-9_x"]
+
+[phases.install]
+cmds = [
+    "composer install --no-dev --optimize-autoloader",
+    "npm install"
+]
+
+[phases.build]
+cmds = [
+    "npm run build",
+    "mkdir -p storage/framework/{sessions,views,cache}",
+    "mkdir -p storage/logs",
+    "mkdir -p bootstrap/cache",
+    "touch database/database.sqlite",
+    "php artisan config:cache",
+    "php artisan route:cache", 
+    "php artisan view:cache",
+    "php artisan migrate --force",
+    "php artisan db:seed --force"
+]
+
+[start]
+cmd = "php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
