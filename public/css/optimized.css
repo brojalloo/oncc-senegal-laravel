@@ -1,0 +1,88 @@
+/* ==================================
+   ONCC SÉNÉGAL - CSS OPTIMISÉ
+   ================================== */
+
+/* CSS optimisé avec variables et réduction de redondance */
+:root {
+    --primary: #2ecc71;
+    --primary-dark: #27ae60;
+    --secondary: #3498db;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+    --success: #2ecc71;
+    --dark: #2c3e50;
+    --light: #ecf0f1;
+    --shadow: 0 5px 15px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 25px rgba(0,0,0,0.15);
+    --transition: all 0.3s ease;
+    --border-radius: 10px;
+    --navbar-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --footer-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+/* Optimisation des animations avec will-change */
+.card, .btn, .nav-link, .social-link {
+    will-change: transform, box-shadow;
+}
+
+/* Classes utilitaires réutilisables */
+.gradient-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+.gradient-navbar { background: var(--navbar-gradient); }
+.gradient-footer { background: var(--footer-gradient); }
+.border-radius { border-radius: var(--border-radius); }
+.shadow { box-shadow: var(--shadow); }
+.shadow-hover { box-shadow: var(--shadow-hover); }
+.transition { transition: var(--transition); }
+
+/* Optimisation des fonts avec font-display */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body { 
+    font-family: 'Inter', sans-serif;
+    font-display: swap;
+}
+
+/* Optimisation des images avec object-fit */
+img { 
+    max-width: 100%; 
+    height: auto; 
+    object-fit: cover; 
+}
+
+/* Préchargement des ressources critiques */
+.preload-critical {
+    content: url('https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2070');
+    display: none;
+}
+
+/* Optimisation GPU avec transform3d */
+.gpu-optimized {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Débounce des animations hover */
+.hover-debounce {
+    transition-delay: 50ms;
+}
+
+/* Lazy loading pour les éléments non critiques */
+.lazy-element {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.lazy-element.loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Compression des styles responsive avec mixins */
+@media (max-width: 767.98px) {
+    .mobile-hide { display: none !important; }
+    .mobile-full { width: 100% !important; }
+    .mobile-center { text-align: center !important; }
+    .mobile-padding { padding: 15px !important; }
+}
