@@ -48,18 +48,34 @@ RUN mkdir -p storage/framework/cache/data \
     storage/logs \
     bootstrap/cache \
     database \
-    && chmod -R 775 storage bootstrap/cache database
+    && chmod -R 777 storage bootstrap/cache database
 
 # Create SQLite database file
-RUN touch database/database.sqlite && chmod 664 database/database.sqlite
+RUN touch database/database.sqlite && chmod 666 database/database.sqlite
 
-# Copy and make entrypoint executable
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+# Create a startup script inline to avoid CRLF issues
+RUN echo '#!/bin/sh' > /start.sh && \
+    echo 'set -e' >> /start.sh && \
+    echo 'cd /app' >> /start.sh && \
+    echo 'echo "APP_NAME=ONCC Senegal" > .env' >> /start.sh && \
+    echo 'echo "APP_ENV=${APP_ENV:-production}" >> .env' >> /start.sh && \
+    echo 'echo "APP_KEY=${APP_KEY}" >> .env' >> /start.sh && \
+    echo 'echo "APP_DEBUG=${APP_DEBUG:-false}" >> .env' >> /start.sh && \
+    echo 'echo "APP_URL=${APP_URL:-http://localhost}" >> .env' >> /start.sh && \
+    echo 'echo "DB_CONNECTION=sqlite" >> .env' >> /start.sh && \
+    echo 'echo "DB_DATABASE=/app/database/database.sqlite" >> .env' >> /start.sh && \
+    echo 'echo "SESSION_DRIVER=cookie" >> .env' >> /start.sh && \
+    echo 'echo "CACHE_STORE=file" >> .env' >> /start.sh && \
+    echo 'echo "QUEUE_CONNECTION=sync" >> .env' >> /start.sh && \
+    echo 'php artisan config:clear' >> /start.sh && \
+    echo 'php artisan migrate --force || true' >> /start.sh && \
+    echo 'php artisan db:seed --force || true' >> /start.sh && \
+    echo 'echo "Starting server on port ${PORT:-8080}"' >> /start.sh && \
+    echo 'exec php -S 0.0.0.0:${PORT:-8080} -t public public/index.php' >> /start.sh && \
+    chmod +x /start.sh
 
-# Expose port (Railway uses $PORT)
+# Expose port
 EXPOSE 8080
 
-# Start with entrypoint script
 WORKDIR /app
-CMD ["/docker-entrypoint.sh"]
+CMD ["/start.sh"]
