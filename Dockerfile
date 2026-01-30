@@ -53,9 +53,13 @@ RUN mkdir -p storage/framework/cache/data \
 # Create SQLite database file
 RUN touch database/database.sqlite && chmod 664 database/database.sqlite
 
+# Copy and make entrypoint executable
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 # Expose port (Railway uses $PORT)
 EXPOSE 8080
 
-# Start script that runs migrations and starts server
+# Start with entrypoint script
 WORKDIR /app
-CMD php artisan migrate --force && php artisan db:seed --force && php -S 0.0.0.0:${PORT:-8080} -t public public/index.php
+CMD ["/docker-entrypoint.sh"]
