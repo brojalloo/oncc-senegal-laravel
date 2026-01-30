@@ -69,7 +69,7 @@ jobs:
         php artisan view:cache
 
     - name: Run Tests
-      run: php artisan test --parallel
+      run: php artisan test
 
   deploy:
     needs: test
