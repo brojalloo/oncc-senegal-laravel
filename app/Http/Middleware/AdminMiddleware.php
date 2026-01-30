@@ -40,7 +40,7 @@ class AdminMiddleware
         }
 
         // Vérifier si le compte est actif
-        if (!auth()->user()->is_active) {
+        if (auth()->user()->statut !== 'actif') {
             Log::warning('Tentative d\'accès avec compte désactivé', [
                 'user_id' => auth()->id(),
                 'ip' => $request->ip(),
