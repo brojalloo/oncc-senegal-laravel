@@ -8,15 +8,17 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    libsqlite3-dev \
     zip \
     unzip \
     nodejs \
     npm \
+    sqlite3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+# Install PHP extensions (SQLite instead of MySQL)
+RUN docker-php-ext-install pdo pdo_sqlite mbstring exif pcntl bcmath gd zip
 
 # Install Composer from official image
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -45,15 +47,15 @@ RUN mkdir -p storage/framework/cache/data \
     storage/framework/views \
     storage/logs \
     bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+    database \
+    && chmod -R 775 storage bootstrap/cache database
 
-# Cache Laravel config
-RUN php artisan config:clear || true
-RUN php artisan view:clear || true
+# Create SQLite database file
+RUN touch database/database.sqlite && chmod 664 database/database.sqlite
 
-# Expose port
+# Expose port (Railway uses $PORT)
 EXPOSE 8080
 
-# Start PHP built-in server from app directory, serving public folder
+# Start script that runs migrations and starts server
 WORKDIR /app
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public", "public/index.php"]
+CMD php artisan migrate --force && php artisan db:seed --force && php -S 0.0.0.0:${PORT:-8080} -t public public/index.php
