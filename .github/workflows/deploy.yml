@@ -6,8 +6,12 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  COMPOSER_PROCESS_TIMEOUT: 0
+  COMPOSER_NO_INTERACTION: 1
+
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,19 +21,40 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
-        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, curl, openssl, tokenizer, fileinfo
+        coverage: none
+        tools: composer:v2
+
+    - name: Validate composer.json
+      run: composer validate --strict
+
+    - name: Get Composer Cache Directory
+      id: composer-cache
+      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
 
     - name: Copy .env
       run: cp .env.example .env
 
     - name: Install Dependencies
-      run: composer install --optimize-autoloader --no-dev
+      run: composer install --prefer-dist --no-progress --optimize-autoloader
 
     - name: Generate Application Key
       run: php artisan key:generate
 
     - name: Create SQLite Database
-      run: touch database/database.sqlite
+      run: |
+        mkdir -p database
+        touch database/database.sqlite
+
+    - name: Directory Permissions
+      run: chmod -R 775 storage bootstrap/cache
 
     - name: Run Database Migrations
       run: php artisan migrate --force
@@ -37,14 +62,37 @@ jobs:
     - name: Run Database Seeders
       run: php artisan db:seed --force
 
-    - name: Clear Caches
+    - name: Cache Config and Routes
       run: |
         php artisan config:cache
         php artisan route:cache
         php artisan view:cache
 
     - name: Run Tests
-      run: php artisan test
+      run: php artisan test --parallel
 
-    # Deploy to your hosting service here
-    # Example for Railway, Heroku, etc.
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, curl, openssl
+        tools: composer:v2
+
+    - name: Install Dependencies (Production)
+      run: composer install --prefer-dist --no-dev --no-progress --optimize-autoloader
+
+    - name: Build Assets
+      run: |
+        npm ci
+        npm run build
+
+    - name: Deploy Ready
+      run: echo "✅ Application is ready for deployment!"
