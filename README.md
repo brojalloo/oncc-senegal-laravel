@@ -1,59 +1,180 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌍 ONCC Sénégal - Observatoire National sur les Changements Climatiques
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-10.48-red?style=for-the-badge&logo=laravel)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777bb4?style=for-the-badge&logo=php)
+![SQLite](https://img.shields.io/badge/SQLite-003b57?style=for-the-badge&logo=sqlite)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-## About Laravel
+## 📋 À propos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+L'**Observatoire National sur les Changements Climatiques du Sénégal (ONCC-SN)** est une plateforme web développée avec Laravel pour la collecte, l'analyse et la visualisation des données climatiques et économiques du Sénégal.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Fonctionnalités
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🔐 **Système d'authentification complet**
+- Inscription/Connexion sécurisée
+- Vérification d'email
+- Réinitialisation de mot de passe
+- Gestion des rôles utilisateurs (Admin, Chercheur, Collectivité, Public)
 
-## Learning Laravel
+### 📊 **Gestion des données**
+- **Données climatiques** : Température, précipitations, humidité, vent
+- **Données économiques** : Impact économique par secteur
+- **Validation des données** par les administrateurs
+- **Alertes** météorologiques automatisées
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 🗺️ **Cartographie interactive**
+- Visualisation géographique des données
+- Intégration des 14 régions du Sénégal
+- Cartes thématiques par indicateur
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 📈 **Tableau de bord et analyses**
+- Statistiques en temps réel
+- Graphiques de tendances
+- Rapports automatisés
+- Export des données
 
-## Laravel Sponsors
+### ⚙️ **Administration**
+- Gestion des utilisateurs
+- Logs système
+- Configuration email
+- Validation des données
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🚀 Installation
 
-### Premium Partners
+### Prérequis
+- PHP 8.2+
+- Composer
+- Node.js & NPM
+- SQLite
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Étapes d'installation
 
-## Contributing
+1. **Cloner le repository**
+```bash
+git clone https://github.com/brojalloo/oncc-senegal-laravel.git
+cd oncc-senegal-laravel
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. **Installer les dépendances**
+```bash
+composer install
+npm install
+```
 
-## Code of Conduct
+3. **Configuration environnement**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. **Base de données**
+```bash
+php artisan migrate
+php artisan db:seed
+```
 
-## Security Vulnerabilities
+5. **Compiler les assets**
+```bash
+npm run build
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. **Lancer le serveur**
+```bash
+php artisan serve
+```
 
-## License
+## 👥 Comptes de test
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Après le seeding, vous pouvez utiliser ces comptes :
+
+| Rôle | Email | Mot de passe |
+|------|-------|--------------|
+| **Admin** | admin@oncc-sn.com | Admin@2026 |
+| **Chercheur** | chercheur@oncc-sn.com | Chercheur@2026 |
+| **Collectivité** | collectivite@oncc-sn.com | Collectivite@2026 |
+| **Public** | public@oncc-sn.com | Public@2026 |
+
+## 📁 Structure du projet
+
+```
+├── app/
+│   ├── Http/Controllers/     # Contrôleurs
+│   ├── Models/              # Modèles Eloquent
+│   ├── Mail/                # Classes de mail
+│   └── Http/Middleware/     # Middlewares
+├── database/
+│   ├── migrations/          # Migrations
+│   └── seeders/            # Seeders
+├── resources/
+│   ├── views/              # Vues Blade
+│   ├── css/                # Styles CSS
+│   └── js/                 # Scripts JavaScript
+└── public/
+    ├── css/                # Assets CSS publics
+    ├── js/                 # Assets JS publics
+    └── img/                # Images
+```
+
+## 🌟 Technologies utilisées
+
+- **Backend** : Laravel 10.48, PHP 8.2+
+- **Base de données** : SQLite
+- **Frontend** : Bootstrap 5.3, JavaScript ES6
+- **Cartes** : Leaflet.js
+- **Build** : Vite, TailwindCSS 4.0
+- **Email** : Laravel Mail
+
+## 📧 Configuration Email
+
+Pour activer l'envoi d'emails, configurez dans `.env` :
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=votre-email@gmail.com
+MAIL_PASSWORD=votre-mot-de-passe-app
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=votre-email@gmail.com
+MAIL_FROM_NAME="ONCC Sénégal"
+```
+
+## 🛡️ Sécurité
+
+- Protection CSRF sur tous les formulaires
+- Validation des données côté serveur
+- Hachage sécurisé des mots de passe
+- Middleware d'autorisation
+- Logging des tentatives d'accès
+
+## 📝 Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## 👨‍💻 Auteur
+
+**ONCC Sénégal Development Team**
+- GitHub: [@brojalloo](https://github.com/brojalloo)
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! Pour contribuer :
+
+1. Fork le projet
+2. Créez votre branche feature (`git checkout -b feature/AmazingFeature`)
+3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
+4. Push vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrez une Pull Request
+
+## 📞 Support
+
+Pour toute question ou support :
+- Créer une [issue](https://github.com/brojalloo/oncc-senegal-laravel/issues)
+- Email : support@oncc-senegal.org
+
+---
+
+<div align="center">
+  <strong>🌍 Pour un Sénégal résilient face aux changements climatiques 🌱</strong>
+</div>
