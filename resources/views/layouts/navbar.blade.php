@@ -6,6 +6,11 @@
             </div>
             <span class="ms-2 fw-bold">ONCC Sénégal</span>
         </a>
+        @auth
+        <button class="btn btn-outline-light me-2 d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+        @endauth
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>

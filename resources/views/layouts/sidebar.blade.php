@@ -1,5 +1,8 @@
-<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" data-bs-parent="#sidebarContainer">
     <div class="position-sticky pt-3">
+        <div class="d-md-none text-end p-2">
+            <button type="button" class="btn-close" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false"></button>
+        </div>
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
