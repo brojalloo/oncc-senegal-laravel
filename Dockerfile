@@ -55,23 +55,18 @@ RUN touch database/database.sqlite && chmod 666 database/database.sqlite
 
 # Create a startup script inline to avoid CRLF issues
 RUN echo '#!/bin/sh' > /start.sh && \
-    echo 'set -e' >> /start.sh && \
     echo 'cd /app' >> /start.sh && \
-    echo 'echo "APP_NAME=ONCC Senegal" > .env' >> /start.sh && \
-    echo 'echo "APP_ENV=${APP_ENV:-production}" >> .env' >> /start.sh && \
+    echo 'echo "APP_NAME=ONCC" > .env' >> /start.sh && \
+    echo 'echo "APP_ENV=production" >> .env' >> /start.sh && \
     echo 'echo "APP_KEY=${APP_KEY}" >> .env' >> /start.sh && \
-    echo 'echo "APP_DEBUG=${APP_DEBUG:-false}" >> .env' >> /start.sh && \
-    echo 'echo "APP_URL=${APP_URL:-http://localhost}" >> .env' >> /start.sh && \
+    echo 'echo "APP_DEBUG=true" >> .env' >> /start.sh && \
     echo 'echo "DB_CONNECTION=sqlite" >> .env' >> /start.sh && \
     echo 'echo "DB_DATABASE=/app/database/database.sqlite" >> .env' >> /start.sh && \
     echo 'echo "SESSION_DRIVER=cookie" >> .env' >> /start.sh && \
     echo 'echo "CACHE_STORE=file" >> .env' >> /start.sh && \
-    echo 'echo "QUEUE_CONNECTION=sync" >> .env' >> /start.sh && \
-    echo 'php artisan config:clear' >> /start.sh && \
-    echo 'php artisan migrate --force || true' >> /start.sh && \
-    echo 'php artisan db:seed --force || true' >> /start.sh && \
-    echo 'echo "Starting server on port ${PORT:-8080}"' >> /start.sh && \
-    echo 'exec php -S 0.0.0.0:${PORT:-8080} -t public public/index.php' >> /start.sh && \
+    echo 'php artisan migrate --force 2>&1 || true' >> /start.sh && \
+    echo 'php artisan db:seed --force 2>&1 || true' >> /start.sh && \
+    echo 'exec php -S 0.0.0.0:${PORT} -t public' >> /start.sh && \
     chmod +x /start.sh
 
 # Expose port
