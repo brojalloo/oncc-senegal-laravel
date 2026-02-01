@@ -301,9 +301,9 @@ html {
 
 /* Amélioration de la lisibilité */
 body {
-    font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 /* Correction du z-index pour le dropdown */
