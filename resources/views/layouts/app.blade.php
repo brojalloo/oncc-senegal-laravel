@@ -28,6 +28,9 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{{ asset('css/premium-design.css') }}" media="print" onload="this.media='all'">
     
+    <!-- Smooth Animations - Override les animations brusques -->
+    <link rel="stylesheet" href="{{ asset('css/smooth-animations.css') }}">
+    
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     
