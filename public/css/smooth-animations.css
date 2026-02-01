@@ -1,0 +1,409 @@
+/* ===== ANIMATIONS DOUCES - ONCC SÉNÉGAL ===== */
+/* Corrections pour des animations plus fluides et moins brusques */
+
+/* ===== Variables pour des transitions douces ===== */
+:root {
+    --transition-fast: 0.2s ease-out;
+    --transition-normal: 0.3s ease-out;
+    --transition-slow: 0.5s ease-out;
+    --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ===== Désactiver les animations pour les utilisateurs qui préfèrent moins de mouvement ===== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== Override des animations trop brusques ===== */
+
+/* Cartes - animations plus douces */
+.premium-card,
+.stat-card,
+.card {
+    animation: none !important;
+    opacity: 1 !important;
+    transition: transform var(--transition-smooth), 
+                box-shadow var(--transition-smooth),
+                background var(--transition-normal) !important;
+}
+
+/* Animation d'entrée douce pour les cartes (optionnel) */
+.premium-card,
+.stat-card {
+    animation: gentleCardEntry 0.6s ease-out forwards !important;
+}
+
+@keyframes gentleCardEntry {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover sur les cartes - plus subtil */
+.premium-card:hover,
+.stat-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Désactiver le scale sur hover qui peut être trop brusque */
+.stat-card:hover {
+    transform: translateY(-4px) !important;
+}
+
+/* Icon rotation plus douce */
+.stat-card:hover .stat-icon {
+    transform: rotate(-5deg) scale(1.05) !important;
+    transition: transform var(--transition-smooth) !important;
+}
+
+/* ===== Navbar - transitions plus douces ===== */
+.modern-navbar .nav-link {
+    transition: background var(--transition-fast), 
+                transform var(--transition-fast),
+                color var(--transition-fast) !important;
+}
+
+.modern-navbar .nav-link:hover {
+    transform: translateY(-1px) !important;
+}
+
+.modern-navbar .navbar-brand:hover {
+    transform: translateX(3px) !important;
+}
+
+/* Désactiver l'animation pulse infinie de la navbar */
+.modern-navbar .navbar-logo {
+    animation: none !important;
+}
+
+/* ===== Boutons - transitions subtiles ===== */
+.btn {
+    transition: all var(--transition-fast) !important;
+}
+
+.btn:hover {
+    transform: translateY(-1px) !important;
+}
+
+.btn:active {
+    transform: translateY(0) !important;
+}
+
+/* ===== Dropdown - apparition douce ===== */
+.dropdown-menu {
+    animation: gentleDropdown 0.2s ease-out forwards !important;
+    transform-origin: top center;
+}
+
+@keyframes gentleDropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modern-dropdown .dropdown-item:hover {
+    transform: translateX(3px) !important;
+    transition: all var(--transition-fast) !important;
+}
+
+/* ===== Liens - soulignement doux ===== */
+a {
+    transition: color var(--transition-fast) !important;
+}
+
+.modern-navbar .nav-link::after {
+    transition: width var(--transition-normal) !important;
+}
+
+/* ===== Alertes - animation de fermeture douce ===== */
+.alert {
+    transition: opacity var(--transition-normal), 
+                transform var(--transition-normal) !important;
+}
+
+.alert.fade {
+    transition: opacity var(--transition-slow) !important;
+}
+
+/* ===== Sidebar - transition fluide ===== */
+.sidebar {
+    transition: transform var(--transition-smooth) !important;
+}
+
+.sidebar-overlay {
+    transition: opacity var(--transition-normal) !important;
+}
+
+/* ===== Tables - hover subtil ===== */
+.premium-table tbody tr {
+    transition: background var(--transition-fast) !important;
+}
+
+.premium-table tbody tr:hover {
+    background: rgba(15, 118, 110, 0.04) !important;
+}
+
+/* ===== Forms - focus doux ===== */
+.form-control,
+.form-select {
+    transition: border-color var(--transition-fast), 
+                box-shadow var(--transition-fast) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1) !important;
+}
+
+/* ===== Page Header - sans animation excessive ===== */
+.page-header {
+    animation: none !important;
+}
+
+.page-header::before,
+.page-header::after {
+    animation: none !important;
+}
+
+/* ===== Modal - transition douce ===== */
+.modal.fade .modal-dialog {
+    transition: transform var(--transition-smooth) !important;
+}
+
+.modal-backdrop {
+    transition: opacity var(--transition-normal) !important;
+}
+
+/* ===== Charts - animation réduite ===== */
+.chart-container canvas {
+    transition: opacity var(--transition-normal) !important;
+}
+
+/* ===== Scroll smooth ===== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ===== Loading states ===== */
+.loading {
+    animation: gentlePulse 1.5s ease-in-out infinite !important;
+}
+
+@keyframes gentlePulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* ===== Tooltips ===== */
+.tooltip {
+    transition: opacity var(--transition-fast) !important;
+}
+
+/* ===== Badge animations ===== */
+.badge {
+    transition: transform var(--transition-fast), 
+                background var(--transition-fast) !important;
+}
+
+.badge:hover {
+    transform: scale(1.02) !important;
+}
+
+/* ===== Icon hover effects ===== */
+.header-icon,
+.stat-icon {
+    transition: transform var(--transition-smooth) !important;
+}
+
+/* ===== Footer links ===== */
+.modern-footer a {
+    transition: color var(--transition-fast), 
+                transform var(--transition-fast) !important;
+}
+
+.modern-footer a:hover {
+    transform: translateX(2px) !important;
+}
+
+/* ===== Social links ===== */
+.social-links a {
+    transition: transform var(--transition-fast), 
+                background var(--transition-fast) !important;
+}
+
+.social-links a:hover {
+    transform: translateY(-2px) !important;
+}
+
+/* ===== Animations réduites pour performance mobile ===== */
+@media (max-width: 768px) {
+    .premium-card:hover,
+    .stat-card:hover {
+        transform: none !important;
+    }
+    
+    .btn:hover {
+        transform: none !important;
+    }
+    
+    .modern-navbar .nav-link:hover {
+        transform: none !important;
+    }
+}
+
+/* ===== Remove jerky animations ===== */
+.modern-navbar .user-dropdown:hover,
+.modern-navbar .btn-outline-light:hover {
+    transform: translateY(-1px) !important;
+}
+
+/* ===== Fixes visuels généraux ===== */
+
+/* Amélioration du contraste */
+.text-muted {
+    color: #6b7280 !important;
+}
+
+/* Bordures plus douces */
+.card, .premium-card, .stat-card {
+    border-radius: 16px !important;
+}
+
+/* Ombres plus subtiles */
+.shadow, .shadow-sm, .shadow-lg {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Espacement cohérent */
+.mb-4 { margin-bottom: 1.5rem !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+
+/* Amélioration de la lisibilité */
+body {
+    font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Correction du z-index pour le dropdown */
+.dropdown-menu.show {
+    z-index: 1050 !important;
+}
+
+/* ===== Animations pour les graphiques Chart.js ===== */
+canvas {
+    transition: opacity var(--transition-normal) !important;
+}
+
+/* ===== Floating Icons - ralentir les animations ===== */
+.floating-icon {
+    animation-duration: 8s !important;
+    animation-timing-function: ease-in-out !important;
+}
+
+/* ===== Auth Page - transitions douces ===== */
+.auth-card {
+    animation: gentleCardEntry 0.5s ease-out forwards !important;
+}
+
+.auth-page {
+    animation: fadeIn 0.3s ease-out forwards !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ===== Dashboard indicator cards - animation plus douce ===== */
+.indicator-card {
+    animation: gentleCardEntry 0.5s ease-out forwards !important;
+    opacity: 1 !important;
+}
+
+.indicator-card:hover {
+    transform: translateY(-5px) !important;
+}
+
+.indicator-card:hover .icon-wrapper {
+    transform: rotate(-5deg) scale(1.05) !important;
+}
+
+/* ===== Correction pulse animation ===== */
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
+    50% { 
+        opacity: 0.7; 
+        transform: scale(1.1); 
+    }
+}
+
+.pulse-dot {
+    animation: pulse 2.5s ease-in-out infinite !important;
+}
+
+/* ===== Amélioration de l'accessibilité ===== */
+:focus {
+    outline: 2px solid rgba(15, 118, 110, 0.5) !important;
+    outline-offset: 2px !important;
+}
+
+:focus:not(:focus-visible) {
+    outline: none !important;
+}
+
+:focus-visible {
+    outline: 2px solid rgba(15, 118, 110, 0.5) !important;
+    outline-offset: 2px !important;
+}
+
+/* ===== Amélioration du scroll ===== */
+* {
+    scroll-behavior: smooth;
+}
+
+/* ===== Fix pour les animations séquentielles des cartes ===== */
+.stat-card:nth-child(1), .premium-card:nth-child(1),
+.indicator-card:nth-child(1) { animation-delay: 0.05s !important; }
+.stat-card:nth-child(2), .premium-card:nth-child(2),
+.indicator-card:nth-child(2) { animation-delay: 0.1s !important; }
+.stat-card:nth-child(3), .premium-card:nth-child(3),
+.indicator-card:nth-child(3) { animation-delay: 0.15s !important; }
+.stat-card:nth-child(4), .premium-card:nth-child(4),
+.indicator-card:nth-child(4) { animation-delay: 0.2s !important; }
+.stat-card:nth-child(5), .premium-card:nth-child(5),
+.indicator-card:nth-child(5) { animation-delay: 0.25s !important; }
+.stat-card:nth-child(6), .premium-card:nth-child(6),
+.indicator-card:nth-child(6) { animation-delay: 0.3s !important; }
+.stat-card:nth-child(7), .premium-card:nth-child(7),
+.indicator-card:nth-child(7) { animation-delay: 0.35s !important; }
+.stat-card:nth-child(8), .premium-card:nth-child(8),
+.indicator-card:nth-child(8) { animation-delay: 0.4s !important; }
