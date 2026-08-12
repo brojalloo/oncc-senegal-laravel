@@ -14,16 +14,29 @@ Route::get('/', function () {
 
 // Routes d'authentification
 Route::controller(AuthController::class)->group(function () {
+    // Formulaires : consultables librement.
     Route::get('/login', 'showLoginForm')->name('login');
-    Route::post('/login', 'login');
     Route::get('/register', 'showRegisterForm')->name('register');
-    Route::post('/register', 'register');
-    Route::get('/verify-email/{token}', 'verifyEmail')->name('verify.email');
     Route::get('/forgot-password', 'showForgotPasswordForm')->name('password.request');
-    Route::post('/forgot-password', 'sendResetLink')->name('password.email');
     Route::get('/reset-password/{token}', 'showResetPasswordForm')->name('password.reset');
-    Route::post('/reset-password', 'resetPassword')->name('password.update');
     Route::post('/logout', 'logout')->name('logout');
+
+    // Soumissions : limitées à 5 tentatives par minute et par IP. Sans cela,
+    // rien ne borne les essais de mot de passe, l'énumération de comptes par
+    // le formulaire d'inscription, ni l'envoi massif d'emails de
+    // réinitialisation.
+    Route::middleware('throttle:5,1')->group(function () {
+        Route::post('/login', 'login');
+        Route::post('/register', 'register');
+        Route::post('/forgot-password', 'sendResetLink')->name('password.email');
+        Route::post('/reset-password', 'resetPassword')->name('password.update');
+    });
+
+    // Les jetons de vérification sont à usage unique et expirent : la limite
+    // vise ici le balayage de jetons, d'où un quota plus large.
+    Route::middleware('throttle:20,1')
+        ->get('/verify-email/{token}', 'verifyEmail')
+        ->name('verify.email');
 });
 
 // Routes protégées par authentification

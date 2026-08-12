@@ -41,6 +41,7 @@ DB_PASSWORD=...
 
 SESSION_DRIVER=database
 SESSION_SECURE_COOKIE=true
+SESSION_ENCRYPT=true
 CACHE_STORE=database
 QUEUE_CONNECTION=database
 
@@ -99,12 +100,28 @@ Exécutez cette commande dans le conteneur (`docker exec`, ou la console de la
 plateforme). L'inscription publique ne permet pas de se créer directement un
 compte administrateur.
 
+## Protections en place
+
+- **Limitation des tentatives** : 5 requêtes par minute et par IP sur la
+  connexion, l'inscription et la réinitialisation de mot de passe.
+- **En-têtes de sécurité** : CSP, `X-Frame-Options`, `X-Content-Type-Options`,
+  `Referrer-Policy` sur toutes les réponses ; HSTS dès que la connexion est
+  chiffrée.
+- **HTTPS forcé** hors développement local, pour que les URL générées ne
+  retombent pas en clair derrière un répartiteur de charge.
+- **Sessions chiffrées**, cookie `secure` à activer via `SESSION_SECURE_COOKIE`.
+
 ## Ce qui n'est pas encore en place
 
-Ces points relèvent de la phase 2 du diagnostic et ne sont **pas** couverts par
-cette configuration :
-
-- Limitation du nombre de tentatives de connexion
-- En-têtes de sécurité HTTP (CSP, HSTS, X-Frame-Options)
-- Redirection HTTPS forcée côté application
-- Traitement des vulnérabilités remontées par `composer audit`
+- **Trois avis de sécurité sur `laravel/framework`**, dont un de niveau élevé
+  (injection CRLF dans la règle de validation `email`, utilisée par les
+  formulaires de connexion, d'inscription et de réinitialisation). Ils ne sont
+  corrigés qu'à partir de Laravel 12.60 : aucune version des lignes 10 ou 11
+  n'apporte de correctif. Fermer ces avis suppose une montée de version majeure
+  du framework.
+- **La CSP autorise `'unsafe-inline'`** pour les scripts et les styles, neuf
+  vues comportant encore du code en ligne. La politique bloque l'injection de
+  scripts distants, l'encadrement en iframe et le détournement de formulaire,
+  mais pas un script injecté en ligne.
+- Mise en file d'attente des emails, pages d'erreur personnalisées et
+  protection du dernier compte administrateur (phase 3).
