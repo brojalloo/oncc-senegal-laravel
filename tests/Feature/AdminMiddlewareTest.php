@@ -10,8 +10,11 @@ class AdminMiddlewareTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_is_redirected_to_login(): void
+    public function test_guest_cannot_access_the_admin_dashboard(): void
     {
+        // The route's outer `auth` middleware intercepts unauthenticated requests
+        // before AdminMiddleware runs, so this verifies the route is protected
+        // end-to-end rather than isolating AdminMiddleware's own auth guard.
         $response = $this->get('/admin/dashboard');
 
         $response->assertRedirect(route('login'));
