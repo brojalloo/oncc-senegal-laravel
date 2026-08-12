@@ -68,4 +68,68 @@ class AuthTest extends TestCase
         $response->assertSessionHasErrors('email');
         $this->assertNull($user->refresh()->email_verified_at);
     }
+
+    public function test_login_succeeds_with_valid_credentials_for_an_active_verified_user(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'ok@test.sn',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'ok@test.sn',
+            'password' => 'password123',
+        ]);
+
+        $response->assertRedirect(route('dashboard'));
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_login_fails_with_wrong_password(): void
+    {
+        User::factory()->create([
+            'email' => 'ok@test.sn',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'ok@test.sn',
+            'password' => 'wrong-password',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+        $this->assertGuest();
+    }
+
+    public function test_login_blocks_an_unverified_account(): void
+    {
+        User::factory()->unverified()->create([
+            'email' => 'nonverifie@test.sn',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'nonverifie@test.sn',
+            'password' => 'password123',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+        $this->assertGuest();
+    }
+
+    public function test_login_blocks_an_inactive_account(): void
+    {
+        User::factory()->inactive()->create([
+            'email' => 'inactif@test.sn',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'inactif@test.sn',
+            'password' => 'password123',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+        $this->assertGuest();
+    }
 }
