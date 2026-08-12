@@ -48,6 +48,17 @@ class UserCommandsTest extends TestCase
         $this->assertNull($user->verification_token);
     }
 
+    public function test_activate_all_activates_unverified_users_when_confirmed(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $this->artisan('users:activate-all')
+            ->expectsConfirmation('Activer ces 1 compte(s) ?', 'yes')
+            ->assertExitCode(0);
+
+        $this->assertNotNull($user->refresh()->email_verified_at);
+    }
+
     public function test_activate_all_does_nothing_when_the_user_declines_confirmation(): void
     {
         $user = User::factory()->unverified()->create();
