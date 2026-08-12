@@ -73,7 +73,7 @@ class AuthController extends Controller
             'password' => 'required|min:8|confirmed',
             'nom' => 'required|string|max:100',
             'prenom' => 'required|string|max:100',
-            'role' => 'required|in:admin,chercheur,collectivite,public',
+            'role' => 'required|in:chercheur,collectivite,public',
             'region' => 'nullable|string|max:100',
             'telephone' => 'nullable|string|max:20',
         ]);
