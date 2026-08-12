@@ -135,7 +135,7 @@ Get-Content storage/logs/laravel.log -Wait -Tail 10
 php artisan config:clear
 
 # Activer manuellement tous les comptes (pour le développement)
-php activate-users.php
+php artisan users:activate-all --force
 
 # Tester l'envoi d'email via Tinker
 php artisan tinker
