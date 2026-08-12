@@ -140,9 +140,9 @@ class AuthTest extends TestCase
 
         $response = $this->post('/forgot-password', ['email' => 'connu@test.sn']);
 
-        $response->assertSessionHas('success');
+        $response->assertSessionHas('success', 'Un lien de réinitialisation a été envoyé à votre email.');
         $this->assertNotNull($user->refresh()->reset_token);
-        Mail::assertSent(ResetPasswordEmail::class);
+        Mail::assertSent(ResetPasswordEmail::class, fn ($mail) => $mail->hasTo($user->email));
     }
 
     public function test_forgot_password_shows_a_generic_message_for_an_unknown_address(): void
@@ -151,7 +151,7 @@ class AuthTest extends TestCase
 
         $response = $this->post('/forgot-password', ['email' => 'inconnu@test.sn']);
 
-        $response->assertSessionHas('success');
+        $response->assertSessionHas('success', 'Si cet email existe, un lien de réinitialisation a été envoyé.');
         Mail::assertNothingSent();
     }
 
