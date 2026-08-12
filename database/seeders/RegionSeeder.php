@@ -25,7 +25,7 @@ class RegionSeeder extends Seeder
             ['code' => 'TC', 'nom' => 'Tambacounda', 'latitude' => 13.7726, 'longitude' => -13.6714, 'chef_lieu' => 'Tambacounda'],
             ['code' => 'MT', 'nom' => 'Matam', 'latitude' => 15.6566, 'longitude' => -13.2577, 'chef_lieu' => 'Matam'],
             ['code' => 'SL', 'nom' => 'Sédhiou', 'latitude' => 12.7046, 'longitude' => -15.5563, 'chef_lieu' => 'Sédhiou'],
-            ['code' => 'KDG', 'nom' => 'Kédougou', 'latitude' => 12.5516, 'longitude' => -12.1749, 'chef_lieu' => 'Kédougou']
+            ['code' => 'KDG', 'nom' => 'Kédougou', 'latitude' => 12.5516, 'longitude' => -12.1749, 'chef_lieu' => 'Kédougou'],
         ];
 
         foreach ($regions as $region) {
@@ -37,7 +37,7 @@ class RegionSeeder extends Seeder
                     'longitude' => $region['longitude'],
                     'chef_lieu' => $region['chef_lieu'],
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ]
             );
         }
