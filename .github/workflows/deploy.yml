@@ -62,12 +62,6 @@ jobs:
     - name: Run Database Seeders
       run: php artisan db:seed --force
 
-    - name: Cache Config and Routes
-      run: |
-        php artisan config:cache
-        php artisan route:cache
-        php artisan view:cache
-
     - name: Run Tests
       run: php artisan test
 
