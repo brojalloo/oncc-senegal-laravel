@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Alerte;
 use App\Models\DonneeClimatique;
 use App\Models\DonneeEconomique;
-use App\Models\Alerte;
-use App\Models\Region;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -33,8 +30,8 @@ class AdminController extends Controller
         ];
 
         $recentUsers = User::orderBy('created_at', 'desc')
-                           ->take(5)
-                           ->get();
+            ->take(5)
+            ->get();
 
         $recentActivities = [
             ['time' => now()->subMinutes(5)->diffForHumans(), 'message' => 'Nouvel utilisateur inscrit', 'color' => 'success'],
@@ -54,14 +51,14 @@ class AdminController extends Controller
                 'total' => User::count(),
                 'active' => User::whereNotNull('email_verified_at')->count(),
                 'by_role' => User::select('role', DB::raw('count(*) as count'))
-                                 ->groupBy('role')
-                                 ->get()
+                    ->groupBy('role')
+                    ->get(),
             ],
             'climate' => [
                 'total' => DonneeClimatique::count(),
                 'by_indicator' => DonneeClimatique::select('type_indicateur', DB::raw('count(*) as count'))
-                                                  ->groupBy('type_indicateur')
-                                                  ->get()
+                    ->groupBy('type_indicateur')
+                    ->get(),
             ],
             'economic' => [
                 'total' => DonneeEconomique::count(),
@@ -71,7 +68,7 @@ class AdminController extends Controller
                 'laravel_version' => app()->version(),
                 'database' => config('database.default'),
                 'database_size' => $this->getDatabaseSize(),
-            ]
+            ],
         ];
 
         return view('admin.reports', compact('stats'));
@@ -88,20 +85,22 @@ class AdminController extends Controller
             $content = File::get($logFile);
             $lines = explode("\n", $content);
             $totalLines = count($lines);
-            
+
             // Prendre les 100 dernières lignes
             $lines = array_slice($lines, -100);
-            
+
             foreach ($lines as $line) {
-                if (empty(trim($line))) continue;
-                
+                if (empty(trim($line))) {
+                    continue;
+                }
+
                 // Parser la ligne de log
                 $log = $this->parseLogLine($line);
                 if ($log) {
                     $logs[] = $log;
                 }
             }
-            
+
             // Inverser pour avoir les plus récents en premier
             $logs = array_reverse($logs);
         }
@@ -113,15 +112,16 @@ class AdminController extends Controller
     public function clearLogs()
     {
         $logFile = storage_path('logs/laravel.log');
-        
+
         if (File::exists($logFile)) {
             File::put($logFile, '');
+
             return redirect()->route('admin.logs')
-                           ->with('success', 'Les logs ont été vidés avec succès.');
+                ->with('success', 'Les logs ont été vidés avec succès.');
         }
 
         return redirect()->route('admin.logs')
-                       ->with('error', 'Le fichier de logs n\'existe pas.');
+            ->with('error', 'Le fichier de logs n\'existe pas.');
     }
 
     // Gestion des emails
@@ -139,20 +139,20 @@ class AdminController extends Controller
     public function sendTestEmail(Request $request)
     {
         $request->validate([
-            'test_email' => 'required|email'
+            'test_email' => 'required|email',
         ]);
 
         try {
             Mail::raw('Ceci est un email de test de ONCC-SN.', function ($message) use ($request) {
                 $message->to($request->test_email)
-                        ->subject('Test d\'envoi d\'email - ONCC-SN');
+                    ->subject('Test d\'envoi d\'email - ONCC-SN');
             });
 
             return redirect()->route('admin.emails')
-                           ->with('test_success', 'Email de test envoyé avec succès à ' . $request->test_email);
+                ->with('test_success', 'Email de test envoyé avec succès à '.$request->test_email);
         } catch (\Exception $e) {
             return redirect()->route('admin.emails')
-                           ->with('test_error', 'Erreur lors de l\'envoi : ' . $e->getMessage());
+                ->with('test_error', 'Erreur lors de l\'envoi : '.$e->getMessage());
         }
     }
 
@@ -162,12 +162,12 @@ class AdminController extends Controller
         $request->validate([
             'subject' => 'required|string|max:255',
             'content' => 'required|string',
-            'target' => 'required|in:all,admin,chercheur,collectivite'
+            'target' => 'required|in:all,admin,chercheur,collectivite',
         ]);
 
         try {
             $query = User::whereNotNull('email_verified_at');
-            
+
             if ($request->target !== 'all') {
                 $query->where('role', $request->target);
             }
@@ -178,16 +178,16 @@ class AdminController extends Controller
             foreach ($users as $user) {
                 Mail::html($request->content, function ($message) use ($request, $user) {
                     $message->to($user->email)
-                            ->subject($request->subject);
+                        ->subject($request->subject);
                 });
                 $sentCount++;
             }
 
             return redirect()->route('admin.emails')
-                           ->with('newsletter_success', "Newsletter envoyée avec succès à {$sentCount} utilisateur(s).");
+                ->with('newsletter_success', "Newsletter envoyée avec succès à {$sentCount} utilisateur(s).");
         } catch (\Exception $e) {
             return redirect()->route('admin.emails')
-                           ->with('newsletter_error', 'Erreur lors de l\'envoi : ' . $e->getMessage());
+                ->with('newsletter_error', 'Erreur lors de l\'envoi : '.$e->getMessage());
         }
     }
 
@@ -195,14 +195,14 @@ class AdminController extends Controller
     public function validationPage()
     {
         $climatiques = DonneeClimatique::with(['region', 'utilisateur'])
-                                     ->where('statut', 'en_attente')
-                                     ->orderBy('created_at', 'desc')
-                                     ->get();
+            ->where('statut', 'en_attente')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         $economiques = DonneeEconomique::with(['region', 'utilisateur'])
-                                     ->where('statut', 'en_attente')
-                                     ->orderBy('created_at', 'desc')
-                                     ->get();
+            ->where('statut', 'en_attente')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('admin.validation', compact('climatiques', 'economiques'));
     }
@@ -221,7 +221,7 @@ class AdminController extends Controller
         $data->update(['statut' => 'valide']);
 
         return redirect()->route('admin.validation')
-                       ->with('success', 'Donnée validée avec succès.');
+            ->with('success', 'Donnée validée avec succès.');
     }
 
     // Rejeter une donnée
@@ -238,14 +238,14 @@ class AdminController extends Controller
         $data->update(['statut' => 'rejete']);
 
         return redirect()->route('admin.validation')
-                       ->with('success', 'Donnée rejetée avec succès.');
+            ->with('success', 'Donnée rejetée avec succès.');
     }
 
     // Gestion des utilisateurs
     public function users()
     {
         $users = User::orderBy('created_at', 'desc')->paginate(20);
-        
+
         return view('admin.users', compact('users'));
     }
 
@@ -253,36 +253,36 @@ class AdminController extends Controller
     public function updateUserRole(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        
+
         $request->validate([
-            'role' => 'required|in:public,collectivite,chercheur,admin'
+            'role' => 'required|in:public,collectivite,chercheur,admin',
         ]);
 
         $user->update(['role' => $request->role]);
 
         return redirect()->back()
-                       ->with('success', 'Rôle de l\'utilisateur mis à jour avec succès.');
+            ->with('success', 'Rôle de l\'utilisateur mis à jour avec succès.');
     }
 
     // Modifier le statut d'un utilisateur (actif/inactif)
     public function updateUserStatus(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        
+
         // Ne pas permettre de désactiver son propre compte
         if ($user->id === auth()->id()) {
             return redirect()->back()
-                           ->withErrors(['error' => 'Vous ne pouvez pas modifier le statut de votre propre compte.']);
+                ->withErrors(['error' => 'Vous ne pouvez pas modifier le statut de votre propre compte.']);
         }
-        
+
         $request->validate([
-            'statut' => 'required|in:actif,inactif'
+            'statut' => 'required|in:actif,inactif',
         ]);
 
         $user->update(['statut' => $request->statut]);
 
-        $message = $request->statut === 'actif' 
-                   ? 'Utilisateur activé avec succès.' 
+        $message = $request->statut === 'actif'
+                   ? 'Utilisateur activé avec succès.'
                    : 'Utilisateur désactivé avec succès.';
 
         return redirect()->back()->with('success', $message);
@@ -294,7 +294,7 @@ class AdminController extends Controller
         // Format Laravel standard: [2024-01-01 12:00:00] local.ERROR: Message
         if (preg_match('/\[(.*?)\]\s+(\w+)\.(\w+):\s+(.*)/', $line, $matches)) {
             $level = strtoupper($matches[3]);
-            $badge = match($level) {
+            $badge = match ($level) {
                 'ERROR', 'CRITICAL', 'ALERT', 'EMERGENCY' => 'danger',
                 'WARNING' => 'warning',
                 'NOTICE', 'INFO' => 'info',
@@ -306,7 +306,7 @@ class AdminController extends Controller
                 'date' => $matches[1],
                 'level' => $level,
                 'message' => $matches[4],
-                'badge' => $badge
+                'badge' => $badge,
             ];
         }
 
@@ -314,7 +314,7 @@ class AdminController extends Controller
         if (preg_match('/^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})\s+(\/\S+)\s+\.+\s+~?\s*(.+)$/', trim($line), $matches)) {
             $route = $matches[2];
             $time = $matches[3];
-            
+
             // Ignorer les fichiers statiques
             if (preg_match('/\.(css|js|ico|png|jpg|jpeg|gif|svg|woff|ttf)$/', $route)) {
                 return null;
@@ -323,8 +323,8 @@ class AdminController extends Controller
             return [
                 'date' => $matches[1],
                 'level' => 'REQUEST',
-                'message' => $route . ' - ' . $time,
-                'badge' => 'info'
+                'message' => $route.' - '.$time,
+                'badge' => 'info',
             ];
         }
 
@@ -336,14 +336,14 @@ class AdminController extends Controller
     {
         try {
             $database = config('database.connections.mysql.database');
-            $result = DB::selectOne("
+            $result = DB::selectOne('
                 SELECT 
                     ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS size_mb
                 FROM information_schema.TABLES
                 WHERE table_schema = ?
-            ", [$database]);
+            ', [$database]);
 
-            return $result->size_mb . ' MB';
+            return $result->size_mb.' MB';
         } catch (\Exception $e) {
             return 'N/A';
         }

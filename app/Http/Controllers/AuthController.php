@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Mail\VerifyEmail;
 use App\Mail\ResetPasswordEmail;
+use App\Mail\VerifyEmail;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,19 +28,19 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
-        
+
         // Vérifier si l'utilisateur existe
         $user = User::where('email', $credentials['email'])->first();
-        
-        if (!$user) {
+
+        if (! $user) {
             return back()->withErrors(['email' => 'Ces identifiants ne correspondent pas à nos enregistrements.']);
         }
 
         // Vérifier si le compte est activé
-        if (!$user->email_verified_at) {
+        if (! $user->email_verified_at) {
             return back()->withErrors(['email' => 'Votre compte n\'est pas encore activé. Veuillez vérifier votre email.'])
-                       ->with('show_resend_activation', true)
-                       ->with('resend_email', $user->email);
+                ->with('show_resend_activation', true)
+                ->with('resend_email', $user->email);
         }
 
         // Vérifier si le compte est actif
@@ -51,9 +51,9 @@ class AuthController extends Controller
         // Tenter la connexion
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            
+
             return redirect()->intended(route('dashboard'))
-                           ->with('success', 'Connexion réussie ! Bienvenue ' . Auth::user()->prenom);
+                ->with('success', 'Connexion réussie ! Bienvenue '.Auth::user()->prenom);
         }
 
         return back()->withErrors(['email' => 'Ces identifiants ne correspondent pas à nos enregistrements.']);
@@ -99,19 +99,19 @@ class AuthController extends Controller
         $this->sendVerificationEmail($user);
 
         return redirect()->route('login')
-                       ->with('success', 'Inscription réussie ! Un email de vérification vous a été envoyé.');
+            ->with('success', 'Inscription réussie ! Un email de vérification vous a été envoyé.');
     }
 
     // Vérifier l'email
     public function verifyEmail($token)
     {
         $user = User::where('verification_token', $token)
-                   ->where('verification_token_expires', '>', now())
-                   ->first();
+            ->where('verification_token_expires', '>', now())
+            ->first();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login')
-                           ->withErrors(['email' => 'Le lien de vérification est invalide ou a expiré.']);
+                ->withErrors(['email' => 'Le lien de vérification est invalide ou a expiré.']);
         }
 
         $user->update([
@@ -122,7 +122,7 @@ class AuthController extends Controller
         ]);
 
         return redirect()->route('login')
-                       ->with('success', 'Votre compte a été activé avec succès ! Vous pouvez maintenant vous connecter.');
+            ->with('success', 'Votre compte a été activé avec succès ! Vous pouvez maintenant vous connecter.');
     }
 
     // Afficher le formulaire de demande de réinitialisation
@@ -138,7 +138,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user) {
+        if (! $user) {
             return back()->with('success', 'Si cet email existe, un lien de réinitialisation a été envoyé.');
         }
 
@@ -169,11 +169,11 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)
-                   ->where('reset_token', $request->token)
-                   ->where('reset_token_expires', '>', now())
-                   ->first();
+            ->where('reset_token', $request->token)
+            ->where('reset_token_expires', '>', now())
+            ->first();
 
-        if (!$user) {
+        if (! $user) {
             return back()->withErrors(['email' => 'Le lien de réinitialisation est invalide ou a expiré.']);
         }
 
@@ -184,7 +184,7 @@ class AuthController extends Controller
         ]);
 
         return redirect()->route('login')
-                       ->with('success', 'Votre mot de passe a été réinitialisé avec succès !');
+            ->with('success', 'Votre mot de passe a été réinitialisé avec succès !');
     }
 
     // Déconnexion
@@ -195,7 +195,7 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login')
-                       ->with('success', 'Vous avez été déconnecté avec succès.');
+            ->with('success', 'Vous avez été déconnecté avec succès.');
     }
 
     // Envoyer l'email de vérification
@@ -204,7 +204,7 @@ class AuthController extends Controller
         try {
             Mail::to($user->email)->send(new VerifyEmail($user));
         } catch (\Exception $e) {
-            \Log::error('Erreur envoi email de vérification: ' . $e->getMessage());
+            \Log::error('Erreur envoi email de vérification: '.$e->getMessage());
         }
     }
 
@@ -214,7 +214,7 @@ class AuthController extends Controller
         try {
             Mail::to($user->email)->send(new ResetPasswordEmail($user));
         } catch (\Exception $e) {
-            \Log::error('Erreur envoi email de réinitialisation: ' . $e->getMessage());
+            \Log::error('Erreur envoi email de réinitialisation: '.$e->getMessage());
         }
     }
 }

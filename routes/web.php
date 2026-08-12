@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 // Routes publiques
 Route::get('/', function () {
@@ -28,7 +28,7 @@ Route::controller(AuthController::class)->group(function () {
 
 // Routes protégées par authentification
 Route::middleware('auth')->group(function () {
-    
+
     // Dashboard
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
