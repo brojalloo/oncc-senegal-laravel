@@ -78,4 +78,21 @@ class UserCommandsTest extends TestCase
             ->assertExitCode(0)
             ->expectsOutputToContain("Aucun compte en attente d'activation.");
     }
+
+    public function test_promote_sets_the_users_role_to_admin(): void
+    {
+        $user = User::factory()->create(['role' => 'public', 'email' => 'user@test.sn']);
+
+        $this->artisan('users:promote', ['email' => 'user@test.sn'])
+            ->assertExitCode(0);
+
+        $this->assertSame('admin', $user->refresh()->role);
+    }
+
+    public function test_promote_fails_for_an_unknown_email(): void
+    {
+        $this->artisan('users:promote', ['email' => 'inconnu@test.sn'])
+            ->assertExitCode(1)
+            ->expectsOutputToContain('Utilisateur non trouvé');
+    }
 }
