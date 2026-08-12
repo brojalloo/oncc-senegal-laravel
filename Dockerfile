@@ -1,76 +1,113 @@
-FROM php:8.2-cli
+# syntax=docker/dockerfile:1
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    libsqlite3-dev \
-    zip \
-    unzip \
-    nodejs \
-    npm \
-    sqlite3 \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Image portable : nginx + PHP-FPM, pilotée entièrement par variables
+# d'environnement. Fonctionne sur toute plateforme sachant lancer un conteneur
+# et injecter un PORT (Railway, Render, Fly.io, Scaleway, un VPS...).
+#
+# Aucune donnée n'est semée au démarrage et aucun .env n'est généré : la
+# configuration vient exclusivement de l'environnement fourni par l'hébergeur.
 
-# Install PHP extensions (SQLite instead of MySQL)
-RUN docker-php-ext-install pdo pdo_sqlite mbstring exif pcntl bcmath gd zip
 
-# Install Composer from official image
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# --------------------------------------------------------------------------
+# 1. Dépendances PHP
+# --------------------------------------------------------------------------
+FROM composer:2 AS vendor
 
-# Set working directory
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install \
+        --no-dev \
+        --no-scripts \
+        --no-interaction \
+        --prefer-dist \
+        --optimize-autoloader
+
+
+# --------------------------------------------------------------------------
+# 2. Assets front
+# --------------------------------------------------------------------------
+FROM node:18-alpine AS assets
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY vite.config.js ./
+COPY resources ./resources
+RUN npm run build
+
+
+# --------------------------------------------------------------------------
+# 3. Image d'exécution
+# --------------------------------------------------------------------------
+FROM php:8.2-fpm-alpine AS runtime
+
+RUN apk add --no-cache \
+        nginx \
+        supervisor \
+        postgresql-dev \
+        libzip-dev \
+        libpng-dev \
+        icu-dev \
+        oniguruma-dev \
+    && docker-php-ext-install -j"$(nproc)" \
+        pdo_pgsql \
+        pdo_mysql \
+        mbstring \
+        bcmath \
+        exif \
+        gd \
+        zip \
+        opcache \
+    && apk del postgresql-dev libzip-dev libpng-dev icu-dev oniguruma-dev \
+    && apk add --no-cache postgresql-libs libzip libpng icu-libs oniguruma
+
+# OPcache : recommandé en production, sans revalidation puisque le code est figé
+# dans l'image.
+RUN { \
+        echo 'opcache.enable=1'; \
+        echo 'opcache.enable_cli=0'; \
+        echo 'opcache.memory_consumption=128'; \
+        echo 'opcache.max_accelerated_files=10000'; \
+        echo 'opcache.validate_timestamps=0'; \
+    } > /usr/local/etc/php/conf.d/opcache.ini
+
+RUN { \
+        echo 'expose_php=Off'; \
+        echo 'memory_limit=256M'; \
+        echo 'upload_max_filesize=16M'; \
+        echo 'post_max_size=16M'; \
+    } > /usr/local/etc/php/conf.d/app.ini
+
 WORKDIR /app
 
-# Copy composer files first for better caching
-COPY composer.json composer.lock ./
-
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-reqs
-
-# Copy all application files
+COPY --from=vendor /app/vendor ./vendor
+COPY --from=assets /app/public/build ./public/build
 COPY . .
 
-# Run composer scripts after copying all files
-RUN composer dump-autoload --optimize
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/zz-app.conf
+COPY docker/supervisord.conf /etc/supervisord.conf
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint
+RUN chmod +x /usr/local/bin/entrypoint
 
-# Install Node dependencies and build assets
-RUN npm install && (npm run build || true)
+# Composer a été lancé sans scripts (le code n'était pas encore copié) : on
+# régénère l'autoloader et on laisse Laravel découvrir ses paquets.
+RUN composer dump-autoload --no-dev --optimize --classmap-authoritative \
+    || true
 
-# Create storage directories and set permissions
-RUN mkdir -p storage/framework/cache/data \
-    storage/framework/sessions \
-    storage/framework/views \
-    storage/logs \
-    bootstrap/cache \
-    database \
-    && chmod -R 777 storage bootstrap/cache database
+RUN mkdir -p \
+        storage/framework/cache/data \
+        storage/framework/sessions \
+        storage/framework/views \
+        storage/logs \
+        bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
+    && mkdir -p /var/lib/nginx/tmp /var/log/nginx \
+    && chown -R www-data:www-data /var/lib/nginx /var/log/nginx
 
-# Create SQLite database file
-RUN touch database/database.sqlite && chmod 666 database/database.sqlite
-
-# Create a startup script inline to avoid CRLF issues
-RUN echo '#!/bin/sh' > /start.sh && \
-    echo 'cd /app' >> /start.sh && \
-    echo 'echo "APP_NAME=ONCC" > .env' >> /start.sh && \
-    echo 'echo "APP_ENV=production" >> .env' >> /start.sh && \
-    echo 'echo "APP_KEY=${APP_KEY}" >> .env' >> /start.sh && \
-    echo 'echo "APP_DEBUG=true" >> .env' >> /start.sh && \
-    echo 'echo "DB_CONNECTION=sqlite" >> .env' >> /start.sh && \
-    echo 'echo "DB_DATABASE=/app/database/database.sqlite" >> .env' >> /start.sh && \
-    echo 'echo "SESSION_DRIVER=cookie" >> .env' >> /start.sh && \
-    echo 'echo "CACHE_STORE=file" >> .env' >> /start.sh && \
-    echo 'php artisan migrate --force 2>&1 || true' >> /start.sh && \
-    echo 'php artisan db:seed --force 2>&1 || true' >> /start.sh && \
-    echo 'exec php -S 0.0.0.0:${PORT} -t public' >> /start.sh && \
-    chmod +x /start.sh
-
-# Expose port
+ENV PORT=8080
 EXPOSE 8080
 
-WORKDIR /app
-CMD ["/start.sh"]
+ENTRYPOINT ["entrypoint"]

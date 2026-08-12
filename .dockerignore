@@ -1,0 +1,39 @@
+# Sans ce fichier, `COPY . .` embarque le .env local (donc APP_KEY et les
+# identifiants de messagerie) dans une couche de l'image, ainsi que .git et
+# node_modules.
+
+.git
+.github
+.gitignore
+.gitattributes
+.editorconfig
+
+.env
+.env.*
+!.env.example
+
+node_modules
+vendor
+public/build
+public/hot
+public/storage
+
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+!storage/**/.gitignore
+
+database/*.sqlite
+database/*.sqlite-journal
+
+.worktrees
+docs
+tests
+phpunit.xml
+.phpunit.result.cache
+
+Dockerfile
+.dockerignore
+docker-compose.yml
+*.md
