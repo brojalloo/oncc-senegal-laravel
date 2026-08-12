@@ -938,26 +938,68 @@ instead of a hardcoded address."
 ### Task 11: Remove obsolete root scripts and stub tests
 
 **Files:**
+- Modify: `tests/Feature/AuthTest.php`
 - Delete: `activate-users.php`, `check-admin.php`, `promote-to-admin.php`
 - Delete: `tests/Feature/ExampleTest.php`, `tests/Unit/ExampleTest.php`
 
-All three root scripts are now fully replaced by tested Artisan commands (Tasks 8–10), and the default PHPUnit stub tests add no value now that real tests exist.
+All three root scripts are now fully replaced by tested Artisan commands (Tasks 8–10). `tests/Unit/ExampleTest.php` is a genuine no-op stub (`assertTrue(true)`) — safe to delete outright. `tests/Feature/ExampleTest.php` is **not** a no-op: it has 3 real assertions (homepage redirects to `/login`, `/login` and `/register` render 200) that aren't covered anywhere else in this plan. Port them into `AuthTest` before deleting the file so this cleanup doesn't silently drop coverage.
 
-- [ ] **Step 1: Delete the files**
+- [ ] **Step 1: Port the homepage/page-accessibility assertions into `AuthTest`**
+
+Insert these methods into `tests/Feature/AuthTest.php`, after `test_logout_ends_the_session`:
+
+```php
+
+    public function test_homepage_redirects_to_login(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertRedirect('/login');
+    }
+
+    public function test_login_page_is_accessible(): void
+    {
+        $response = $this->get('/login');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_register_page_is_accessible(): void
+    {
+        $response = $this->get('/register');
+
+        $response->assertStatus(200);
+    }
+```
+
+- [ ] **Step 2: Run `AuthTest` to confirm the ported assertions pass**
+
+Run: `php artisan test --filter=AuthTest`
+Expected: `15 passed`
+
+- [ ] **Step 3: Commit the ported tests**
+
+```bash
+git add tests/Feature/AuthTest.php
+git commit -m "test: port homepage/login/register page checks from ExampleTest"
+```
+
+- [ ] **Step 4: Delete the now-redundant files**
 
 ```bash
 git rm activate-users.php check-admin.php promote-to-admin.php tests/Feature/ExampleTest.php tests/Unit/ExampleTest.php
 ```
 
-- [ ] **Step 2: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git commit -m "chore: remove root ad hoc scripts and default test stubs
 
 activate-users.php, check-admin.php, and promote-to-admin.php are
 replaced by users:activate-all, users:list-admins, and users:promote
-(see previous commits). The default ExampleTest stubs are superseded
-by the real Feature test suite added in this branch."
+(see previous commits). tests/Unit/ExampleTest.php was a no-op stub;
+tests/Feature/ExampleTest.php's real assertions were ported into
+AuthTest in the previous commit before removing this file."
 ```
 
 ---
@@ -969,7 +1011,7 @@ by the real Feature test suite added in this branch."
 - [ ] **Step 1: Run every test**
 
 Run: `php artisan test`
-Expected: All tests pass (25 total: 12 in `AuthTest`, 4 in `AdminMiddlewareTest`, 2 in `RateLimitMiddlewareTest`, 7 in `UserCommandsTest`, plus any pre-existing tests outside this plan's scope). If any pre-existing test outside this plan fails, stop and investigate before continuing — do not proceed with a red suite.
+Expected: All tests pass (28 total: 15 in `AuthTest`, 4 in `AdminMiddlewareTest`, 2 in `RateLimitMiddlewareTest`, 7 in `UserCommandsTest`, plus any pre-existing tests outside this plan's scope). If any pre-existing test outside this plan fails, stop and investigate before continuing — do not proceed with a red suite.
 
 ---
 
