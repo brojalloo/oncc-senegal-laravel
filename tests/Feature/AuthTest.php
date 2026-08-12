@@ -192,4 +192,14 @@ class AuthTest extends TestCase
         $response->assertSessionHasErrors('email');
         $this->assertTrue(Hash::check('ancienmdp123', $user->refresh()->password));
     }
+
+    public function test_logout_ends_the_session(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post('/logout');
+
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 }
