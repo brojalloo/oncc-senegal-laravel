@@ -5,6 +5,7 @@
 .env.production
 /database/database.sqlite
 /database/*.sqlite
+/.worktrees
 .phpactor.json
 .phpunit.result.cache
 /.fleet
