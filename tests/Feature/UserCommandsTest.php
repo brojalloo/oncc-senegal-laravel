@@ -30,4 +30,41 @@ class UserCommandsTest extends TestCase
             ->expectsOutputToContain('Aucun administrateur trouvé')
             ->expectsOutputToContain('public@test.sn');
     }
+
+    public function test_activate_all_activates_unverified_users_with_the_force_flag(): void
+    {
+        $user = User::factory()->unverified()->create([
+            'statut' => 'inactif',
+            'verification_token' => 'abc123',
+            'verification_token_expires' => now()->addDay(),
+        ]);
+
+        $this->artisan('users:activate-all', ['--force' => true])
+            ->assertExitCode(0);
+
+        $user->refresh();
+        $this->assertNotNull($user->email_verified_at);
+        $this->assertSame('actif', $user->statut);
+        $this->assertNull($user->verification_token);
+    }
+
+    public function test_activate_all_does_nothing_when_the_user_declines_confirmation(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $this->artisan('users:activate-all')
+            ->expectsConfirmation('Activer ces 1 compte(s) ?', 'no')
+            ->assertExitCode(1);
+
+        $this->assertNull($user->refresh()->email_verified_at);
+    }
+
+    public function test_activate_all_reports_when_there_is_nothing_to_do(): void
+    {
+        User::factory()->create();
+
+        $this->artisan('users:activate-all')
+            ->assertExitCode(0)
+            ->expectsOutputToContain("Aucun compte en attente d'activation.");
+    }
 }
