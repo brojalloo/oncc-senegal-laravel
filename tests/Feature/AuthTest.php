@@ -132,4 +132,64 @@ class AuthTest extends TestCase
         $response->assertSessionHasErrors('email');
         $this->assertGuest();
     }
+
+    public function test_forgot_password_sends_a_reset_email_for_a_known_address(): void
+    {
+        Mail::fake();
+        $user = User::factory()->create(['email' => 'connu@test.sn']);
+
+        $response = $this->post('/forgot-password', ['email' => 'connu@test.sn']);
+
+        $response->assertSessionHas('success');
+        $this->assertNotNull($user->refresh()->reset_token);
+        Mail::assertSent(ResetPasswordEmail::class);
+    }
+
+    public function test_forgot_password_shows_a_generic_message_for_an_unknown_address(): void
+    {
+        Mail::fake();
+
+        $response = $this->post('/forgot-password', ['email' => 'inconnu@test.sn']);
+
+        $response->assertSessionHas('success');
+        Mail::assertNothingSent();
+    }
+
+    public function test_reset_password_updates_the_password_with_a_valid_token(): void
+    {
+        $user = User::factory()->create([
+            'reset_token' => 'valid-reset-token',
+            'reset_token_expires' => now()->addHour(),
+        ]);
+
+        $response = $this->post('/reset-password', [
+            'token' => 'valid-reset-token',
+            'email' => $user->email,
+            'password' => 'nouveaumdp123',
+            'password_confirmation' => 'nouveaumdp123',
+        ]);
+
+        $response->assertRedirect(route('login'));
+        $this->assertTrue(Hash::check('nouveaumdp123', $user->refresh()->password));
+        $this->assertNull($user->reset_token);
+    }
+
+    public function test_reset_password_rejects_an_expired_token(): void
+    {
+        $user = User::factory()->create([
+            'password' => bcrypt('ancienmdp123'),
+            'reset_token' => 'expired-reset-token',
+            'reset_token_expires' => now()->subHour(),
+        ]);
+
+        $response = $this->post('/reset-password', [
+            'token' => 'expired-reset-token',
+            'email' => $user->email,
+            'password' => 'nouveaumdp123',
+            'password_confirmation' => 'nouveaumdp123',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+        $this->assertTrue(Hash::check('ancienmdp123', $user->refresh()->password));
+    }
 }
