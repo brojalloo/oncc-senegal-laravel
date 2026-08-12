@@ -14,6 +14,7 @@ class DataController extends Controller
     public function createClimate()
     {
         $regions = Region::all();
+
         return view('data.create-climate', compact('regions'));
     }
 
@@ -22,7 +23,7 @@ class DataController extends Controller
     {
         $request->validate([
             'region_id' => 'required|exists:regions,id',
-            'annee' => 'required|integer|min:1900|max:' . (date('Y') + 10),
+            'annee' => 'required|integer|min:1900|max:'.(date('Y') + 10),
             'type_indicateur' => 'required|in:secheresse,inondation,desertification,temperature,pluviometrie',
             'valeur' => 'required|numeric',
             'unite' => 'nullable|string|max:50',
@@ -42,13 +43,14 @@ class DataController extends Controller
         ]);
 
         return redirect()->route('data.climate.create')
-                       ->with('success', 'Données climatiques ajoutées avec succès.');
+            ->with('success', 'Données climatiques ajoutées avec succès.');
     }
 
     // Formulaire d'ajout de données économiques
     public function createEconomic()
     {
         $regions = Region::all();
+
         return view('data.create-economic', compact('regions'));
     }
 
@@ -57,7 +59,7 @@ class DataController extends Controller
     {
         $request->validate([
             'region_id' => 'required|exists:regions,id',
-            'annee' => 'required|integer|min:1900|max:' . (date('Y') + 10),
+            'annee' => 'required|integer|min:1900|max:'.(date('Y') + 10),
             'secteur' => 'required|in:agriculture,peche,tourisme,energie,elevage,foret',
             'indicateur' => 'required|string|max:100',
             'valeur' => 'required|numeric',
@@ -79,21 +81,21 @@ class DataController extends Controller
         ]);
 
         return redirect()->route('data.economic.create')
-                       ->with('success', 'Données économiques ajoutées avec succès.');
+            ->with('success', 'Données économiques ajoutées avec succès.');
     }
 
     // Liste des données de l'utilisateur
     public function myData()
     {
         $climatiques = DonneeClimatique::with('region')
-                                     ->where('utilisateur_id', Auth::id())
-                                     ->orderBy('created_at', 'desc')
-                                     ->paginate(10, ['*'], 'climatiques');
+            ->where('utilisateur_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10, ['*'], 'climatiques');
 
         $economiques = DonneeEconomique::with('region')
-                                     ->where('utilisateur_id', Auth::id())
-                                     ->orderBy('created_at', 'desc')
-                                     ->paginate(10, ['*'], 'economiques');
+            ->where('utilisateur_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10, ['*'], 'economiques');
 
         return view('data.my', compact('climatiques', 'economiques'));
     }

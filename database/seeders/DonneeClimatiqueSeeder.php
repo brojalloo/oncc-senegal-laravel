@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Region;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Models\Region;
 
 class DonneeClimatiqueSeeder extends Seeder
 {
@@ -15,11 +15,11 @@ class DonneeClimatiqueSeeder extends Seeder
     {
         $regions = Region::all();
         $indicateurs = [
-            'secheresse', 
-            'inondation', 
-            'desertification', 
-            'temperature', 
-            'pluviometrie'
+            'secheresse',
+            'inondation',
+            'desertification',
+            'temperature',
+            'pluviometrie',
         ];
         $annees = [2020, 2021, 2022, 2023, 2024, 2025];
         $sources = ['ANACIM', 'MEPA', 'CSE', 'DGPRE', 'DMN', 'OMM'];
@@ -31,7 +31,7 @@ class DonneeClimatiqueSeeder extends Seeder
                     // 4 mesures par an (une par trimestre)
                     for ($i = 1; $i <= 4; $i++) {
                         // Générer des valeurs réalistes selon l'indicateur et la région
-                        $valeur = match($indicateur) {
+                        $valeur = match ($indicateur) {
                             'secheresse' => rand(10, 85),
                             'inondation' => rand(5, 70),
                             'desertification' => rand(15, 65),
@@ -40,7 +40,7 @@ class DonneeClimatiqueSeeder extends Seeder
                             default => rand(10, 80)
                         };
 
-                        $unite = match($indicateur) {
+                        $unite = match ($indicateur) {
                             'temperature' => '°C',
                             'pluviometrie' => 'mm',
                             default => '%'
@@ -55,7 +55,7 @@ class DonneeClimatiqueSeeder extends Seeder
                             'source' => $sources[array_rand($sources)],
                             'statut' => rand(1, 10) > 1 ? 'valide' : 'en_attente',
                             'created_at' => now()->subDays(rand(1, 365)),
-                            'updated_at' => now()
+                            'updated_at' => now(),
                         ]);
                     }
                 }
@@ -63,6 +63,6 @@ class DonneeClimatiqueSeeder extends Seeder
         }
 
         $this->command->info('Données climatiques détaillées insérées avec succès !');
-        $this->command->info('Total: ' . (count($regions) * count($indicateurs) * count($annees) * 4) . ' enregistrements créés.');
+        $this->command->info('Total: '.(count($regions) * count($indicateurs) * count($annees) * 4).' enregistrements créés.');
     }
 }

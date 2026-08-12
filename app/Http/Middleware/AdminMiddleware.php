@@ -17,13 +17,14 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Vérifier l'authentification
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             Log::warning('Tentative d\'accès admin sans authentification', [
                 'ip' => $request->ip(),
                 'user_agent' => $request->userAgent(),
                 'url' => $request->fullUrl(),
-                'timestamp' => now()
+                'timestamp' => now(),
             ]);
+
             return redirect()->route('login')->with('error', 'Veuillez vous connecter pour accéder à cette page.');
         }
 
@@ -34,7 +35,7 @@ class AdminMiddleware
                 'user_role' => auth()->user()->role,
                 'ip' => $request->ip(),
                 'url' => $request->fullUrl(),
-                'timestamp' => now()
+                'timestamp' => now(),
             ]);
             abort(403, 'Accès non autorisé. Seuls les administrateurs peuvent accéder à cette section.');
         }
@@ -44,9 +45,10 @@ class AdminMiddleware
             Log::warning('Tentative d\'accès avec compte désactivé', [
                 'user_id' => auth()->id(),
                 'ip' => $request->ip(),
-                'timestamp' => now()
+                'timestamp' => now(),
             ]);
             auth()->logout();
+
             return redirect()->route('login')->with('error', 'Votre compte a été désactivé. Contactez l\'administrateur.');
         }
 

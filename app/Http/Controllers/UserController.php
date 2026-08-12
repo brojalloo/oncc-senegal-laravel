@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +12,7 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
+
         return view('user.profile', compact('user'));
     }
 
@@ -36,7 +36,7 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('user.profile')
-                       ->with('success', 'Profil mis à jour avec succès.');
+            ->with('success', 'Profil mis à jour avec succès.');
     }
 
     // Formulaire de changement de mot de passe
@@ -55,15 +55,15 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (! Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'Le mot de passe actuel est incorrect.']);
         }
 
         $user->update([
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
         ]);
 
         return redirect()->route('user.profile')
-                       ->with('success', 'Mot de passe changé avec succès.');
+            ->with('success', 'Mot de passe changé avec succès.');
     }
 }

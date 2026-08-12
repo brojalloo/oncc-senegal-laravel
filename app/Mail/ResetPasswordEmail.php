@@ -14,6 +14,7 @@ class ResetPasswordEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+
     public $resetUrl;
 
     /**
