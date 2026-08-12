@@ -1,0 +1,56 @@
+# Environnement local reproduisant la production : mêmes nginx, PHP-FPM et
+# PostgreSQL que l'image déployée.
+#
+#   docker compose up --build
+#
+# Pour du développement au quotidien sans conteneur, `composer dev` reste plus
+# rapide (SQLite, rechargement à chaud des assets).
+
+services:
+  app:
+    build:
+      context: .
+      target: runtime
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      APP_NAME: "ONCC Sénégal"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      # Générez-en une avec : php artisan key:generate --show
+      APP_KEY: ${APP_KEY:?Renseignez APP_KEY dans un fichier .env a la racine}
+      APP_URL: http://localhost:8080
+      APP_LOCALE: fr
+
+      DB_CONNECTION: pgsql
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_DATABASE: oncc
+      DB_USERNAME: oncc
+      DB_PASSWORD: secret
+
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      MAIL_MAILER: log
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: oncc
+      POSTGRES_USER: oncc
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oncc -d oncc"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-data:

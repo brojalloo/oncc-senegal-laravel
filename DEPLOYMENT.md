@@ -1,79 +1,110 @@
-# 🌍 ONCC Sénégal - Déploiement
+# Déploiement — ONCC Sénégal
 
-## 🚀 Options de déploiement
+L'application se déploie par conteneur. Le `Dockerfile` à la racine est la
+**seule** description du déploiement : il fonctionne sur toute plateforme
+capable de lancer un conteneur et d'injecter un port (Railway, Render, Fly.io,
+Scaleway, Clever Cloud, ou un VPS avec Docker).
 
-### 1. **Railway** (Recommandé - Gratuit)
-```bash
-# 1. Créer un compte sur railway.app
-# 2. Connecter votre GitHub
-# 3. Déployer automatiquement
-```
+Les configurations spécifiques à une plateforme (`railway.json`, `render.yaml`,
+`nixpacks.toml`, `app.json`, `Procfile`) ont été retirées : elles se
+contredisaient entre elles et rendaient impossible de savoir ce qui tournait
+réellement en production.
 
-### 2. **Heroku**
-```bash
-# Installation Heroku CLI puis :
-heroku create oncc-senegal-app
-git push heroku main
-```
+## Ce que fait l'image
 
-### 3. **DigitalOcean App Platform**
-```bash
-# Connecter directement depuis l'interface web
-# Auto-détection Laravel
-```
+| Étape | Détail |
+|---|---|
+| Build | Dépendances PHP sans `--dev`, assets compilés par Vite, autoloader optimisé |
+| Serveur | nginx en frontal, PHP-FPM derrière, supervisé par supervisord |
+| Démarrage | Migrations, puis mise en cache de la configuration, des routes et des vues |
+| Base | PostgreSQL, via variables d'environnement |
 
-## 📋 Variables d'environnement requises
+L'image **ne sème jamais de données** et **ne génère jamais de `.env`**. Toute
+la configuration vient de l'environnement fourni par l'hébergeur.
 
-Pour le déploiement, configurez ces variables :
+## Variables d'environnement requises
 
 ```env
 APP_NAME="ONCC Sénégal"
 APP_ENV=production
-APP_KEY=base64:YOUR_KEY_HERE
+APP_KEY=base64:...          # php artisan key:generate --show
 APP_DEBUG=false
-APP_URL=https://votre-domaine.com
+APP_URL=https://votre-domaine.example
+APP_LOCALE=fr
 
-DB_CONNECTION=sqlite
-DB_DATABASE=/app/database/database.sqlite
+DB_CONNECTION=pgsql
+DB_HOST=...                 # fourni par la base managée
+DB_PORT=5432
+DB_DATABASE=...
+DB_USERNAME=...
+DB_PASSWORD=...
 
 SESSION_DRIVER=database
-SESSION_ENCRYPT=true
+SESSION_SECURE_COOKIE=true
 CACHE_STORE=database
 QUEUE_CONNECTION=database
 
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
+MAIL_HOST=...
 MAIL_PORT=587
-MAIL_USERNAME=your-email@gmail.com
-MAIL_PASSWORD=your-app-password
-MAIL_ENCRYPTION=tls
+MAIL_USERNAME=...
+MAIL_PASSWORD=...
+MAIL_FROM_ADDRESS=...
+MAIL_FROM_NAME="ONCC Sénégal"
 ```
 
-## 🔧 Configuration automatique
+`PORT` est généralement injecté par la plateforme ; à défaut, l'image écoute
+sur 8080.
 
-Le site est déjà configuré pour :
-- ✅ Création automatique de la base de données
-- ✅ Migration et seeders automatiques
-- ✅ Optimisation des performances
-- ✅ Gestion des erreurs en production
-- ✅ Logging des activités
+Le conteneur refuse de démarrer si `APP_KEY` est vide, plutôt que de servir des
+sessions et des données chiffrées avec une clé absente.
 
-## 📊 Données incluses
+### Variables optionnelles
 
-- 13 régions du Sénégal
-- 4 comptes utilisateurs de test
-- 1,560 données climatiques
-- 3,612 données économiques
-- Alertes climatiques par région
+| Variable | Défaut | Effet |
+|---|---|---|
+| `RUN_MIGRATIONS` | `true` | Passez à `false` pour piloter les migrations depuis une étape de release dédiée |
+| `SEED_PASSWORD` | — | Développement uniquement. Le seeder de démonstration refuse de s'exécuter en production |
 
-## 🔒 Sécurité
+## Base de données
 
-- Middlewares de protection
-- Rate limiting
-- Headers de sécurité
-- Sessions chiffrées
-- Validation CSRF
+Utilisez une base **PostgreSQL managée**, proposée par toutes les plateformes
+citées. Le stockage local d'un conteneur est éphémère : une base SQLite posée
+dans l'image disparaît à chaque redéploiement, avec tous les comptes et toutes
+les données saisies.
 
----
+SQLite reste le choix par défaut en développement local, où cette contrainte
+n'existe pas.
 
-**Prêt pour la production !** 🚀
+## Essai local
+
+```bash
+php artisan key:generate --show   # copiez la valeur dans un .env à la racine
+docker compose up --build
+```
+
+L'application répond sur <http://localhost:8080>, avec un PostgreSQL identique
+à celui de production.
+
+## Premier administrateur
+
+Aucun compte n'est créé automatiquement. Après le premier déploiement,
+inscrivez-vous par le formulaire public, puis promouvez ce compte :
+
+```bash
+php artisan users:promote votre-email@example.com
+```
+
+Exécutez cette commande dans le conteneur (`docker exec`, ou la console de la
+plateforme). L'inscription publique ne permet pas de se créer directement un
+compte administrateur.
+
+## Ce qui n'est pas encore en place
+
+Ces points relèvent de la phase 2 du diagnostic et ne sont **pas** couverts par
+cette configuration :
+
+- Limitation du nombre de tentatives de connexion
+- En-têtes de sécurité HTTP (CSP, HSTS, X-Frame-Options)
+- Redirection HTTPS forcée côté application
+- Traitement des vulnérabilités remontées par `composer audit`

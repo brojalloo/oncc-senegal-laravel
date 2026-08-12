@@ -8,27 +8,26 @@ echo ""
 
 cd "$(dirname "$0")"
 
-echo "[1/6] Cleaning caches..."
+echo "[1/5] Cleaning caches..."
 php artisan config:clear >/dev/null 2>&1
 php artisan cache:clear >/dev/null 2>&1
 php artisan view:clear >/dev/null 2>&1
 php artisan route:clear >/dev/null 2>&1
 
-echo "[2/6] Stopping PHP processes..."
+echo "[2/5] Stopping PHP processes..."
 pkill -f "php.*serve" >/dev/null 2>&1
 
-echo "[3/6] Checking database..."
+echo "[3/5] Checking database..."
 php artisan migrate:status
 
-echo "[4/6] Optimizing Laravel..."
-php artisan config:cache >/dev/null 2>&1
-php artisan route:cache >/dev/null 2>&1
-php artisan view:cache >/dev/null 2>&1
-
-echo "[5/6] Building assets..."
+echo "[4/5] Building assets..."
 npm run build >/dev/null 2>&1
 
-echo "[6/6] Starting server..."
+# Pas de config:cache ici : en développement, la configuration mise en cache
+# fige le .env, les modifications n'ont plus d'effet et env() renvoie null.
+# La mise en cache appartient au démarrage du conteneur (docker/entrypoint.sh).
+
+echo "[5/5] Starting server..."
 echo ""
 echo "✅ Server available at: http://localhost:8080"
 echo "⚠️  Press Ctrl+C to stop"
