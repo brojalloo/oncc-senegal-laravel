@@ -84,16 +84,28 @@ npm run build
 php artisan serve
 ```
 
-## 👥 Comptes de test
+## 👥 Comptes de démonstration
 
-Après le seeding, vous pouvez utiliser ces comptes :
+`php artisan db:seed` crée quatre comptes locaux, un par rôle :
 
-| Rôle | Email | Mot de passe |
-|------|-------|--------------|
-| **Admin** | admin@oncc-sn.com | Admin@2026 |
-| **Chercheur** | chercheur@oncc-sn.com | Chercheur@2026 |
-| **Collectivité** | collectivite@oncc-sn.com | Collectivite@2026 |
-| **Public** | public@oncc-sn.com | Public@2026 |
+| Rôle | Email |
+|------|-------|
+| **Admin** | admin@oncc-sn.com |
+| **Chercheur** | chercheur@oncc-sn.com |
+| **Collectivité** | collectivite@oncc-sn.com |
+| **Public** | public@oncc-sn.com |
+
+Ils partagent un mot de passe unique, **affiché dans la console à la fin du
+seeding**. Par défaut il est généré aléatoirement à chaque exécution ; pour en
+fixer un pendant le développement, renseignez `SEED_PASSWORD` dans votre `.env` :
+
+```env
+SEED_PASSWORD=un-mot-de-passe-de-developpement
+```
+
+> ⚠️ Ces comptes sont réservés au développement. Le seeder refuse de s'exécuter
+> lorsque `APP_ENV=production`, y compris avec `--force`. Ne renseignez jamais
+> `SEED_PASSWORD` sur un environnement déployé.
 
 ## 📁 Structure du projet
 
