@@ -16,6 +16,29 @@
 }
 
 /* ====================================================================
+   Collision Tailwind / Bootstrap
+   ====================================================================
+
+   Les deux feuilles définissent .collapse, et pas pour la même chose :
+   chez Bootstrap c'est un panneau repliable, masqué par display:none
+   tant qu'il ne porte pas .show ; chez Tailwind c'est l'utilitaire
+   visibility:collapse.
+
+   Cette feuille étant chargée après Bootstrap, l'utilitaire s'appliquait
+   par-dessus et rendait invisibles, à toute largeur, le panneau latéral
+   et le menu de la barre haute. Sans les retirer du flux : la colonne
+   du panneau restait en place, vide.
+
+   Aucune vue n'utilise .collapse comme utilitaire Tailwind ; la classe
+   n'apparaît que sur les composants Bootstrap.
+
+   La règle est hors couche, ce qui la fait primer sur @layer utilities
+   quel que soit l'ordre des fichiers.
+   ==================================================================== */
+
+.collapse { visibility: visible; }
+
+/* ====================================================================
    Système de design — « Gradient sahélien »
    ====================================================================
 

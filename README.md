@@ -3,7 +3,7 @@
 ![Laravel](https://img.shields.io/badge/Laravel-12.66-red?style=for-the-badge&logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777bb4?style=for-the-badge&logo=php)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-113-1a6e42?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-115-1a6e42?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ## 📋 À propos
@@ -142,7 +142,7 @@ est masquée et confirmée, et douze caractères sont exigés.
 ## ✅ Tests
 
 ```bash
-php artisan test          # 113 tests
+php artisan test          # 115 tests
 ./vendor/bin/pint --test  # style de code
 ```
 
@@ -187,7 +187,7 @@ docker compose up --build   # pile complète en local, PostgreSQL compris
 │   └── seeders/              # Données de démonstration
 ├── docker/                   # nginx, PHP-FPM, supervisord, entrypoint
 ├── resources/views/          # Vues Blade, dont les pages d'erreur
-├── tests/                    # 113 tests
+├── tests/                    # 115 tests
 └── public/                   # Racine web, assets compilés
 ```
 
