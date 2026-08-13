@@ -24,12 +24,18 @@ class SecurityHeaders
         'https://unpkg.com',
         'https://cdnjs.cloudflare.com',
         'https://fonts.bunny.net',
+        // style.css et optimized.css importent des polices depuis Google.
+        'https://fonts.googleapis.com',
     ];
 
     private const FONT_SOURCES = [
         'https://fonts.bunny.net',
         'https://cdnjs.cloudflare.com',
         'https://cdn.jsdelivr.net',
+        // La feuille servie par googleapis pointe vers gstatic pour les
+        // fichiers de police eux-mêmes : autoriser l'un sans l'autre ne
+        // charge rien.
+        'https://fonts.gstatic.com',
     ];
 
     private const IMAGE_SOURCES = [
@@ -37,6 +43,8 @@ class SecurityHeaders
         'https://*.tile.openstreetmap.org',
         'https://*.basemaps.cartocdn.com',
         'https://unpkg.com',
+        // custom.css utilise une photographie hébergée par Unsplash.
+        'https://images.unsplash.com',
     ];
 
     public function handle(Request $request, Closure $next): Response

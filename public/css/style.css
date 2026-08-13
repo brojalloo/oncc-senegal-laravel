@@ -95,7 +95,7 @@
             rgba(17, 24, 39, 0.85) 75%,
             rgba(17, 24, 39, 0.9) 100%),
         /* Même image d'arrière-plan avec effet sombre */
-        url('../img/africa-sunset.jpg');
+        url('../img/africa-sunset.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -112,7 +112,7 @@
             rgba(55, 65, 81, 0.7) 50%,
             rgba(17, 24, 39, 0.85) 75%,
             rgba(17, 24, 39, 0.9) 100%),
-        url('../img/senegal-baobab.jpg');
+        url('../img/senegal-baobab.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -127,7 +127,7 @@
             rgba(55, 65, 81, 0.7) 50%,
             rgba(17, 24, 39, 0.85) 75%,
             rgba(17, 24, 39, 0.9) 100%),
-        url('../img/africa-sunset.jpg');
+        url('../img/africa-sunset.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -142,7 +142,7 @@
             rgba(55, 65, 81, 0.7) 50%,
             rgba(17, 24, 39, 0.85) 75%,
             rgba(17, 24, 39, 0.9) 100%),
-        url('../img/drought-climate.jpg');
+        url('../img/drought-climate.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -157,7 +157,7 @@
             rgba(55, 65, 81, 0.7) 50%,
             rgba(17, 24, 39, 0.85) 75%,
             rgba(17, 24, 39, 0.9) 100%),
-        url('../img/agriculture-field.jpg');
+        url('../img/agriculture-field.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -172,7 +172,7 @@
             rgba(55, 65, 81, 0.7) 50%,
             rgba(17, 24, 39, 0.85) 75%,
             rgba(17, 24, 39, 0.9) 100%),
-        url('../img/nature-landscape.jpg');
+        url('../img/nature-landscape.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -225,7 +225,7 @@ body {
             rgba(249, 250, 251, 0.85) 75%,
             rgba(255, 255, 255, 0.9) 100%),
         /* Image d'arrière-plan - Coucher de soleil africain */
-        url('../img/africa-sunset.jpg');
+        url('../img/africa-sunset.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -247,7 +247,7 @@ body.bg-baobab {
             rgba(255, 255, 255, 0.75) 50%,
             rgba(249, 250, 251, 0.85) 75%,
             rgba(255, 255, 255, 0.9) 100%),
-        url('../img/senegal-baobab.jpg');
+        url('../img/senegal-baobab.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -262,7 +262,7 @@ body.bg-sunset {
             rgba(255, 255, 255, 0.75) 50%,
             rgba(249, 250, 251, 0.85) 75%,
             rgba(255, 255, 255, 0.9) 100%),
-        url('../img/africa-sunset.jpg');
+        url('../img/africa-sunset.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -277,7 +277,7 @@ body.bg-drought {
             rgba(255, 255, 255, 0.75) 50%,
             rgba(249, 250, 251, 0.85) 75%,
             rgba(255, 255, 255, 0.9) 100%),
-        url('../img/drought-climate.jpg');
+        url('../img/drought-climate.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -292,7 +292,7 @@ body.bg-agriculture {
             rgba(255, 255, 255, 0.75) 50%,
             rgba(249, 250, 251, 0.85) 75%,
             rgba(255, 255, 255, 0.9) 100%),
-        url('../img/agriculture-field.jpg');
+        url('../img/agriculture-field.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -307,7 +307,7 @@ body.bg-nature {
             rgba(255, 255, 255, 0.75) 50%,
             rgba(249, 250, 251, 0.85) 75%,
             rgba(255, 255, 255, 0.9) 100%),
-        url('../img/nature-landscape.jpg');
+        url('../img/nature-landscape.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
