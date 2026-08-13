@@ -238,16 +238,16 @@
                                                                     <select name="role" class="form-select" required>
                                                                         <option value="">-- Sélectionner un rôle --</option>
                                                                         <option value="public" {{ $user->role === 'public' ? 'selected' : '' }}>
-                                                                            👤 Public
+                                                                            Public
                                                                         </option>
                                                                         <option value="collectivite" {{ $user->role === 'collectivite' ? 'selected' : '' }}>
-                                                                            🏛️ Collectivité
+                                                                            Collectivité
                                                                         </option>
                                                                         <option value="chercheur" {{ $user->role === 'chercheur' ? 'selected' : '' }}>
-                                                                            🔬 Chercheur
+                                                                            Chercheur
                                                                         </option>
                                                                         <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>
-                                                                            👑 Administrateur
+                                                                            Administrateur
                                                                         </option>
                                                                     </select>
                                                                 </div>

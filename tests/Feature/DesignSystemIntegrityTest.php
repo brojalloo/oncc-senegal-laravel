@@ -137,6 +137,44 @@ class DesignSystemIntegrityTest extends TestCase
         ));
     }
 
+    /**
+     * Un <option> ne rend que du texte : aucune icône ne peut s'y afficher,
+     * d'où le recours à l'emoji. Mais l'emoji ne suit ni la police, ni la
+     * palette, ni le thème — il est rendu par le système d'exploitation et
+     * change d'aspect d'une machine à l'autre. Les libellés portent donc leur
+     * icône, et les options restent du texte.
+     *
+     * Les courriels gardent les leurs : ils s'affichent dans un client de
+     * messagerie, hors du système.
+     */
+    public function test_application_views_do_not_use_emoji_as_icons(): void
+    {
+        $fautives = [];
+
+        foreach ($this->vues() as $chemin) {
+            if (str_contains(str_replace('\\', '/', $chemin), '/views/emails/')) {
+                continue;
+            }
+
+            foreach (explode("\n", file_get_contents($chemin)) as $numero => $ligne) {
+                // Les traces de développement ne parviennent pas à l'écran.
+                if (str_contains($ligne, 'console.')) {
+                    continue;
+                }
+
+                if (preg_match('/[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}]/u', $ligne)) {
+                    $fautives[] = basename($chemin).':'.($numero + 1);
+                }
+            }
+        }
+
+        $this->assertSame([], $fautives, sprintf(
+            "%d ligne(s) utilisent un emoji comme icône :\n%s",
+            count($fautives),
+            implode("\n", $fautives)
+        ));
+    }
+
     public function test_every_page_header_uses_the_shared_band(): void
     {
         $variantes = [];

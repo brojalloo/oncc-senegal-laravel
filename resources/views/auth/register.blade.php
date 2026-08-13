@@ -121,13 +121,13 @@
                                 required>
                             <option value="">-- Sélectionner --</option>
                             <option value="public" {{ old('role') === 'public' ? 'selected' : '' }}>
-                                👤 Public (Consultation uniquement)
+                                Public (Consultation uniquement)
                             </option>
                             <option value="collectivite" {{ old('role') === 'collectivite' ? 'selected' : '' }}>
-                                🏛️ Collectivité (Saisie données économiques)
+                                Collectivité (Saisie données économiques)
                             </option>
                             <option value="chercheur" {{ old('role') === 'chercheur' ? 'selected' : '' }}>
-                                👨‍🔬 Chercheur (Saisie toutes données)
+                                Chercheur (Saisie toutes données)
                             </option>
                         </select>
                     </div>

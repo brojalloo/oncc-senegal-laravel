@@ -97,7 +97,7 @@
                         @csrf
                         <div class="mb-4">
                             <label for="test_email" class="form-label">
-                                <i class="fas fa-at text-info"></i> Adresse email de test
+                                <i class="fas fa-at"></i> Adresse email de test
                             </label>
                             <input type="email" class="form-control @error('test_email') is-invalid @enderror" 
                                    id="test_email" name="test_email"
@@ -221,7 +221,7 @@
                 <div class="row">
                     <div class="col-md-8 mb-4">
                         <label for="newsletter_subject" class="form-label">
-                            <i class="fas fa-heading text-success"></i> Sujet de la newsletter
+                            <i class="fas fa-heading"></i> Sujet de la newsletter
                         </label>
                         <input type="text" class="form-control @error('subject') is-invalid @enderror" 
                                id="newsletter_subject" name="subject"
@@ -232,25 +232,25 @@
                     </div>
                     <div class="col-md-4 mb-4">
                         <label class="form-label">
-                            <i class="fas fa-users text-primary"></i> Destinataires
+                            <i class="fas fa-users"></i> Destinataires
                         </label>
                         <div class="mt-2">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="radio" id="target_all" name="target" value="all" checked>
                                 <label class="form-check-label" for="target_all">
-                                    <span class="badge-premium primary">👥</span> Tous les utilisateurs vérifiés
+                                    <span class="badge-premium primary"><i class="fas fa-users"></i></span> Tous les utilisateurs vérifiés
                                 </label>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="radio" id="target_admin" name="target" value="admin">
                                 <label class="form-check-label" for="target_admin">
-                                    <span class="badge-premium danger">👑</span> Administrateurs uniquement
+                                    <span class="badge-premium danger"><i class="fas fa-user-shield"></i></span> Administrateurs uniquement
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" id="target_chercheur" name="target" value="chercheur">
                                 <label class="form-check-label" for="target_chercheur">
-                                    <span class="badge-premium info">🔬</span> Chercheurs uniquement
+                                    <span class="badge-premium info"><i class="fas fa-microscope"></i></span> Chercheurs uniquement
                                 </label>
                             </div>
                         </div>
@@ -259,7 +259,7 @@
 
                 <div class="mb-4">
                     <label for="newsletter_content" class="form-label">
-                        <i class="fas fa-file-alt text-warning"></i> Contenu de la newsletter (HTML supporté)
+                        <i class="fas fa-file-alt"></i> Contenu de la newsletter (HTML supporté)
                     </label>
                     <textarea class="form-control @error('content') is-invalid @enderror" 
                               id="newsletter_content" name="content" rows="10" required 

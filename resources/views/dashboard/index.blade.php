@@ -26,14 +26,14 @@
 <div class="filter-bar">
     <form method="get" class="d-flex align-items-center gap-3 flex-wrap">
         <div class="d-flex align-items-center gap-2">
-            <i class="fas fa-filter text-primary"></i>
+            <i class="fas fa-filter"></i>
             <label for="region_id" class="fw-semibold mb-0">Filtrer par région :</label>
         </div>
         <select name="region_id" id="region_id" class="form-select w-auto" onchange="this.form.submit()">
-            <option value="">🌍 Toutes les régions</option>
+            <option value="">Toutes les régions</option>
             @foreach($regions as $region)
                 <option value="{{ $region->id }}" {{ $regionId == $region->id ? 'selected' : '' }}>
-                    📍 {{ $region->nom }}
+                    {{ $region->nom }}
                 </option>
             @endforeach
         </select>

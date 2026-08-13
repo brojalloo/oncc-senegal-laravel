@@ -157,7 +157,7 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-user text-primary"></i> Nom complet
+                                        <i class="fas fa-user"></i> Nom complet
                                     </label>
                                     <input type="text" name="nom" class="form-control @error('nom') is-invalid @enderror" 
                                            value="{{ old('nom', $user->nom) }}" required>
@@ -169,7 +169,7 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-envelope text-info"></i> Email
+                                        <i class="fas fa-envelope"></i> Email
                                     </label>
                                     <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
                                            value="{{ old('email', $user->email) }}" required>
@@ -184,7 +184,7 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-building text-success"></i> Organisation
+                                        <i class="fas fa-building"></i> Organisation
                                     </label>
                                     <input type="text" name="organisation" class="form-control @error('organisation') is-invalid @enderror" 
                                            value="{{ old('organisation', $user->organisation) }}" placeholder="Votre organisation">
@@ -196,7 +196,7 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-phone text-warning"></i> Téléphone
+                                        <i class="fas fa-phone"></i> Téléphone
                                     </label>
                                     <input type="text" name="telephone" class="form-control @error('telephone') is-invalid @enderror" 
                                            value="{{ old('telephone', $user->telephone) }}" placeholder="+221 XX XXX XX XX">
@@ -247,7 +247,7 @@
                             <div class="col-md-4">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-key text-warning"></i> Nouveau mot de passe
+                                        <i class="fas fa-key"></i> Nouveau mot de passe
                                     </label>
                                     <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
                                     @error('password')
@@ -259,7 +259,7 @@
                             <div class="col-md-4">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-check-double text-success"></i> Confirmer
+                                        <i class="fas fa-check-double"></i> Confirmer
                                     </label>
                                     <input type="password" name="password_confirmation" class="form-control" required>
                                 </div>

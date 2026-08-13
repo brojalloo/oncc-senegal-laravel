@@ -590,7 +590,7 @@ function showNotification(message, type = 'info') {
                 <form id="mapFilters" class="premium-form">
                     <div class="mb-4">
                         <label class="form-label">
-                            <i class="fas fa-calendar-alt text-primary"></i> Année
+                            <i class="fas fa-calendar-alt"></i> Année
                         </label>
                         <select class="form-select" name="year" id="yearSelect">
                             @for ($year = date('Y'); $year >= 2010; $year--)
@@ -603,20 +603,20 @@ function showNotification(message, type = 'info') {
                     
                     <div class="mb-4">
                         <label class="form-label">
-                            <i class="fas fa-chart-pie text-success"></i> Indicateur
+                            <i class="fas fa-gauge"></i> Indicateur
                         </label>
                         <select class="form-select" name="indicator" id="indicatorSelect">
-                            <option value="secheresse">🌞 Sécheresse</option>
-                            <option value="inondation">🌊 Inondation</option>
-                            <option value="desertification">🏜️ Désertification</option>
-                            <option value="temperature">🌡️ Température</option>
-                            <option value="pluviometrie">🌧️ Pluviométrie</option>
+                            <option value="secheresse">Sécheresse</option>
+                            <option value="inondation">Inondation</option>
+                            <option value="desertification">Désertification</option>
+                            <option value="temperature">Température</option>
+                            <option value="pluviometrie">Pluviométrie</option>
                         </select>
                     </div>
                     
                     <div class="mb-4">
                         <label class="form-label">
-                            <i class="fas fa-bell text-warning"></i> Alertes
+                            <i class="fas fa-bell"></i> Alertes
                         </label>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="showAlerts" checked style="width: 3em; height: 1.5em;">
