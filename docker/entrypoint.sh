@@ -7,6 +7,15 @@ set -e
 # configuration provient des variables d'environnement fournies par
 # l'hébergeur. Les comptes de démonstration n'ont rien à faire en production.
 
+# Une commande explicite l'emporte sur le démarrage du serveur : sans cela,
+# l'image ne sert qu'à une chose et toute opération ponctuelle est impossible —
+# `docker run image php artisan users:promote ...`, la génération d'une clé, ou
+# le moindre diagnostic. On la lance telle quelle, sans migrer ni mettre en
+# cache, et sans exiger APP_KEY dont ces commandes n'ont pas toutes besoin.
+if [ "$#" -gt 0 ]; then
+    exec "$@"
+fi
+
 : "${PORT:=8080}"
 
 echo "==> Configuration de nginx sur le port ${PORT}"
