@@ -3,7 +3,6 @@
 @section('title', 'Mon Profil')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/premium-design.css') }}">
 <style>
     .profile-avatar {
         width: 120px;

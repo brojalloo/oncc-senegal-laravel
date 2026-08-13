@@ -3,7 +3,6 @@
 @section('title', 'Cartographie')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/premium-design.css') }}">
 <style>
     /* Padding card-body */
     .premium-card .card-body {

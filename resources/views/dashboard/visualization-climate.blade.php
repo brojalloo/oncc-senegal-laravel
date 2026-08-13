@@ -3,7 +3,6 @@
 @section('title', 'Visualisation Climatique')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/premium-design.css') }}">
 @endpush
 
 @section('content')

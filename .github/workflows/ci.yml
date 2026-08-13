@@ -41,6 +41,13 @@ jobs:
           php artisan key:generate
           php artisan migrate --force
 
+      - name: Compiler les assets
+        # Le layout charge ses styles et scripts par @vite : si la
+        # construction casse, la page ne s'affiche plus. Les tests s'en
+        # affranchissent via withoutVite(), c'est donc ici que le build est
+        # réellement vérifié.
+        run: npm run build
+
       - name: Check code style (Pint)
         run: ./vendor/bin/pint --test
 

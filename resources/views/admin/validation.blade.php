@@ -3,7 +3,6 @@
 @section('title', 'Validation des Données')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/premium-design.css') }}">
 <style>
 .btn-action {
     width: 32px;
