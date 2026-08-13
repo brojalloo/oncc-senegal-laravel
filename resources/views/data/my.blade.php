@@ -3,7 +3,6 @@
 @section('title', 'Mes Données')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/premium-design.css') }}">
 @endpush
 
 @section('content')

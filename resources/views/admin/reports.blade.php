@@ -3,7 +3,6 @@
 @section('title', 'Rapports système')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/premium-design.css') }}">
 <style>
 .premium-card .card-body {
     padding: 2rem 2.5rem;

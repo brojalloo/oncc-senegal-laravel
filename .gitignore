@@ -25,3 +25,12 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Outillage local d'assistants IA : configuration personnelle, sans rapport
+# avec l'application, et volumineuse (plusieurs milliers de fichiers).
+/.github/agents
+/.github/hooks
+/.github/skills
+
+# Sortie de `npm audit --json`, régénérable à volonté.
+/npm-audit.json
