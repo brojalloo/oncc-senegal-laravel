@@ -47,6 +47,14 @@
     --oncc-accent-soft:  #E6E4F7;
     --oncc-on-accent:    #FFFFFF;
 
+    /* Le bandeau de chrome reste sombre dans les deux thèmes : ce qui s'y
+       pose s'exprime donc par ces jetons, et non par du blanc en dur. */
+    --oncc-on-chrome:        #FFFFFF;
+    --oncc-on-chrome-soft:   rgb(255 255 255 / 0.72);
+    --oncc-on-chrome-dim:    rgb(255 255 255 / 0.55);
+    --oncc-chrome-veil:      rgb(255 255 255 / 0.12);
+    --oncc-chrome-veil-plus: rgb(255 255 255 / 0.18);
+
     /* Aridité — nord vers sud. Réservée aux données. */
     --oncc-ar-0: #E8DCC0;
     --oncc-ar-1: #D4A855;
@@ -57,7 +65,7 @@
     /* Niveaux — ceux de la table alertes */
     --oncc-faible:      #2C6B4F;
     --oncc-faible-bg:   #E3F0E9;
-    --oncc-moyen:       #8A6B12;
+    --oncc-moyen:       #7E610F;
     --oncc-moyen-bg:    #F7EFD6;
     --oncc-eleve:       #A8501F;
     --oncc-eleve-bg:    #FAE8DC;
@@ -85,10 +93,19 @@
     --oncc-ink-soft:     #8089A6;
     --oncc-rule:         #2A3352;
     --oncc-rule-strong:  #3B4569;
-    --oncc-chrome:       #C3CBE6;
+    /* Un bleu nettement plus saturé que le fond et les surfaces : c'est ce
+       qui distingue le bandeau du reste, faute de pouvoir aller plus
+       sombre que le fond lui-même. */
+    --oncc-chrome:       #232D4D;
     --oncc-accent:       #9A90F5;
     --oncc-accent-soft:  #241F52;
     --oncc-on-accent:    #10152A;
+
+    --oncc-on-chrome:        #EDF0F8;
+    --oncc-on-chrome-soft:   rgb(237 240 248 / 0.7);
+    --oncc-on-chrome-dim:    rgb(237 240 248 / 0.52);
+    --oncc-chrome-veil:      rgb(255 255 255 / 0.09);
+    --oncc-chrome-veil-plus: rgb(255 255 255 / 0.15);
 
     --oncc-ar-0: #C8BC9E;
     --oncc-ar-1: #C79B48;
@@ -139,12 +156,38 @@
     --bs-body-font-family: var(--oncc-body);
 }
 
+/* Le thème sombre reprend la passerelle en entier. Le gabarit pose aussi
+   data-bs-theme="dark", ce qui bascule les composants que Bootstrap
+   habille lui-même — menus déroulants, champs, tableaux, fenêtres
+   modales ; ces quelques jetons priment ensuite sur sa palette. */
 [data-theme="dark"] {
-    --bs-body-bg:    var(--oncc-ground);
-    --bs-body-color: var(--oncc-ink);
-    --bs-border-color: var(--oncc-rule);
+    --bs-body-bg:        var(--oncc-ground);
+    --bs-body-color:     var(--oncc-ink);
     --bs-emphasis-color: var(--oncc-ink);
+    --bs-secondary-color: var(--oncc-ink-soft);
+    --bs-border-color:   var(--oncc-rule);
+    --bs-border-radius:  var(--oncc-radius);
+    --bs-border-radius-sm: 3px;
+    --bs-border-radius-lg: 6px;
+
+    --bs-primary:     var(--oncc-accent);
+    --bs-primary-rgb: 154, 144, 245;
+    --bs-link-color:  var(--oncc-accent);
+    --bs-link-hover-color: var(--oncc-ink);
+
+    --bs-success: var(--oncc-faible);
+    --bs-warning: var(--oncc-moyen);
+    --bs-danger:  var(--oncc-critique);
+    --bs-info:    var(--oncc-accent);
+
+    --bs-font-sans-serif: var(--oncc-body);
+    --bs-body-font-family: var(--oncc-body);
 }
+
+/* Les contrôles natifs — ascenseurs, sélecteurs de date, champs — suivent
+   cette déclaration et non la feuille de style. */
+:root { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
 
 /* --------------------------------------------------------------------
    Typographie
@@ -215,7 +258,7 @@ h3, .h3 { font-size: 1.25rem; }
 .modern-navbar .nav-link,
 .modern-navbar .brand-text,
 .modern-navbar .navbar-toggler {
-    color: #FFFFFF;
+    color: var(--oncc-on-chrome);
 }
 
 .modern-navbar .navbar-brand .fw-semibold {
@@ -246,6 +289,45 @@ h3, .h3 { font-size: 1.25rem; }
     background: rgba(255, 255, 255, 0.1);
 }
 
+/* --------------------------------------------------------------------
+   Bascule de thème
+   --------------------------------------------------------------------
+   Les deux icônes sont dans le balisage ; c'est le thème courant qui
+   décide laquelle s'affiche. Rien à permuter en JavaScript, donc rien
+   qui puisse se désynchroniser de l'état réel.
+   -------------------------------------------------------------------- */
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    padding: 0;
+    border: 1px solid var(--oncc-chrome-veil);
+    border-radius: var(--oncc-radius);
+    background: transparent;
+    color: var(--oncc-on-chrome-soft);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--oncc-chrome-veil);
+    color: var(--oncc-on-chrome);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--oncc-on-chrome);
+    outline-offset: 2px;
+}
+
+.theme-toggle .icone-sombre { display: inline-block; }
+.theme-toggle .icone-clair  { display: none; }
+[data-theme="dark"] .theme-toggle .icone-sombre { display: none; }
+[data-theme="dark"] .theme-toggle .icone-clair  { display: inline-block; }
+
 /* Le déclencheur du menu : sans cette règle, l'avatar est un bloc et
    le nom passe à la ligne en dessous. */
 .user-dropdown {
@@ -260,7 +342,7 @@ h3, .h3 { font-size: 1.25rem; }
     justify-content: center;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.14);
-    color: #FFFFFF;
+    color: var(--oncc-on-chrome);
 }
 
 .user-avatar { width: 1.9rem; height: 1.9rem; font-size: 0.8rem; }
@@ -332,35 +414,35 @@ h3, .h3 { font-size: 1.25rem; }
 
 .modern-footer {
     background: var(--oncc-chrome);
-    color: rgb(255 255 255 / 0.7);
+    color: var(--oncc-on-chrome-soft);
     border-top: 3px solid transparent;
     border-image: var(--oncc-lat) 1;
 }
 
 .modern-footer .footer-content { background: transparent; padding-block: 2.5rem; }
-.modern-footer .footer-title { color: #FFFFFF; font-size: 1rem; }
+.modern-footer .footer-title { color: var(--oncc-on-chrome); font-size: 1rem; }
 
 .modern-footer .footer-links a,
 .modern-footer .footer-contact span,
 .modern-footer .footer-bottom-link,
 .modern-footer .footer-text {
-    color: rgb(255 255 255 / 0.72);
+    color: var(--oncc-on-chrome-soft);
     text-decoration: none;
 }
 
 .modern-footer .footer-links a:hover,
-.modern-footer .footer-bottom-link:hover { color: #FFFFFF; }
+.modern-footer .footer-bottom-link:hover { color: var(--oncc-on-chrome); }
 
 .modern-footer .stat-item {
-    background: rgb(255 255 255 / 0.06);
-    border: 1px solid rgb(255 255 255 / 0.1);
+    background: var(--oncc-chrome-veil);
+    border: 1px solid var(--oncc-chrome-veil);
     border-radius: var(--oncc-radius);
 }
 
 .modern-footer .stat-item h4 {
     font-family: var(--oncc-data);
     font-size: 1.6rem;
-    color: #FFFFFF;
+    color: var(--oncc-on-chrome);
 }
 
 .social-link {
@@ -370,13 +452,13 @@ h3, .h3 { font-size: 1.25rem; }
     width: 2rem;
     height: 2rem;
     border-radius: var(--oncc-radius);
-    background: rgb(255 255 255 / 0.08);
-    color: rgb(255 255 255 / 0.8);
+    background: var(--oncc-chrome-veil);
+    color: var(--oncc-on-chrome-soft);
     text-decoration: none;
     transition: background-color 0.15s ease;
 }
 
-.social-link:hover { background: rgb(255 255 255 / 0.18); color: #FFFFFF; }
+.social-link:hover { background: var(--oncc-chrome-veil-plus); color: var(--oncc-on-chrome); }
 
 /* --------------------------------------------------------------------
    Authentification
@@ -414,27 +496,27 @@ h3, .h3 { font-size: 1.25rem; }
 
 .auth-card-header {
     background: var(--oncc-chrome);
-    color: #FFFFFF;
+    color: var(--oncc-on-chrome);
     padding: 1.75rem 1.75rem 1.5rem;
     text-align: center;
 }
 
 .auth-card-header h3 {
-    color: #FFFFFF;
+    color: var(--oncc-on-chrome);
     font-size: 1.3rem;
     letter-spacing: 0.06em;
     margin-bottom: 0.35rem;
 }
 
 .auth-card-header p {
-    color: rgb(255 255 255 / 0.72);
+    color: var(--oncc-on-chrome-soft);
     font-size: 0.86rem;
     line-height: 1.45;
     margin-inline: auto;
     max-width: 22rem;
 }
 
-.auth-card-header .fa-2x { color: rgb(255 255 255 / 0.55); font-size: 1.5rem; }
+.auth-card-header .fa-2x { color: var(--oncc-on-chrome-dim); font-size: 1.5rem; }
 
 .auth-card-body { padding: 1.75rem; }
 .auth-card-body .form-label { font-weight: 600; font-size: 0.86rem; color: var(--oncc-ink-mid); }
@@ -739,7 +821,7 @@ h3, .h3 { font-size: 1.25rem; }
 
 .dashboard-header {
     background: var(--oncc-chrome);
-    color: #FFFFFF;
+    color: var(--oncc-on-chrome);
     padding: 1.75rem 2rem;
     margin: 1.5rem 0 1.75rem;
     border-radius: var(--oncc-radius);
@@ -747,10 +829,10 @@ h3, .h3 { font-size: 1.25rem; }
     border-image: var(--oncc-lat) 1;
 }
 
-.dashboard-header h1 { color: #FFFFFF; margin-bottom: 0.4rem; }
+.dashboard-header h1 { color: var(--oncc-on-chrome); margin-bottom: 0.4rem; }
 
 .dashboard-header p {
-    color: rgb(255 255 255 / 0.72);
+    color: var(--oncc-on-chrome-soft);
     font-size: 0.98rem;
     max-width: 46rem;
     margin-bottom: 1rem;
@@ -761,11 +843,11 @@ h3, .h3 { font-size: 1.25rem; }
     align-items: center;
     gap: 0.6rem;
     font-size: 0.86rem;
-    color: rgb(255 255 255 / 0.85);
+    color: var(--oncc-on-chrome-soft);
 }
 
 .user-badge .role-badge {
-    background: rgb(255 255 255 / 0.14);
+    background: var(--oncc-chrome-veil-plus);
     border-radius: var(--oncc-radius);
     padding: 0.2rem 0.55rem;
     font-weight: 600;
@@ -1070,7 +1152,7 @@ h3, .h3 { font-size: 1.25rem; }
 
 .page-header.admin-header {
     background: var(--oncc-chrome);
-    color: #FFFFFF;
+    color: var(--oncc-on-chrome);
     padding: 1.5rem 1.75rem;
     margin-top: 1.5rem;
     border-radius: var(--oncc-radius);
@@ -1078,17 +1160,17 @@ h3, .h3 { font-size: 1.25rem; }
     border-image: var(--oncc-lat) 1;
 }
 
-.page-header.admin-header h1 { color: #FFFFFF; }
-.page-header.admin-header p { color: rgb(255 255 255 / 0.72); margin: 0; }
+.page-header.admin-header h1 { color: var(--oncc-on-chrome); }
+.page-header.admin-header p { color: var(--oncc-on-chrome-soft); margin: 0; }
 
 .page-header.admin-header .header-badge {
     align-self: flex-start;
     margin: 0.5rem 0 0;
-    background: rgb(255 255 255 / 0.14);
+    background: var(--oncc-chrome-veil-plus);
     border-radius: var(--oncc-radius);
     padding: 0.3rem 0.65rem;
     font-size: 0.82rem;
-    color: rgb(255 255 255 / 0.9);
+    color: var(--oncc-on-chrome);
 }
 
 /* Signale une file d'attente : la couleur dit « à traiter ». */
@@ -1293,7 +1375,7 @@ h3, .h3 { font-size: 1.25rem; }
 .page-header.climate-header,
 .page-header.economic-header {
     background: var(--oncc-chrome);
-    color: #FFFFFF;
+    color: var(--oncc-on-chrome);
     padding: 1.5rem 1.75rem;
     margin-top: 1.5rem;
     border-radius: var(--oncc-radius);
@@ -1302,10 +1384,10 @@ h3, .h3 { font-size: 1.25rem; }
 }
 
 .page-header.climate-header h1,
-.page-header.economic-header h1 { color: #FFFFFF; }
+.page-header.economic-header h1 { color: var(--oncc-on-chrome); }
 
 .page-header.climate-header p,
-.page-header.economic-header p { color: rgb(255 255 255 / 0.72); margin: 0; }
+.page-header.economic-header p { color: var(--oncc-on-chrome-soft); margin: 0; }
 
 .page-header.climate-header .pulse-dot,
 .page-header.economic-header .pulse-dot { background: var(--oncc-ar-1); }
