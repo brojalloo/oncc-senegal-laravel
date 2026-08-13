@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ErrorPagesTest extends TestCase
@@ -29,9 +30,7 @@ class ErrorPagesTest extends TestCase
         $response->assertSee('Accès non autorisé');
     }
 
-    /**
-     * @dataProvider errorViews
-     */
+    #[DataProvider('errorViews')]
     public function test_each_error_view_renders_standalone(string $view, string $expected): void
     {
         // Les pages d'erreur ne doivent dépendre ni de la session ni de la
