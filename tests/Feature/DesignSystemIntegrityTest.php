@@ -95,6 +95,127 @@ class DesignSystemIntegrityTest extends TestCase
         ));
     }
 
+    public function test_the_chrome_band_stays_dark_in_both_themes(): void
+    {
+        // Six bandeaux utilisent --oncc-chrome en fond avec du texte clair
+        // posé dessus. Un jeton clair de ce côté rendrait ce texte invisible.
+        foreach (['clair' => $this->jeton('--oncc-chrome', false),
+            'sombre' => $this->jeton('--oncc-chrome', true)] as $theme => $couleur) {
+            $this->assertLessThan(0.2, $this->luminance($couleur), sprintf(
+                'Le bandeau de chrome du thème %s (%s) est trop clair pour porter du texte clair.',
+                $theme,
+                $couleur
+            ));
+        }
+    }
+
+    /**
+     * Les couples texte/fond du système tiennent le seuil AA de 4,5:1 dans
+     * les deux thèmes. Sans ce test, un ajustement de teinte peut faire
+     * passer un libellé sous le seuil sans que rien ne le signale.
+     */
+    public function test_the_token_pairs_meet_the_aa_contrast_threshold(): void
+    {
+        $couples = [
+            'texte sur surface' => ['--oncc-ink', '--oncc-surface'],
+            'texte doux sur surface' => ['--oncc-ink-soft', '--oncc-surface'],
+            'texte sur fond' => ['--oncc-ink', '--oncc-ground'],
+            'accent sur surface' => ['--oncc-accent', '--oncc-surface'],
+            'niveau faible' => ['--oncc-faible', '--oncc-faible-bg'],
+            'niveau moyen' => ['--oncc-moyen', '--oncc-moyen-bg'],
+            'niveau élevé' => ['--oncc-eleve', '--oncc-eleve-bg'],
+            'niveau critique' => ['--oncc-critique', '--oncc-critique-bg'],
+        ];
+
+        $insuffisants = [];
+
+        foreach ([false, true] as $sombre) {
+            foreach ($couples as $nom => [$texte, $fond]) {
+                $rapport = $this->contraste($this->jeton($texte, $sombre), $this->jeton($fond, $sombre));
+
+                if ($rapport < 4.5) {
+                    $insuffisants[] = sprintf(
+                        '%s (thème %s) : %.2f:1',
+                        $nom,
+                        $sombre ? 'sombre' : 'clair',
+                        $rapport
+                    );
+                }
+            }
+        }
+
+        $this->assertSame([], $insuffisants, "Couples sous le seuil AA :\n".implode("\n", $insuffisants));
+    }
+
+    public function test_the_theme_is_applied_before_the_first_paint(): void
+    {
+        // Chargé comme module Vite, le script s'exécuterait après le premier
+        // rendu : la page apparaîtrait en clair avant de basculer.
+        $partiel = $this->racine().'/resources/views/layouts/theme.blade.php';
+        $this->assertFileExists($partiel);
+
+        // Les trois vues qui portent leur propre <head>.
+        foreach (['layouts/app', 'auth/login', 'auth/register'] as $vue) {
+            $source = file_get_contents($this->racine()."/resources/views/{$vue}.blade.php");
+
+            $this->assertStringContainsString("@include('layouts.theme')", $source, sprintf(
+                "La vue %s porte son propre <head> mais n'inclut pas le choix de thème : ".
+                'la page y scintillerait en clair avant de basculer.',
+                $vue
+            ));
+
+            $positionTheme = strpos($source, "@include('layouts.theme')");
+            $positionVite = strpos($source, '@vite(');
+
+            $this->assertLessThan($positionVite, $positionTheme, sprintf(
+                'Dans %s, le choix de thème doit précéder @vite.',
+                $vue
+            ));
+        }
+    }
+
+    private function jeton(string $nom, bool $sombre): string
+    {
+        $css = file_get_contents($this->racine().'/resources/css/app.css');
+
+        $motif = $sombre
+            ? '/\[data-theme="dark"\] \{(.+?)\n\}/s'
+            : '/:root \{(.+?)\n\}/s';
+
+        preg_match($motif, $css, $bloc);
+        preg_match('/'.preg_quote($nom, '/').':\s*(#[0-9A-Fa-f]{6})/', $bloc[1] ?? '', $valeur);
+
+        $this->assertNotEmpty($valeur, sprintf(
+            'Jeton %s introuvable dans le thème %s.',
+            $nom,
+            $sombre ? 'sombre' : 'clair'
+        ));
+
+        return $valeur[1];
+    }
+
+    private function luminance(string $hexadecimal): float
+    {
+        $canaux = [];
+
+        foreach ([0, 2, 4] as $decalage) {
+            $canal = hexdec(substr(ltrim($hexadecimal, '#'), $decalage, 2)) / 255;
+            $canaux[] = $canal <= 0.03928
+                ? $canal / 12.92
+                : (($canal + 0.055) / 1.055) ** 2.4;
+        }
+
+        return 0.2126 * $canaux[0] + 0.7152 * $canaux[1] + 0.0722 * $canaux[2];
+    }
+
+    private function contraste(string $premier, string $second): float
+    {
+        $a = $this->luminance($premier);
+        $b = $this->luminance($second);
+
+        return (max($a, $b) + 0.05) / (min($a, $b) + 0.05);
+    }
+
     /** @return list<string> */
     private function proprietesDefinies(string $css): array
     {

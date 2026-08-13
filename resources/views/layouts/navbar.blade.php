@@ -22,6 +22,17 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item me-3">
+                    <button type="button"
+                            class="theme-toggle"
+                            id="basculeTheme"
+                            aria-pressed="false"
+                            aria-label="Passer au thème sombre">
+                        <i class="fas fa-moon icone-sombre" aria-hidden="true"></i>
+                        <i class="fas fa-sun icone-clair" aria-hidden="true"></i>
+                    </button>
+                </li>
+
                 @auth
                     <li class="nav-item me-3">
                         <a class="nav-link" href="{{ route('dashboard') }}">
