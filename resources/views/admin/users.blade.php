@@ -2,18 +2,10 @@
 
 @section('title', 'Gestion des Utilisateurs')
 
-@push('styles')
-@endpush
-
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header admin-header" style="position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
+    <div class="page-header admin-header">
         <h1>
             <i class="fas fa-users me-2"></i>
             Gestion des Utilisateurs
@@ -98,7 +90,7 @@
 
     <!-- Table des utilisateurs -->
     <div class="premium-card">
-        <div class="card-header gradient-primary">
+        <div class="card-header">
             <div class="header-content">
                 <div class="header-icon">
                     <i class="fas fa-list"></i>
@@ -312,22 +304,4 @@
     </div>
 </div>
 
-<style>
-.btn-action {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.btn-action.primary { background: #3b82f6; color: white; }
-.btn-action.success { background: #10b981; color: white; }
-.btn-action.warning { background: #f59e0b; color: white; }
-.btn-action.danger { background: #ef4444; color: white; }
-.btn-action:hover { transform: scale(1.1); }
-</style>
 @endsection

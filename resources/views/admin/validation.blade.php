@@ -2,58 +2,10 @@
 
 @section('title', 'Validation des Données')
 
-@push('styles')
-<style>
-.btn-action {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.btn-action.success { background: #10b981; color: white; }
-.btn-action.danger { background: #ef4444; color: white; }
-.btn-action.info { background: #0ea5e9; color: white; }
-.btn-action:hover { transform: scale(1.1); }
-
-.pulse-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #fbbf24;
-    animation: pulse 2s infinite;
-    margin-right: 8px;
-}
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
-}
-.header-badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    margin-top: 1rem;
-}
-</style>
-@endpush
-
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header admin-header" style="position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
+    <div class="page-header admin-header">
         <h1>
             <i class="fas fa-check-double me-2"></i>
             Validation des Données

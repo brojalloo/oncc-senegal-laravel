@@ -13,22 +13,22 @@
     <title>@yield('title') — ONCC Sénégal</title>
     <style>
         :root {
-            --ground: #f5f8f9;
-            --surface: #ffffff;
-            --ink: #101920;
-            --ink-soft: #61757f;
-            --rule: #d7e1e5;
-            --accent: #0b6f79;
+            --ground: #F3F4F8;
+            --surface: #FFFFFF;
+            --ink: #131A2E;
+            --ink-soft: #6B7594;
+            --rule: #D6DAE6;
+            --accent: #3B2FA8;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --ground: #0d1317;
-                --surface: #151f25;
-                --ink: #e5edf0;
-                --ink-soft: #8397a1;
-                --rule: #26343b;
-                --accent: #3fbeca;
+                --ground: #0D1222;
+                --surface: #151C31;
+                --ink: #E7EAF4;
+                --ink-soft: #8089A6;
+                --rule: #2A3352;
+                --accent: #9A90F5;
             }
         }
 
@@ -50,16 +50,30 @@
         .card {
             background: var(--surface);
             border: 1px solid var(--rule);
-            border-radius: 8px;
+            border-radius: 4px;
             padding: 2.5rem;
+            position: relative;
             max-width: 32rem;
             width: 100%;
             text-align: center;
         }
 
+        /* La bande de latitude du système, écrite en dur : ce gabarit ne
+           charge délibérément aucune feuille externe. */
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto;
+            height: 4px;
+            background: linear-gradient(90deg,
+                #E8DCC0 0 20%, #D4A855 20% 40%, #A8A03C 40% 60%,
+                #5E8C3A 60% 80%, #2C6B4F 80% 100%);
+        }
+
         .code {
             font-size: 3.5rem;
-            font-weight: 700;
+            font-weight: 500;
+            font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
             line-height: 1;
             color: var(--accent);
             margin: 0 0 0.75rem;
@@ -84,7 +98,7 @@
             color: var(--surface);
             text-decoration: none;
             padding: 0.65rem 1.4rem;
-            border-radius: 5px;
+            border-radius: 4px;
             font-weight: 600;
         }
 

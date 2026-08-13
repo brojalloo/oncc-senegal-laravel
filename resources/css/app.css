@@ -6,196 +6,12 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 @layer base {
-    :root {
-        color-scheme: light;
-        color: #0f172a;
-        background-color: #f8fafc;
-        --color-primary: #0f66c2;
-        --color-accent: #fb8d47;
-        --color-surface: #ffffff;
-        --color-muted: #64748b;
-    }
-
     html {
         scroll-behavior: smooth;
-    }
-
-    body {
-        font-family: var(--font-sans);
-        background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.14), transparent 28%), radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.1), transparent 25%), #f8fafc;
-        color: #0f172a;
-        min-height: 100vh;
-    }
-
-    a {
-        color: var(--color-primary);
-    }
-
-    a:hover {
-        color: #0c4a9a;
-    }
-
-    .btn-primary {
-        @apply bg-orange-500 border-orange-500 text-white;
-    }
-
-    .btn-primary:hover {
-        @apply bg-orange-600 border-orange-600;
-    }
-
-    .card {
-        border: 1px solid rgba(148, 163, 184, 0.18);
-        border-radius: 1rem;
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
-    }
-
-    .form-control,
-    .form-select,
-    .form-range {
-        border-radius: 0.85rem;
-    }
-
-    .table {
-        border-radius: 1rem;
-        overflow: hidden;
-    }
-}
-
-@layer components {
-    .modern-navbar {
-        background: linear-gradient(135deg, #0f4fac 0%, #0d8ac8 100%);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 18px 35px rgba(15, 23, 42, 0.08);
-    }
-
-    .modern-navbar .navbar-brand,
-    .modern-navbar .nav-link,
-    .modern-navbar .brand-text,
-    .modern-navbar .navbar-toggler {
-        color: #ffffff;
-    }
-
-    .modern-navbar .navbar-logo {
-        width: 2.75rem;
-        height: 2.75rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.16);
-        border-radius: 1rem;
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-    }
-
-    .modern-navbar .nav-link {
-        transition: color 0.2s ease;
-    }
-
-    .modern-navbar .nav-link:hover,
-    .modern-navbar .nav-link.active {
-        color: #ffffff;
-    }
-
-    .modern-dropdown {
-        background: rgba(15, 23, 42, 0.96);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(12px);
-    }
-
-    .modern-dropdown .dropdown-item {
-        color: #f8fafc;
-    }
-
-    .modern-dropdown .dropdown-item:hover {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    .sidebar {
-        background: #ffffff;
-        min-height: 100vh;
-        box-shadow: 0 24px 80px rgba(15, 23, 42, 0.06);
-    }
-
-    .sidebar-header {
-        background: #f8fafc;
-    }
-
-    .sidebar .nav-link {
-        color: #334155;
-        border-radius: 1rem;
-        padding: 0.9rem 1rem;
-        margin-bottom: 0.35rem;
-        transition: background-color 0.2s ease, color 0.2s ease;
-    }
-
-    .sidebar .nav-link:hover,
-    .sidebar .nav-link.active {
-        background: #eff6ff;
-        color: #0f4fac;
-    }
-
-    .sidebar-heading {
-        font-size: 0.75rem;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-    }
-
-    .sidebar-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(15, 23, 42, 0.45);
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.25s ease;
-        z-index: 1000;
-    }
-
-    .sidebar-overlay.show {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .footer-content {
-        background: #081522;
-        border-radius: 1.5rem;
-        padding: 2rem;
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-    }
-
-    .modern-footer {
-        background: linear-gradient(180deg, #061b2d 0%, #071a2d 100%);
-        color: #cbd5e1;
-    }
-
-    .footer-title {
-        color: #ffffff;
-        font-weight: 700;
-    }
-
-    .footer-links a,
-    .footer-contact span,
-    .footer-bottom-link {
-        color: #cbd5e1;
-    }
-
-    .footer-links a:hover,
-    .footer-bottom-link:hover {
-        color: #ffffff;
-    }
-
-    .stat-item {
-        border: 1px solid rgba(148, 163, 184, 0.18);
-        background: rgba(255, 255, 255, 0.04);
-    }
-}
-
-@layer utilities {
-    .bg-glow {
-        background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 30%), radial-gradient(circle at bottom right, rgba(251, 146, 60, 0.14), transparent 30%);
     }
 }
 
@@ -247,6 +63,12 @@
     --oncc-eleve-bg:    #FAE8DC;
     --oncc-critique:    #8F2626;
     --oncc-critique-bg: #F9E2E2;
+
+    /* Le gradient en cinq zones, à bords francs : mêmes paliers que
+       .bande-latitude, sous forme utilisable comme fond. */
+    --oncc-lat: linear-gradient(90deg,
+        var(--oncc-ar-0) 0 20%, var(--oncc-ar-1) 20% 40%, var(--oncc-ar-2) 40% 60%,
+        var(--oncc-ar-3) 60% 80%, var(--oncc-ar-4) 80% 100%);
 
     --oncc-radius: 4px;
     --oncc-display: "Archivo Expanded", "Archivo", "Arial Black", system-ui, sans-serif;
@@ -323,6 +145,300 @@
     --bs-border-color: var(--oncc-rule);
     --bs-emphasis-color: var(--oncc-ink);
 }
+
+/* --------------------------------------------------------------------
+   Typographie
+   --------------------------------------------------------------------
+   Archivo en chasse élargie porte les titres ; Source Sans 3, dessiné
+   pour l'écran, porte le texte courant ; IBM Plex Mono aligne les
+   chiffres en colonne. Les trois sont chargés dans le gabarit : sans
+   ces @font-face, les jetons ci-dessus retombaient en silence sur les
+   polices système.
+   -------------------------------------------------------------------- */
+
+body {
+    font-family: var(--oncc-body);
+    color: var(--oncc-ink);
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: var(--oncc-display);
+    font-stretch: 112%;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--oncc-ink);
+    text-wrap: balance;
+}
+
+h1, .h1 { font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.1rem); }
+h2, .h2 { font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.65rem); }
+h3, .h3 { font-size: 1.25rem; }
+
+/* Étiquette en capitales : sert d'exergue au-dessus d'un titre ou
+   d'un intitulé de colonne. */
+.eyebrow {
+    font-family: var(--oncc-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--oncc-ink-soft);
+}
+
+/* --------------------------------------------------------------------
+   Chrome : barre haute, panneau latéral, pied de page
+   --------------------------------------------------------------------
+   Le chrome reste en indigo sourd et sans dégradé : la seule couleur
+   qui compte dans cette interface est celle qui porte une donnée.
+   -------------------------------------------------------------------- */
+
+.modern-navbar {
+    background: var(--oncc-chrome);
+    border-bottom: none;
+    position: relative;
+    padding-block: 0.85rem;
+}
+
+/* La signature, posée en bas de la barre : elle traverse chaque page. */
+.modern-navbar::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--oncc-lat);
+}
+
+.modern-navbar .navbar-brand,
+.modern-navbar .nav-link,
+.modern-navbar .brand-text,
+.modern-navbar .navbar-toggler {
+    color: #FFFFFF;
+}
+
+.modern-navbar .navbar-brand .fw-semibold {
+    font-family: var(--oncc-display);
+    font-stretch: 112%;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.modern-navbar .navbar-logo {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: var(--oncc-radius);
+}
+
+.modern-navbar .nav-link {
+    border-radius: var(--oncc-radius);
+    padding-inline: 0.6rem;
+    transition: background-color 0.15s ease;
+}
+
+.modern-navbar .nav-link:hover,
+.modern-navbar .nav-link.active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Le déclencheur du menu : sans cette règle, l'avatar est un bloc et
+   le nom passe à la ligne en dessous. */
+.user-dropdown {
+    display: inline-flex;
+    align-items: center;
+}
+
+.user-avatar,
+.user-avatar-large {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    color: #FFFFFF;
+}
+
+.user-avatar { width: 1.9rem; height: 1.9rem; font-size: 0.8rem; }
+
+.user-avatar-large {
+    width: 3rem;
+    height: 3rem;
+    margin-inline: auto;
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+}
+
+.modern-dropdown {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    box-shadow: 0 8px 24px rgb(19 26 46 / 0.12);
+}
+
+.modern-dropdown .dropdown-item { color: var(--oncc-ink-mid); }
+.modern-dropdown .dropdown-item:hover { background: var(--oncc-sunk); color: var(--oncc-ink); }
+.modern-dropdown .dropdown-header strong { color: var(--oncc-ink); }
+
+.sidebar {
+    background: var(--oncc-surface);
+    min-height: 100vh;
+    border-right: 1px solid var(--oncc-rule);
+}
+
+.sidebar-header { background: var(--oncc-sunk); border-color: var(--oncc-rule) !important; }
+.sidebar-header h5 { font-size: 1rem; margin-bottom: 0.1rem; }
+
+.sidebar .nav-link {
+    color: var(--oncc-ink-mid);
+    border-radius: var(--oncc-radius);
+    border-left: 2px solid transparent;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.94rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar .nav-link:hover { background: var(--oncc-sunk); color: var(--oncc-ink); }
+
+.sidebar .nav-link.active {
+    background: var(--oncc-accent-soft);
+    border-left-color: var(--oncc-accent);
+    color: var(--oncc-accent);
+    font-weight: 600;
+}
+
+.sidebar-heading {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--oncc-ink-soft) !important;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgb(19 26 46 / 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+}
+
+.sidebar-overlay.show { opacity: 1; visibility: visible; }
+
+.modern-footer {
+    background: var(--oncc-chrome);
+    color: rgb(255 255 255 / 0.7);
+    border-top: 3px solid transparent;
+    border-image: var(--oncc-lat) 1;
+}
+
+.modern-footer .footer-content { background: transparent; padding-block: 2.5rem; }
+.modern-footer .footer-title { color: #FFFFFF; font-size: 1rem; }
+
+.modern-footer .footer-links a,
+.modern-footer .footer-contact span,
+.modern-footer .footer-bottom-link,
+.modern-footer .footer-text {
+    color: rgb(255 255 255 / 0.72);
+    text-decoration: none;
+}
+
+.modern-footer .footer-links a:hover,
+.modern-footer .footer-bottom-link:hover { color: #FFFFFF; }
+
+.modern-footer .stat-item {
+    background: rgb(255 255 255 / 0.06);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: var(--oncc-radius);
+}
+
+.modern-footer .stat-item h4 {
+    font-family: var(--oncc-data);
+    font-size: 1.6rem;
+    color: #FFFFFF;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--oncc-radius);
+    background: rgb(255 255 255 / 0.08);
+    color: rgb(255 255 255 / 0.8);
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+.social-link:hover { background: rgb(255 255 255 / 0.18); color: #FFFFFF; }
+
+/* --------------------------------------------------------------------
+   Authentification
+   --------------------------------------------------------------------
+   La carte est posée sur la photographie de fond, la bande de latitude
+   en tête. Elle est le seul objet de la page : rien d'autre n'y attire
+   l'œil.
+   -------------------------------------------------------------------- */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 26rem;
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    box-shadow: 0 12px 40px rgb(19 26 46 / 0.18);
+    overflow: hidden;
+}
+
+/* La signature, en tête de carte. */
+.auth-card::before {
+    content: "";
+    display: block;
+    height: 4px;
+    background: var(--oncc-lat);
+}
+
+.auth-card-header {
+    background: var(--oncc-chrome);
+    color: #FFFFFF;
+    padding: 1.75rem 1.75rem 1.5rem;
+    text-align: center;
+}
+
+.auth-card-header h3 {
+    color: #FFFFFF;
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.35rem;
+}
+
+.auth-card-header p {
+    color: rgb(255 255 255 / 0.72);
+    font-size: 0.86rem;
+    line-height: 1.45;
+    margin-inline: auto;
+    max-width: 22rem;
+}
+
+.auth-card-header .fa-2x { color: rgb(255 255 255 / 0.55); font-size: 1.5rem; }
+
+.auth-card-body { padding: 1.75rem; }
+.auth-card-body .form-label { font-weight: 600; font-size: 0.86rem; color: var(--oncc-ink-mid); }
+.auth-card-body hr { border-color: var(--oncc-rule); opacity: 1; }
 
 /* --------------------------------------------------------------------
    Signature : la bande de latitude
@@ -610,6 +726,748 @@
 .timeline-item:last-child { border-left-color: transparent; }
 
 /* --------------------------------------------------------------------
+   Tableau de bord
+   --------------------------------------------------------------------
+   Ces composants vivaient dans 692 lignes de <style> en tête de la vue,
+   écrites avant le système : huit dégradés pour huit indicateurs, plus
+   quatre autres pour les en-têtes de carte, et onze variables héritées
+   qui n'existent plus — leurs déclarations tombaient donc en silence.
+
+   Ils sont repris ici sous une seule règle : une carte est une surface
+   neutre, et la couleur ne sert qu'à dire de quel indicateur il s'agit.
+   -------------------------------------------------------------------- */
+
+.dashboard-header {
+    background: var(--oncc-chrome);
+    color: #FFFFFF;
+    padding: 1.75rem 2rem;
+    margin: 1.5rem 0 1.75rem;
+    border-radius: var(--oncc-radius);
+    border-bottom: 3px solid transparent;
+    border-image: var(--oncc-lat) 1;
+}
+
+.dashboard-header h1 { color: #FFFFFF; margin-bottom: 0.4rem; }
+
+.dashboard-header p {
+    color: rgb(255 255 255 / 0.72);
+    font-size: 0.98rem;
+    max-width: 46rem;
+    margin-bottom: 1rem;
+}
+
+.user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.86rem;
+    color: rgb(255 255 255 / 0.85);
+}
+
+.user-badge .role-badge {
+    background: rgb(255 255 255 / 0.14);
+    border-radius: var(--oncc-radius);
+    padding: 0.2rem 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+}
+
+.filter-bar {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    padding: 0.85rem 1.15rem;
+    margin-bottom: 1.75rem;
+}
+
+.filter-bar label { font-size: 0.88rem; color: var(--oncc-ink-mid); }
+
+/* En-tête de section : un filet, pas une pastille de couleur. */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--oncc-rule);
+}
+
+.section-header h5 {
+    font-family: var(--oncc-display);
+    font-stretch: 112%;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.section-header .section-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-soft);
+    font-size: 0.85rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 576px)  { .stats-grid { grid-template-columns: 1fr; } }
+
+/* --------------------------------------------------------------------
+   Carte d'indicateur
+   --------------------------------------------------------------------
+   Toutes identiques : surface neutre, chiffre en chasse fixe, filet de
+   tête coloré selon ce que l'indicateur mesure. Le filet est la seule
+   couleur de la carte, et il est lisible — l'ocre dit l'aridité, le
+   rouge la perte — là où les huit dégradés d'origine ne disaient rien
+   d'autre que « ceci est une carte ».
+   -------------------------------------------------------------------- */
+
+.indicator-card {
+    position: relative;
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    border-top: 3px solid var(--oncc-rule-strong);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.indicator-card:hover { box-shadow: 0 4px 16px rgb(19 26 46 / 0.08); }
+
+.indicator-card .card-inner {
+    padding: 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    height: 100%;
+}
+
+.indicator-card .icon-wrapper {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-soft);
+    font-size: 0.9rem;
+}
+
+.indicator-card .card-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oncc-ink-soft);
+    margin-bottom: 0.3rem;
+}
+
+.indicator-card .card-value {
+    font-family: var(--oncc-data);
+    font-size: 1.9rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.indicator-card .card-unit {
+    font-size: 0.78rem;
+    color: var(--oncc-ink-soft);
+    margin-top: 0.25rem;
+}
+
+/* La flèche de tendance : discrète, et colorée par son sens. */
+.indicator-card .trend-indicator {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    font-size: 0.75rem;
+    color: var(--oncc-ink-soft);
+}
+
+/* Le filet de tête, par indicateur. */
+.indicator-card.drought      { border-top-color: var(--oncc-ar-1); }
+.indicator-card.desert       { border-top-color: var(--oncc-ar-0); }
+.indicator-card.flood        { border-top-color: var(--oncc-ar-4); }
+.indicator-card.loss         { border-top-color: var(--oncc-critique); }
+.indicator-card.agriculture  { border-top-color: var(--oncc-ar-3); }
+.indicator-card.fishing      { border-top-color: var(--oncc-chrome); }
+.indicator-card.tourism      { border-top-color: var(--oncc-accent); }
+.indicator-card.energy       { border-top-color: var(--oncc-ar-2); }
+
+.indicator-card.drought .icon-wrapper,
+.indicator-card.desert  .icon-wrapper { background: var(--oncc-moyen-bg); color: var(--oncc-moyen); }
+.indicator-card.loss    .icon-wrapper { background: var(--oncc-critique-bg); color: var(--oncc-critique); }
+.indicator-card.flood   .icon-wrapper,
+.indicator-card.agriculture .icon-wrapper { background: var(--oncc-faible-bg); color: var(--oncc-faible); }
+.indicator-card.tourism .icon-wrapper { background: var(--oncc-accent-soft); color: var(--oncc-accent); }
+
+/* --------------------------------------------------------------------
+   Cartes du tableau de bord
+   -------------------------------------------------------------------- */
+
+.premium-card {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    overflow: hidden;
+}
+
+.premium-header {
+    background: var(--oncc-sunk);
+    border-bottom: 1px solid var(--oncc-rule);
+    padding: 0.9rem 1.15rem;
+}
+
+.premium-header h5 { font-size: 1rem; color: var(--oncc-ink); margin: 0; }
+.premium-header small { color: var(--oncc-ink-soft); opacity: 1 !important; }
+
+.header-content { display: flex; align-items: center; gap: 0.75rem; }
+
+.header-icon {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.header-badge {
+    margin-left: auto;
+    font-family: var(--oncc-data);
+    font-size: 0.8rem;
+    color: var(--oncc-ink-soft);
+}
+
+/* Pertes agricoles par région : un classement, donc numéroté. */
+.losses-list { max-height: 250px; overflow-y: auto; }
+
+.loss-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem 0.25rem;
+    border-bottom: 1px solid var(--oncc-rule);
+}
+
+.loss-item:last-child { border-bottom: none; }
+
+.loss-rank {
+    width: 1.4rem;
+    font-family: var(--oncc-data);
+    font-size: 0.8rem;
+    color: var(--oncc-ink-soft);
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.loss-info { flex: 1; min-width: 0; }
+
+.loss-region {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--oncc-ink);
+    margin-bottom: 0.25rem;
+}
+
+.loss-bar-container {
+    height: 4px;
+    background: var(--oncc-sunk);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.loss-bar { height: 100%; background: var(--oncc-critique); }
+
+.loss-value {
+    font-family: var(--oncc-data);
+    font-size: 0.88rem;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------
+   Actions rapides
+   -------------------------------------------------------------------- */
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.75rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    color: var(--oncc-ink);
+    text-decoration: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.action-btn:hover {
+    border-color: var(--oncc-accent);
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-ink);
+}
+
+.action-btn .action-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.action-text { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.action-title { font-weight: 600; font-size: 0.94rem; }
+.action-desc { font-size: 0.82rem; color: var(--oncc-ink-soft); }
+
+.action-arrow {
+    color: var(--oncc-ink-soft);
+    font-size: 0.8rem;
+    transition: transform 0.15s ease;
+}
+
+.action-btn:hover .action-arrow { transform: translateX(3px); color: var(--oncc-accent); }
+
+/* --------------------------------------------------------------------
+   Écrans d'administration, de saisie et de profil
+   --------------------------------------------------------------------
+   Mêmes composants que le tableau de bord, mêmes règles. Ce bloc
+   complète ce que .stat-card, .page-header et .premium-tabs — restaurés
+   au PR #20 — laissaient encore sans style : leurs éléments internes.
+   -------------------------------------------------------------------- */
+
+.page-header.admin-header {
+    background: var(--oncc-chrome);
+    color: #FFFFFF;
+    padding: 1.5rem 1.75rem;
+    margin-top: 1.5rem;
+    border-radius: var(--oncc-radius);
+    border-bottom: 3px solid transparent;
+    border-image: var(--oncc-lat) 1;
+}
+
+.page-header.admin-header h1 { color: #FFFFFF; }
+.page-header.admin-header p { color: rgb(255 255 255 / 0.72); margin: 0; }
+
+.page-header.admin-header .header-badge {
+    align-self: flex-start;
+    margin: 0.5rem 0 0;
+    background: rgb(255 255 255 / 0.14);
+    border-radius: var(--oncc-radius);
+    padding: 0.3rem 0.65rem;
+    font-size: 0.82rem;
+    color: rgb(255 255 255 / 0.9);
+}
+
+/* Signale une file d'attente : la couleur dit « à traiter ». */
+.pulse-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--oncc-moyen);
+    margin-right: 0.45rem;
+    vertical-align: middle;
+}
+
+.page-header.admin-header .pulse-dot { background: var(--oncc-ar-1); }
+
+/* Contenu d'une carte de statistique. */
+.stat-card { position: relative; display: flex; align-items: flex-start; gap: 0.85rem; }
+
+.stat-card .trend-badge {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    background: none;
+    color: var(--oncc-ink-soft);
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+.stat-icon {
+    width: 2.1rem;
+    height: 2.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-soft);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.stat-card.success .stat-icon { background: var(--oncc-faible-bg);   color: var(--oncc-faible); }
+.stat-card.warning .stat-icon { background: var(--oncc-moyen-bg);    color: var(--oncc-moyen); }
+.stat-card.danger  .stat-icon { background: var(--oncc-critique-bg); color: var(--oncc-critique); }
+.stat-card.info    .stat-icon,
+.stat-card.primary .stat-icon { background: var(--oncc-accent-soft); color: var(--oncc-accent); }
+
+.stat-content { min-width: 0; }
+
+.stat-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oncc-ink-soft);
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-family: var(--oncc-data);
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-unit { font-size: 0.78rem; color: var(--oncc-ink-soft); margin-top: 0.2rem; }
+
+/* Variante compacte, sur le profil et les rapports. */
+.stat-mini, .stat-mini-card {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    padding: 1rem;
+    text-align: center;
+}
+
+.stat-mini-card .icon {
+    width: 2.1rem;
+    height: 2.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.6rem;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+    font-size: 0.9rem;
+}
+
+.stat-mini-card .value {
+    font-family: var(--oncc-data);
+    font-size: 1.4rem;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-mini-card .label { font-size: 0.78rem; color: var(--oncc-ink-soft); }
+
+/* Le tableau : .glass-table ne verrait plus rien à travers, mais la
+   classe reste dans neuf vues — elle vaut ici pour « tableau posé sur
+   une surface ». */
+.glass-table { background: var(--oncc-surface); }
+
+.premium-table tbody tr:hover { background: var(--oncc-sunk); }
+
+/* Onglets : le balisage utilise <button class="tab-btn">, que la règle
+   du PR #20 ne visait pas. */
+.premium-tabs .tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--oncc-body);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--oncc-ink-soft);
+    padding: 0.6rem 0.95rem;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    cursor: pointer;
+}
+
+.premium-tabs .tab-btn:hover { color: var(--oncc-ink); }
+
+.premium-tabs .tab-btn.active {
+    color: var(--oncc-accent);
+    border-bottom-color: var(--oncc-accent);
+}
+
+.badge-count {
+    font-family: var(--oncc-data);
+    font-size: 0.72rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 2px;
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-mid);
+}
+
+.premium-tabs .tab-btn.active .badge-count {
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+}
+
+/* L'icône d'un encart : elle reprend la couleur de son niveau. */
+.alert-premium { display: flex; align-items: flex-start; gap: 0.7rem; }
+.alert-icon { font-size: 1rem; line-height: 1.4; flex-shrink: 0; }
+.alert-premium.success .alert-icon { color: var(--oncc-faible); }
+.alert-premium.warning .alert-icon { color: var(--oncc-moyen); }
+.alert-premium.danger  .alert-icon { color: var(--oncc-critique); }
+.alert-premium.info    .alert-icon { color: var(--oncc-accent); }
+
+/* Boutons d'action en fin de ligne de tableau. */
+.btn-action {
+    width: 1.9rem;
+    height: 1.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-surface);
+    color: var(--oncc-ink-mid);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-action:hover { border-color: var(--oncc-rule-strong); background: var(--oncc-sunk); }
+.btn-action.success { color: var(--oncc-faible);   border-color: var(--oncc-faible); }
+.btn-action.danger  { color: var(--oncc-critique); border-color: var(--oncc-critique); }
+.btn-action.warning { color: var(--oncc-moyen);    border-color: var(--oncc-moyen); }
+.btn-action.info,
+.btn-action.primary { color: var(--oncc-accent);   border-color: var(--oncc-accent); }
+.btn-action.success:hover { background: var(--oncc-faible-bg); }
+.btn-action.danger:hover  { background: var(--oncc-critique-bg); }
+.btn-action.warning:hover { background: var(--oncc-moyen-bg); }
+.btn-action.info:hover,
+.btn-action.primary:hover { background: var(--oncc-accent-soft); }
+
+/* Les six vues qui ouvraient un <style> pour cette seule règle. */
+.premium-card .card-body { padding: 1.5rem 1.75rem; }
+@media (max-width: 768px) { .premium-card .card-body { padding: 1.15rem; } }
+
+/* Vingt-neuf en-têtes de carte portaient une classe .gradient-* dont la
+   définition avait disparu. Le système leur donne un seul traitement. */
+.card-header {
+    background: var(--oncc-sunk);
+    border-bottom: 1px solid var(--oncc-rule);
+    padding: 0.9rem 1.15rem;
+}
+
+.card-header h5, .card-header h6 { font-size: 1rem; margin: 0; }
+.card-header small { color: var(--oncc-ink-soft); opacity: 1; }
+
+.text-accent { color: var(--oncc-accent) !important; }
+.bg-sunk { background: var(--oncc-sunk); }
+
+/* Les deux pages de visualisation ouvrent sur la même bande que
+   l'administration. */
+.page-header.climate-header,
+.page-header.economic-header {
+    background: var(--oncc-chrome);
+    color: #FFFFFF;
+    padding: 1.5rem 1.75rem;
+    margin-top: 1.5rem;
+    border-radius: var(--oncc-radius);
+    border-bottom: 3px solid transparent;
+    border-image: var(--oncc-lat) 1;
+}
+
+.page-header.climate-header h1,
+.page-header.economic-header h1 { color: #FFFFFF; }
+
+.page-header.climate-header p,
+.page-header.economic-header p { color: rgb(255 255 255 / 0.72); margin: 0; }
+
+.page-header.climate-header .pulse-dot,
+.page-header.economic-header .pulse-dot { background: var(--oncc-ar-1); }
+
+/* --------------------------------------------------------------------
+   Profil
+   -------------------------------------------------------------------- */
+
+.profile-avatar {
+    width: 5.5rem;
+    height: 5.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.15rem;
+    border-radius: 50%;
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+    font-size: 2.1rem;
+}
+
+.profile-name {
+    font-family: var(--oncc-display);
+    font-stretch: 112%;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--oncc-ink);
+    margin-bottom: 0.5rem;
+}
+
+/* Le rôle est une donnée : il porte la même couleur que dans la table
+   des utilisateurs. */
+.profile-role {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--oncc-radius);
+    border: 1px solid;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.profile-role.admin        { background: var(--oncc-critique-bg); color: var(--oncc-critique); border-color: var(--oncc-critique); }
+.profile-role.chercheur    { background: var(--oncc-accent-soft); color: var(--oncc-accent);   border-color: var(--oncc-accent); }
+.profile-role.collectivite { background: var(--oncc-faible-bg);   color: var(--oncc-faible);   border-color: var(--oncc-faible); }
+.profile-role.public       { background: var(--oncc-sunk);        color: var(--oncc-ink-soft); border-color: var(--oncc-rule-strong); }
+
+/* --------------------------------------------------------------------
+   Cartographie
+   -------------------------------------------------------------------- */
+
+.map-card .card-body { padding: 0; }
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--oncc-ink-mid);
+    padding: 0.2rem 0;
+}
+
+/* Chiffres dans une infobulle Leaflet. */
+.popup-stat {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid var(--oncc-rule);
+}
+
+.popup-content { min-width: 12rem; font-family: var(--oncc-body); }
+.popup-content h6 { font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+.popup-stat:last-child { border-bottom: none; }
+.popup-stat-label { font-size: 0.8rem; color: var(--oncc-ink-soft); }
+
+.popup-stat-value {
+    font-family: var(--oncc-data);
+    font-size: 0.82rem;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-surface);
+    color: var(--oncc-ink);
+}
+
+.leaflet-container { font-family: var(--oncc-body); font-size: 0.88rem; }
+.leaflet-popup-content { margin: 0.8rem 1.1rem; }
+
+#map { background: var(--oncc-sunk); z-index: 1; }
+#map:fullscreen { width: 100vw !important; height: 100vh !important; }
+
+.region-marker { background: none !important; border: none !important; }
+
+.legend-item.disabled { opacity: 0.4; text-decoration: line-through; }
+
+/* Une alerte porte un niveau : le filet gauche en donne la couleur,
+   la même que dans .badge-premium et la table alertes. */
+.alert-card {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-left: 3px solid var(--oncc-rule-strong);
+    border-radius: var(--oncc-radius);
+    padding: 0.8rem 0.9rem;
+    margin-bottom: 0.6rem;
+}
+
+.alert-card.success { border-left-color: var(--oncc-faible);   background: var(--oncc-faible-bg); }
+.alert-card.warning { border-left-color: var(--oncc-moyen);    background: var(--oncc-moyen-bg); }
+.alert-card.danger  { border-left-color: var(--oncc-critique); background: var(--oncc-critique-bg); }
+.alert-card.info    { border-left-color: var(--oncc-accent);   background: var(--oncc-accent-soft); }
+
+.region-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--oncc-sunk);
+    border-radius: var(--oncc-radius);
+    padding: 0.75rem 0.9rem;
+    margin-bottom: 0.6rem;
+}
+
+.region-stat-icon {
+    width: 2.1rem;
+    height: 2.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-surface);
+    color: var(--oncc-ink-soft);
+    flex-shrink: 0;
+}
+
+.region-stat-value,
+.value-number {
+    font-family: var(--oncc-data);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.region-stat-label,
+.value-label { font-size: 0.78rem; color: var(--oncc-ink-soft); }
+
+.value-display {
+    background: var(--oncc-sunk);
+    border-radius: var(--oncc-radius);
+    padding: 0.6rem;
+}
+
+#alertsList::-webkit-scrollbar { width: 6px; }
+#alertsList::-webkit-scrollbar-track { background: var(--oncc-sunk); }
+#alertsList::-webkit-scrollbar-thumb { background: var(--oncc-rule-strong); border-radius: 3px; }
+
+/* --------------------------------------------------------------------
    Accessibilité
    -------------------------------------------------------------------- */
 
@@ -640,7 +1498,7 @@
    ------------------------------------------------------------------ */
 
 [data-theme="dark"] body {
-    background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(31, 41, 55, 0.75) 25%, rgba(55, 65, 81, 0.7) 50%, rgba(17, 24, 39, 0.85) 75%, rgba(17, 24, 39, 0.9) 100%), url('/img/africa-sunset.webp');
+    background: linear-gradient(135deg, rgb(13 18 34 / 0.86) 0%, rgb(13 18 34 / 0.92) 40%, rgb(13 18 34 / 0.96) 100%), url('/img/africa-sunset.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -648,7 +1506,7 @@
 }
 
 [data-theme="dark"] body.bg-baobab {
-    background-image: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(31, 41, 55, 0.75) 25%, rgba(55, 65, 81, 0.7) 50%, rgba(17, 24, 39, 0.85) 75%, rgba(17, 24, 39, 0.9) 100%), url('/img/senegal-baobab.webp');
+    background-image: linear-gradient(135deg, rgb(13 18 34 / 0.86) 0%, rgb(13 18 34 / 0.92) 40%, rgb(13 18 34 / 0.96) 100%), url('/img/senegal-baobab.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -656,7 +1514,7 @@
 }
 
 [data-theme="dark"] body.bg-sunset {
-    background-image: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(31, 41, 55, 0.75) 25%, rgba(55, 65, 81, 0.7) 50%, rgba(17, 24, 39, 0.85) 75%, rgba(17, 24, 39, 0.9) 100%), url('/img/africa-sunset.webp');
+    background-image: linear-gradient(135deg, rgb(13 18 34 / 0.86) 0%, rgb(13 18 34 / 0.92) 40%, rgb(13 18 34 / 0.96) 100%), url('/img/africa-sunset.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -664,7 +1522,7 @@
 }
 
 [data-theme="dark"] body.bg-drought {
-    background-image: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(31, 41, 55, 0.75) 25%, rgba(55, 65, 81, 0.7) 50%, rgba(17, 24, 39, 0.85) 75%, rgba(17, 24, 39, 0.9) 100%), url('/img/drought-climate.webp');
+    background-image: linear-gradient(135deg, rgb(13 18 34 / 0.86) 0%, rgb(13 18 34 / 0.92) 40%, rgb(13 18 34 / 0.96) 100%), url('/img/drought-climate.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -672,7 +1530,7 @@
 }
 
 [data-theme="dark"] body.bg-agriculture {
-    background-image: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(31, 41, 55, 0.75) 25%, rgba(55, 65, 81, 0.7) 50%, rgba(17, 24, 39, 0.85) 75%, rgba(17, 24, 39, 0.9) 100%), url('/img/agriculture-field.webp');
+    background-image: linear-gradient(135deg, rgb(13 18 34 / 0.86) 0%, rgb(13 18 34 / 0.92) 40%, rgb(13 18 34 / 0.96) 100%), url('/img/agriculture-field.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -680,7 +1538,7 @@
 }
 
 [data-theme="dark"] body.bg-nature {
-    background-image: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(31, 41, 55, 0.75) 25%, rgba(55, 65, 81, 0.7) 50%, rgba(17, 24, 39, 0.85) 75%, rgba(17, 24, 39, 0.9) 100%), url('/img/nature-landscape.webp');
+    background-image: linear-gradient(135deg, rgb(13 18 34 / 0.86) 0%, rgb(13 18 34 / 0.92) 40%, rgb(13 18 34 / 0.96) 100%), url('/img/nature-landscape.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -688,7 +1546,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, rgba(15, 118, 110, 0.15) 0%, rgba(20, 184, 166, 0.1) 25%, rgba(255, 255, 255, 0.75) 50%, rgba(249, 250, 251, 0.85) 75%, rgba(255, 255, 255, 0.9) 100%), url('/img/africa-sunset.webp');
+    background: linear-gradient(135deg, rgb(31 42 74 / 0.20) 0%, rgb(243 244 248 / 0.84) 32%, rgb(243 244 248 / 0.94) 100%), url('/img/africa-sunset.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -696,7 +1554,7 @@ body {
 }
 
 body.bg-baobab {
-    background-image: linear-gradient(135deg, rgba(15, 118, 110, 0.15) 0%, rgba(20, 184, 166, 0.1) 25%, rgba(255, 255, 255, 0.75) 50%, rgba(249, 250, 251, 0.85) 75%, rgba(255, 255, 255, 0.9) 100%), url('/img/senegal-baobab.webp');
+    background-image: linear-gradient(135deg, rgb(31 42 74 / 0.20) 0%, rgb(243 244 248 / 0.84) 32%, rgb(243 244 248 / 0.94) 100%), url('/img/senegal-baobab.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -704,7 +1562,7 @@ body.bg-baobab {
 }
 
 body.bg-sunset {
-    background-image: linear-gradient(135deg, rgba(15, 118, 110, 0.15) 0%, rgba(20, 184, 166, 0.1) 25%, rgba(255, 255, 255, 0.75) 50%, rgba(249, 250, 251, 0.85) 75%, rgba(255, 255, 255, 0.9) 100%), url('/img/africa-sunset.webp');
+    background-image: linear-gradient(135deg, rgb(31 42 74 / 0.20) 0%, rgb(243 244 248 / 0.84) 32%, rgb(243 244 248 / 0.94) 100%), url('/img/africa-sunset.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -712,7 +1570,7 @@ body.bg-sunset {
 }
 
 body.bg-drought {
-    background-image: linear-gradient(135deg, rgba(15, 118, 110, 0.15) 0%, rgba(20, 184, 166, 0.1) 25%, rgba(255, 255, 255, 0.75) 50%, rgba(249, 250, 251, 0.85) 75%, rgba(255, 255, 255, 0.9) 100%), url('/img/drought-climate.webp');
+    background-image: linear-gradient(135deg, rgb(31 42 74 / 0.20) 0%, rgb(243 244 248 / 0.84) 32%, rgb(243 244 248 / 0.94) 100%), url('/img/drought-climate.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -720,7 +1578,7 @@ body.bg-drought {
 }
 
 body.bg-agriculture {
-    background-image: linear-gradient(135deg, rgba(15, 118, 110, 0.15) 0%, rgba(20, 184, 166, 0.1) 25%, rgba(255, 255, 255, 0.75) 50%, rgba(249, 250, 251, 0.85) 75%, rgba(255, 255, 255, 0.9) 100%), url('/img/agriculture-field.webp');
+    background-image: linear-gradient(135deg, rgb(31 42 74 / 0.20) 0%, rgb(243 244 248 / 0.84) 32%, rgb(243 244 248 / 0.94) 100%), url('/img/agriculture-field.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -728,7 +1586,7 @@ body.bg-agriculture {
 }
 
 body.bg-nature {
-    background-image: linear-gradient(135deg, rgba(15, 118, 110, 0.15) 0%, rgba(20, 184, 166, 0.1) 25%, rgba(255, 255, 255, 0.75) 50%, rgba(249, 250, 251, 0.85) 75%, rgba(255, 255, 255, 0.9) 100%), url('/img/nature-landscape.webp');
+    background-image: linear-gradient(135deg, rgb(31 42 74 / 0.20) 0%, rgb(243 244 248 / 0.84) 32%, rgb(243 244 248 / 0.94) 100%), url('/img/nature-landscape.webp');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;

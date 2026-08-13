@@ -2,28 +2,10 @@
 
 @section('title', 'Gestion des emails')
 
-@push('styles')
-<style>
-.premium-card .card-body {
-    padding: 2rem 2.5rem;
-}
-@media (max-width: 768px) {
-    .premium-card .card-body {
-        padding: 1.5rem;
-    }
-}
-</style>
-@endpush
-
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header admin-header" style="position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
+    <div class="page-header admin-header">
         <h1>
             <i class="fas fa-envelope me-2"></i>
             Gestion des Emails
@@ -66,7 +48,7 @@
                 <div class="stat-unit">Emails vérifiés</div>
             </div>
         </div>
-        <div class="stat-card cyan">
+        <div class="stat-card info">
             <div class="trend-badge">
                 <i class="fas fa-server"></i>
             </div>
@@ -85,7 +67,7 @@
         <!-- Test d'email -->
         <div class="col-lg-6 mb-4">
             <div class="premium-card h-100">
-                <div class="card-header gradient-info">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-flask"></i>
@@ -135,7 +117,7 @@
         <!-- Configuration SMTP -->
         <div class="col-lg-6 mb-4">
             <div class="premium-card h-100">
-                <div class="card-header gradient-secondary">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-cogs"></i>
@@ -173,7 +155,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><strong><i class="fas fa-shield-alt text-purple me-2"></i>Encryption</strong></td>
+                                    <td><strong><i class="fas fa-shield-alt text-accent me-2"></i>Encryption</strong></td>
                                     <td><span class="badge-premium info">{{ strtoupper(config('mail.mailers.smtp.encryption', 'none')) }}</span></td>
                                 </tr>
                                 <tr>
@@ -208,7 +190,7 @@
 
     <!-- Newsletter -->
     <div class="premium-card">
-        <div class="card-header gradient-success">
+        <div class="card-header">
             <div class="header-content">
                 <div class="header-icon">
                     <i class="fas fa-newspaper"></i>

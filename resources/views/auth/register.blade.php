@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - ONCC Sénégal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -15,14 +18,6 @@
 </head>
 <body>
     <div class="auth-page">
-        <!-- Icônes flottantes -->
-        <div class="floating-icons">
-            <i class="fas fa-cloud-rain floating-icon"></i>
-            <i class="fas fa-leaf floating-icon"></i>
-            <i class="fas fa-water floating-icon"></i>
-            <i class="fas fa-sun floating-icon"></i>
-        </div>
-
         <div class="auth-card">
             <div class="auth-card-header">
                 <i class="fas fa-user-plus fa-2x mb-2"></i>

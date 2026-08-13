@@ -2,28 +2,10 @@
 
 @section('title', 'Admin Dashboard')
 
-@push('styles')
-<style>
-.premium-card .card-body {
-    padding: 2rem 2.5rem;
-}
-@media (max-width: 768px) {
-    .premium-card .card-body {
-        padding: 1.5rem;
-    }
-}
-</style>
-@endpush
-
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header admin-header" style="position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
+    <div class="page-header admin-header">
         <h1>
             <i class="fas fa-shield-alt me-2"></i>
             Tableau de bord administrateur
@@ -98,7 +80,7 @@
         <!-- Actions rapides -->
         <div class="col-lg-6 mb-4">
             <div class="premium-card">
-                <div class="card-header gradient-purple">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-rocket"></i>
@@ -153,7 +135,7 @@
             
             <!-- Statut système -->
             <div class="premium-card mt-4">
-                <div class="card-header gradient-dark">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-server"></i>
@@ -165,15 +147,15 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded" style="background: var(--gray-50);">
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded bg-sunk">
                         <span class="fw-semibold"><i class="fab fa-php me-2 text-primary"></i>Version PHP</span>
                         <span class="badge-premium info">{{ $systemInfo['php_version'] }}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded" style="background: var(--gray-50);">
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded bg-sunk">
                         <span class="fw-semibold"><i class="fab fa-laravel me-2 text-danger"></i>Version Laravel</span>
                         <span class="badge-premium danger">{{ $systemInfo['laravel_version'] }}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded" style="background: var(--gray-50);">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded bg-sunk">
                         <span class="fw-semibold"><i class="fas fa-database me-2 text-success"></i>Base de données</span>
                         <span class="badge-premium success">{{ $systemInfo['database_size'] }}</span>
                     </div>
@@ -184,7 +166,7 @@
         <!-- Derniers utilisateurs -->
         <div class="col-lg-6 mb-4">
             <div class="premium-card">
-                <div class="card-header gradient-primary d-flex justify-content-between align-items-center">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-users"></i>
@@ -251,7 +233,7 @@
             
             <!-- Dernières activités -->
             <div class="premium-card mt-4">
-                <div class="card-header gradient-info">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-history"></i>

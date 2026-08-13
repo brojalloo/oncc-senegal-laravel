@@ -9,11 +9,6 @@
 <div class="container-fluid">
     <!-- Page Header avec particules -->
     <div class="page-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
         <h1>
             <i class="fas fa-database me-2"></i>
             Mes Données
@@ -82,7 +77,7 @@
                 <!-- Données Climatiques -->
                 <div class="tab-pane fade show active" id="climate" role="tabpanel">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="mb-0" style="font-weight: 600; color: var(--text-dark);">
+                        <h5 class="mb-0">
                             <i class="fas fa-snowflake text-info me-2"></i>Mes Données Climatiques
                         </h5>
                         <a href="{{ route('data.climate.create') }}" class="btn-premium primary">
@@ -162,7 +157,7 @@
                 <!-- Données Économiques -->
                 <div class="tab-pane fade" id="economic" role="tabpanel">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="mb-0" style="font-weight: 600; color: var(--text-dark);">
+                        <h5 class="mb-0">
                             <i class="fas fa-coins text-success me-2"></i>Mes Données Économiques
                         </h5>
                         <a href="{{ route('data.economic.create') }}" class="btn-premium success">
