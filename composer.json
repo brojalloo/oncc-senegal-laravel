@@ -11,7 +11,7 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.61.1",
-        "laravel/tinker": "^2.10",
+        "laravel/tinker": "^3.0",
         "tijsverkoyen/css-to-inline-styles": "^2.2.6",
         "symfony/css-selector": "^7.2"
     },
