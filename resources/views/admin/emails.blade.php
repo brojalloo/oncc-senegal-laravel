@@ -262,7 +262,7 @@
                         <i class="fas fa-file-alt"></i> Contenu de la newsletter (HTML supporté)
                     </label>
                     <textarea class="form-control @error('content') is-invalid @enderror" 
-                              id="newsletter_content" name="content" rows="10" required 
+                              id="newsletter_content" name="content" rows="10" required maxlength="20000" 
                               style="font-family: monospace;"><h2>Newsletter ONCC-SN</h2>
 
 <p>Bonjour,</p>

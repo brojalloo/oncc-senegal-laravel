@@ -193,13 +193,15 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">
-                        <i class="fas fa-comment-alt text-secondary"></i> 
-                        Commentaire
+                    <label class="form-label" for="description">
+                        <i class="fas fa-comment-alt"></i>
+                        Description
                     </label>
-                    <textarea name="commentaire" class="form-control @error('commentaire') is-invalid @enderror" 
-                              rows="4" placeholder="Informations complémentaires...">{{ old('commentaire') }}</textarea>
-                    @error('commentaire')
+                    <textarea id="description" name="description" maxlength="2000" rows="4"
+                              class="form-control @error('description') is-invalid @enderror"
+                              placeholder="Informations complémentaires...">{{ old('description') }}</textarea>
+                    <small class="text-muted">2000 caractères au maximum.</small>
+                    @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
