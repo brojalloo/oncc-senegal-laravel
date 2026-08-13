@@ -7,6 +7,15 @@ set -e
 # configuration provient des variables d'environnement fournies par
 # l'hébergeur. Les comptes de démonstration n'ont rien à faire en production.
 
+# Une commande explicite l'emporte sur le démarrage du serveur : sans cela,
+# l'image ne sert qu'à une chose et toute opération ponctuelle est impossible —
+# `docker run image php artisan users:promote ...`, la génération d'une clé, ou
+# le moindre diagnostic. On la lance telle quelle, sans migrer ni mettre en
+# cache, et sans exiger APP_KEY dont ces commandes n'ont pas toutes besoin.
+if [ "$#" -gt 0 ]; then
+    exec "$@"
+fi
+
 : "${PORT:=8080}"
 
 echo "==> Configuration de nginx sur le port ${PORT}"
@@ -25,7 +34,6 @@ mkdir -p \
     storage/framework/views \
     storage/logs \
     bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache
 
 if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     echo "==> Migrations"
@@ -40,5 +48,13 @@ php artisan config:cache --no-ansi
 php artisan route:cache --no-ansi
 php artisan view:cache --no-ansi
 
-echo "==> Démarrage de nginx et php-fpm"
+# Le chown vient APRÈS les commandes Artisan, et non avant : celles-ci
+# s'exécutent en root et créent laravel.log, les vues compilées et les fichiers
+# de bootstrap/cache. Chowner d'abord les laisserait appartenir à root, et
+# php-fpm comme le worker — qui tournent en www-data — ne pourraient plus
+# écrire dans le journal. L'application continuerait de servir, sans plus
+# jamais journaliser.
+chown -R www-data:www-data storage bootstrap/cache
+
+echo "==> Démarrage de nginx, php-fpm et du worker"
 exec supervisord -c /etc/supervisord.conf

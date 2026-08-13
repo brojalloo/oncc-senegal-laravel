@@ -24,6 +24,13 @@ storage/framework/sessions/*
 storage/framework/views/*
 !storage/**/.gitignore
 
+# bootstrap/cache/config.php est la configuration sérialisée : il contient
+# APP_KEY et les mots de passe de base et de messagerie. Si un développeur a
+# lancé config:cache, l'exclure évite que ses secrets se retrouvent figés dans
+# une couche de l'image. L'entrypoint régénère ces fichiers au démarrage.
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
 database/*.sqlite
 database/*.sqlite-journal
 

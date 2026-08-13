@@ -34,6 +34,16 @@ RUN npm ci
 
 COPY vite.config.js ./
 COPY resources ./resources
+
+# resources/css/app.css déclare @source vers les vues de pagination de Laravel.
+# Sans elles, Tailwind ne voit pas les classes qu'elles utilisent et les
+# supprime : la pagination s'affiche alors sans style sur les trois pages qui
+# l'emploient. Tailwind n'avertit pas d'un @source introuvable — la seule trace
+# est un CSS plus léger de 24 classes.
+COPY --from=vendor \
+    /app/vendor/laravel/framework/src/Illuminate/Pagination/resources/views \
+    ./vendor/laravel/framework/src/Illuminate/Pagination/resources/views
+
 RUN npm run build
 
 
@@ -42,25 +52,23 @@ RUN npm run build
 # --------------------------------------------------------------------------
 FROM php:8.2-fpm-alpine AS runtime
 
-RUN apk add --no-cache \
-        nginx \
-        supervisor \
-        postgresql-dev \
-        libzip-dev \
-        libpng-dev \
-        icu-dev \
-        oniguruma-dev \
+# L'image officielle fournit déjà ctype, dom, fileinfo, filter, hash, iconv,
+# json, libxml, mbstring, openssl, pcre, session, tokenizer et pdo_sqlite —
+# soit toutes les extensions exigées par les dépendances de production. On
+# n'ajoute donc que ce qui manque réellement : le pilote PostgreSQL et OPcache.
+#
+# Ne pas réinstaller mbstring : déjà compilée dans l'image, la recompiler
+# produit un module chargé deux fois. gd et intl ne sont utilisées nulle part
+# dans ce projet.
+RUN apk add --no-cache nginx supervisor postgresql-libs \
+    && apk add --no-cache --virtual .build-deps postgresql-dev libzip-dev \
     && docker-php-ext-install -j"$(nproc)" \
         pdo_pgsql \
-        pdo_mysql \
-        mbstring \
         bcmath \
-        exif \
-        gd \
         zip \
         opcache \
-    && apk del postgresql-dev libzip-dev libpng-dev icu-dev oniguruma-dev \
-    && apk add --no-cache postgresql-libs libzip libpng icu-libs oniguruma
+    && apk del .build-deps \
+    && apk add --no-cache libzip
 
 # OPcache : recommandé en production, sans revalidation puisque le code est figé
 # dans l'image.
@@ -92,9 +100,15 @@ COPY docker/entrypoint.sh /usr/local/bin/entrypoint
 RUN chmod +x /usr/local/bin/entrypoint
 
 # Composer a été lancé sans scripts (le code n'était pas encore copié) : on
-# régénère l'autoloader et on laisse Laravel découvrir ses paquets.
-RUN composer dump-autoload --no-dev --optimize --classmap-authoritative \
-    || true
+# régénère l'autoloader maintenant que les classes de l'application sont là.
+#
+# Sans --classmap-authoritative : ce mode fait échouer toute classe absente du
+# classmap plutôt que de la chercher sur le disque, ce qui casse le chargement
+# dynamique. Et sans « || true » : un autoloader périmé produit des erreurs
+# incompréhensibles à l'exécution, mieux vaut faire échouer la construction.
+COPY --from=vendor /usr/bin/composer /usr/bin/composer
+RUN composer dump-autoload --no-dev --optimize --no-interaction \
+    && rm -f /usr/bin/composer
 
 RUN mkdir -p \
         storage/framework/cache/data \
@@ -109,5 +123,15 @@ RUN mkdir -p \
 
 ENV PORT=8080
 EXPOSE 8080
+
+# Si nginx ou php-fpm finit par abandonner, supervisord garde le conteneur en
+# vie mais celui-ci ne sert plus rien. Le healthcheck le rend visible pour que
+# la plateforme redémarre le conteneur plutôt que de router vers un service
+# mort.
+# La sonde vise /up, hors du groupe « web » : interroger une page normale
+# créerait une session à chaque appel, soit des milliers de lignes par jour
+# dans la table sessions.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD php -r 'exit(@file_get_contents("http://127.0.0.1:".(getenv("PORT")?:"8080")."/up") === false ? 1 : 0);'
 
 ENTRYPOINT ["entrypoint"]

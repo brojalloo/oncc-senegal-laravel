@@ -57,4 +57,20 @@ class SecurityHeadersTest extends TestCase
         $this->assertNotNull($hsts, 'Aucun en-tête Strict-Transport-Security en HTTPS.');
         $this->assertStringContainsString('max-age=', $hsts);
     }
+
+    public function test_it_sends_hsts_behind_a_tls_terminating_proxy(): void
+    {
+        // Cas réel du déploiement : la plateforme termine le TLS et transmet
+        // la requête en clair au conteneur, avec X-Forwarded-Proto. Sans
+        // TrustProxies, $request->secure() renvoie false et HSTS n'est jamais
+        // émis — l'en-tête serait du code mort en production.
+        $response = $this->get('http://localhost/login', [
+            'X-Forwarded-Proto' => 'https',
+        ]);
+
+        $this->assertNotNull(
+            $response->headers->get('Strict-Transport-Security'),
+            'HSTS absent derrière un répartiteur : X-Forwarded-Proto n\'est pas pris en compte.'
+        );
+    }
 }

@@ -16,6 +16,7 @@ réellement en production.
 |---|---|
 | Build | Dépendances PHP sans `--dev`, assets compilés par Vite, autoloader optimisé |
 | Serveur | nginx en frontal, PHP-FPM derrière, supervisé par supervisord |
+| File d'attente | Un worker `queue:work` supervisé dans le même conteneur |
 | Démarrage | Migrations, puis mise en cache de la configuration, des routes et des vues |
 | Base | PostgreSQL, via variables d'environnement |
 
@@ -66,6 +67,18 @@ sessions et des données chiffrées avec une clé absente.
 |---|---|---|
 | `RUN_MIGRATIONS` | `true` | Passez à `false` pour piloter les migrations depuis une étape de release dédiée |
 | `SEED_PASSWORD` | — | Développement uniquement. Le seeder de démonstration refuse de s'exécuter en production |
+| `FORCE_HTTPS` | `false` | Voir ci-dessous — normalement inutile |
+
+### HTTPS derrière un répartiteur
+
+Les plateformes d'hébergement terminent le TLS devant le conteneur et lui
+transmettent la requête en clair, avec l'en-tête `X-Forwarded-Proto`. Le
+middleware `TrustProxies` rétablit le protocole d'origine : les URL générées
+sont correctes et l'en-tête HSTS est bien émis, sans rien forcer.
+
+N'activez `FORCE_HTTPS` que si votre plateforme ne transmet pas cet en-tête, et
+**jamais** si le conteneur est réellement servi en HTTP : toutes les URL
+deviendraient injoignables.
 
 ## Base de données
 
@@ -100,6 +113,24 @@ Exécutez cette commande dans le conteneur (`docker exec`, ou la console de la
 plateforme). L'inscription publique ne permet pas de se créer directement un
 compte administrateur.
 
+## Emails et file d'attente
+
+Les emails de vérification d'adresse, de réinitialisation de mot de passe et
+l'infolettre partent **en file d'attente**, pas pendant la requête HTTP. Un
+worker `queue:work` tourne dans le conteneur aux côtés de nginx et PHP-FPM.
+
+Conséquence à connaître : **si ce worker ne tourne pas, aucun email ne part** —
+les messages s'accumulent en base sans erreur visible. Après un déploiement,
+vérifiez que la table `jobs` ne grossit pas indéfiniment :
+
+```bash
+php artisan queue:monitor database   # alerte si la file s'allonge
+php artisan queue:failed             # travaux en échec
+```
+
+L'infolettre est envoyée par lots de 100 destinataires ; un destinataire
+refusé par le serveur SMTP est journalisé sans interrompre le reste du lot.
+
 ## Protections en place
 
 - **Limitation des tentatives** : 5 requêtes par minute et par IP sur la
@@ -107,8 +138,8 @@ compte administrateur.
 - **En-têtes de sécurité** : CSP, `X-Frame-Options`, `X-Content-Type-Options`,
   `Referrer-Policy` sur toutes les réponses ; HSTS dès que la connexion est
   chiffrée.
-- **HTTPS forcé** hors développement local, pour que les URL générées ne
-  retombent pas en clair derrière un répartiteur de charge.
+- **Protocole d'origine rétabli** derrière un répartiteur (`TrustProxies`), pour
+  que les URL générées et l'en-tête HSTS reflètent le HTTPS vu par le visiteur.
 - **Sessions chiffrées**, cookie `secure` à activer via `SESSION_SECURE_COOKIE`.
 
 ## Ce qui n'est pas encore en place
@@ -123,5 +154,5 @@ compte administrateur.
   vues comportant encore du code en ligne. La politique bloque l'injection de
   scripts distants, l'encadrement en iframe et le détournement de formulaire,
   mais pas un script injecté en ligne.
-- Mise en file d'attente des emails, pages d'erreur personnalisées et
-  protection du dernier compte administrateur (phase 3).
+- Optimisation des images et migration du framework vers Laravel 12 (phases
+  suivantes).

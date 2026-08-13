@@ -28,6 +28,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Forçage du schéma HTTPS
+    |--------------------------------------------------------------------------
+    |
+    | Normalement inutile : TrustProxies rétablit le protocole d'origine depuis
+    | X-Forwarded-Proto, et les URL générées sont correctes. À n'activer que
+    | sur une plateforme qui ne transmet pas cet en-tête — et jamais si le
+    | conteneur est réellement servi en HTTP.
+    |
+    */
+
+    'force_https' => (bool) env('FORCE_HTTPS', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application URL
     |--------------------------------------------------------------------------
     */

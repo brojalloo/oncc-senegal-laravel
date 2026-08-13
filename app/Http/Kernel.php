@@ -12,6 +12,9 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
+        // En premier : les middlewares suivants doivent voir le protocole
+        // d'origine, pas celui de la liaison interne au répartiteur.
+        \App\Http\Middleware\TrustProxies::class,
         \App\Http\Middleware\SecurityHeaders::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
