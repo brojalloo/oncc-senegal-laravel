@@ -147,15 +147,15 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded" style="background: var(--gray-50);">
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded bg-sunk">
                         <span class="fw-semibold"><i class="fab fa-php me-2 text-primary"></i>Version PHP</span>
                         <span class="badge-premium info">{{ $systemInfo['php_version'] }}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded" style="background: var(--gray-50);">
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded bg-sunk">
                         <span class="fw-semibold"><i class="fab fa-laravel me-2 text-danger"></i>Version Laravel</span>
                         <span class="badge-premium danger">{{ $systemInfo['laravel_version'] }}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded" style="background: var(--gray-50);">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded bg-sunk">
                         <span class="fw-semibold"><i class="fas fa-database me-2 text-success"></i>Base de données</span>
                         <span class="badge-premium success">{{ $systemInfo['database_size'] }}</span>
                     </div>

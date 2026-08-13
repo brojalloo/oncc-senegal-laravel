@@ -1286,6 +1286,7 @@ h3, .h3 { font-size: 1.25rem; }
 .card-header small { color: var(--oncc-ink-soft); opacity: 1; }
 
 .text-accent { color: var(--oncc-accent) !important; }
+.bg-sunk { background: var(--oncc-sunk); }
 
 /* Les deux pages de visualisation ouvrent sur la même bande que
    l'administration. */
