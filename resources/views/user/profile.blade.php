@@ -194,7 +194,8 @@
                                 <div class="icon" style="background: linear-gradient(135deg, #f97316, #ea580c);">
                                     <i class="fas fa-calendar-alt"></i>
                                 </div>
-                                <div class="value">{{ $user->created_at->diffInDays(now()) }}</div>
+                                {{-- Carbon 3 renvoie un flottant : sans arrondi, on afficherait « 5.2916666761806 ». --}}
+                                <div class="value">{{ (int) $user->created_at->diffInDays(now()) }}</div>
                                 <div class="label">Jours actif</div>
                             </div>
                         </div>

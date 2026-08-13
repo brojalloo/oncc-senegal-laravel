@@ -6,6 +6,7 @@ use App\Mail\NewsletterEmail;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -66,7 +67,7 @@ class SendNewsletter implements ShouldQueue
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder<User>
+     * @return Builder<User>
      */
     private function recipients()
     {
