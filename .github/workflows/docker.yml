@@ -165,12 +165,33 @@ jobs:
 
       - name: Limitation des tentatives de connexion
         run: |
+          # Il faut une vraie session et un jeton CSRF : sans eux la requête
+          # est rejetée en 419 par VerifyCsrfToken, qui s'exécute avant la
+          # limitation, et l'on ne teste rien. C'est aussi ce que ferait un
+          # attaquant — récupérer le formulaire puis rejouer le jeton. La
+          # suite PHPUnit ne peut pas le voir : Laravel y désactive CSRF.
+          jar=$(mktemp)
+          token=$(curl -s -c "$jar" http://127.0.0.1:8080/login \
+            | grep -oE 'name="_token" value="[^"]+"' | head -1 | sed 's/.*value="//; s/"//')
+
+          if [ -z "$token" ]; then
+            echo "::error::jeton CSRF introuvable dans le formulaire de connexion"; exit 1
+          fi
+
           for i in $(seq 1 6); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:8080/login \
-              -H 'Accept: application/json' -d 'email=a@b.sn&password=x')
+            code=$(curl -s -o /dev/null -w '%{http_code}' -b "$jar" -c "$jar" \
+              -X POST http://127.0.0.1:8080/login \
+              --data-urlencode "_token=$token" \
+              --data-urlencode 'email=inexistant@test.sn' \
+              --data-urlencode 'password=mauvais')
+            echo "tentative $i -> $code"
+            if [ "$i" -lt 6 ] && [ "$code" = "419" ]; then
+              echo "::error::419 dès la tentative $i : le jeton CSRF n'est pas accepté"; exit 1
+            fi
           done
+
           [ "$code" = "429" ] || { echo "::error::la 6e tentative renvoie $code, pas 429"; exit 1; }
-          echo "Limitation active."
+          echo "Limitation active après 5 tentatives."
 
       - name: La file d'attente traite réellement un travail
         run: |
