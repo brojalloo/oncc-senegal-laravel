@@ -246,6 +246,13 @@ h3, .h3 { font-size: 1.25rem; }
     background: rgba(255, 255, 255, 0.1);
 }
 
+/* Le déclencheur du menu : sans cette règle, l'avatar est un bloc et
+   le nom passe à la ligne en dessous. */
+.user-dropdown {
+    display: inline-flex;
+    align-items: center;
+}
+
 .user-avatar,
 .user-avatar-large {
     display: inline-flex;
@@ -1052,6 +1059,412 @@ h3, .h3 { font-size: 1.25rem; }
 }
 
 .action-btn:hover .action-arrow { transform: translateX(3px); color: var(--oncc-accent); }
+
+/* --------------------------------------------------------------------
+   Écrans d'administration, de saisie et de profil
+   --------------------------------------------------------------------
+   Mêmes composants que le tableau de bord, mêmes règles. Ce bloc
+   complète ce que .stat-card, .page-header et .premium-tabs — restaurés
+   au PR #20 — laissaient encore sans style : leurs éléments internes.
+   -------------------------------------------------------------------- */
+
+.page-header.admin-header {
+    background: var(--oncc-chrome);
+    color: #FFFFFF;
+    padding: 1.5rem 1.75rem;
+    margin-top: 1.5rem;
+    border-radius: var(--oncc-radius);
+    border-bottom: 3px solid transparent;
+    border-image: var(--oncc-lat) 1;
+}
+
+.page-header.admin-header h1 { color: #FFFFFF; }
+.page-header.admin-header p { color: rgb(255 255 255 / 0.72); margin: 0; }
+
+.page-header.admin-header .header-badge {
+    align-self: flex-start;
+    margin: 0.5rem 0 0;
+    background: rgb(255 255 255 / 0.14);
+    border-radius: var(--oncc-radius);
+    padding: 0.3rem 0.65rem;
+    font-size: 0.82rem;
+    color: rgb(255 255 255 / 0.9);
+}
+
+/* Signale une file d'attente : la couleur dit « à traiter ». */
+.pulse-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--oncc-moyen);
+    margin-right: 0.45rem;
+    vertical-align: middle;
+}
+
+.page-header.admin-header .pulse-dot { background: var(--oncc-ar-1); }
+
+/* Contenu d'une carte de statistique. */
+.stat-card { position: relative; display: flex; align-items: flex-start; gap: 0.85rem; }
+
+.stat-card .trend-badge {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    background: none;
+    color: var(--oncc-ink-soft);
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+.stat-icon {
+    width: 2.1rem;
+    height: 2.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-soft);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.stat-card.success .stat-icon { background: var(--oncc-faible-bg);   color: var(--oncc-faible); }
+.stat-card.warning .stat-icon { background: var(--oncc-moyen-bg);    color: var(--oncc-moyen); }
+.stat-card.danger  .stat-icon { background: var(--oncc-critique-bg); color: var(--oncc-critique); }
+.stat-card.info    .stat-icon,
+.stat-card.primary .stat-icon { background: var(--oncc-accent-soft); color: var(--oncc-accent); }
+
+.stat-content { min-width: 0; }
+
+.stat-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oncc-ink-soft);
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-family: var(--oncc-data);
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-unit { font-size: 0.78rem; color: var(--oncc-ink-soft); margin-top: 0.2rem; }
+
+/* Variante compacte, sur le profil et les rapports. */
+.stat-mini, .stat-mini-card {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    padding: 1rem;
+    text-align: center;
+}
+
+.stat-mini-card .icon {
+    width: 2.1rem;
+    height: 2.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.6rem;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+    font-size: 0.9rem;
+}
+
+.stat-mini-card .value {
+    font-family: var(--oncc-data);
+    font-size: 1.4rem;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-mini-card .label { font-size: 0.78rem; color: var(--oncc-ink-soft); }
+
+/* Le tableau : .glass-table ne verrait plus rien à travers, mais la
+   classe reste dans neuf vues — elle vaut ici pour « tableau posé sur
+   une surface ». */
+.glass-table { background: var(--oncc-surface); }
+
+.premium-table tbody tr:hover { background: var(--oncc-sunk); }
+
+/* Onglets : le balisage utilise <button class="tab-btn">, que la règle
+   du PR #20 ne visait pas. */
+.premium-tabs .tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--oncc-body);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--oncc-ink-soft);
+    padding: 0.6rem 0.95rem;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    cursor: pointer;
+}
+
+.premium-tabs .tab-btn:hover { color: var(--oncc-ink); }
+
+.premium-tabs .tab-btn.active {
+    color: var(--oncc-accent);
+    border-bottom-color: var(--oncc-accent);
+}
+
+.badge-count {
+    font-family: var(--oncc-data);
+    font-size: 0.72rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 2px;
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-mid);
+}
+
+.premium-tabs .tab-btn.active .badge-count {
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+}
+
+/* L'icône d'un encart : elle reprend la couleur de son niveau. */
+.alert-premium { display: flex; align-items: flex-start; gap: 0.7rem; }
+.alert-icon { font-size: 1rem; line-height: 1.4; flex-shrink: 0; }
+.alert-premium.success .alert-icon { color: var(--oncc-faible); }
+.alert-premium.warning .alert-icon { color: var(--oncc-moyen); }
+.alert-premium.danger  .alert-icon { color: var(--oncc-critique); }
+.alert-premium.info    .alert-icon { color: var(--oncc-accent); }
+
+/* Boutons d'action en fin de ligne de tableau. */
+.btn-action {
+    width: 1.9rem;
+    height: 1.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-surface);
+    color: var(--oncc-ink-mid);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-action:hover { border-color: var(--oncc-rule-strong); background: var(--oncc-sunk); }
+.btn-action.success { color: var(--oncc-faible);   border-color: var(--oncc-faible); }
+.btn-action.danger  { color: var(--oncc-critique); border-color: var(--oncc-critique); }
+.btn-action.warning { color: var(--oncc-moyen);    border-color: var(--oncc-moyen); }
+.btn-action.info,
+.btn-action.primary { color: var(--oncc-accent);   border-color: var(--oncc-accent); }
+.btn-action.success:hover { background: var(--oncc-faible-bg); }
+.btn-action.danger:hover  { background: var(--oncc-critique-bg); }
+.btn-action.warning:hover { background: var(--oncc-moyen-bg); }
+.btn-action.info:hover,
+.btn-action.primary:hover { background: var(--oncc-accent-soft); }
+
+/* Les six vues qui ouvraient un <style> pour cette seule règle. */
+.premium-card .card-body { padding: 1.5rem 1.75rem; }
+@media (max-width: 768px) { .premium-card .card-body { padding: 1.15rem; } }
+
+/* Vingt-neuf en-têtes de carte portaient une classe .gradient-* dont la
+   définition avait disparu. Le système leur donne un seul traitement. */
+.card-header {
+    background: var(--oncc-sunk);
+    border-bottom: 1px solid var(--oncc-rule);
+    padding: 0.9rem 1.15rem;
+}
+
+.card-header h5, .card-header h6 { font-size: 1rem; margin: 0; }
+.card-header small { color: var(--oncc-ink-soft); opacity: 1; }
+
+.text-accent { color: var(--oncc-accent) !important; }
+
+/* Les deux pages de visualisation ouvrent sur la même bande que
+   l'administration. */
+.page-header.climate-header,
+.page-header.economic-header {
+    background: var(--oncc-chrome);
+    color: #FFFFFF;
+    padding: 1.5rem 1.75rem;
+    margin-top: 1.5rem;
+    border-radius: var(--oncc-radius);
+    border-bottom: 3px solid transparent;
+    border-image: var(--oncc-lat) 1;
+}
+
+.page-header.climate-header h1,
+.page-header.economic-header h1 { color: #FFFFFF; }
+
+.page-header.climate-header p,
+.page-header.economic-header p { color: rgb(255 255 255 / 0.72); margin: 0; }
+
+.page-header.climate-header .pulse-dot,
+.page-header.economic-header .pulse-dot { background: var(--oncc-ar-1); }
+
+/* --------------------------------------------------------------------
+   Profil
+   -------------------------------------------------------------------- */
+
+.profile-avatar {
+    width: 5.5rem;
+    height: 5.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.15rem;
+    border-radius: 50%;
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+    font-size: 2.1rem;
+}
+
+.profile-name {
+    font-family: var(--oncc-display);
+    font-stretch: 112%;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--oncc-ink);
+    margin-bottom: 0.5rem;
+}
+
+/* Le rôle est une donnée : il porte la même couleur que dans la table
+   des utilisateurs. */
+.profile-role {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--oncc-radius);
+    border: 1px solid;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.profile-role.admin        { background: var(--oncc-critique-bg); color: var(--oncc-critique); border-color: var(--oncc-critique); }
+.profile-role.chercheur    { background: var(--oncc-accent-soft); color: var(--oncc-accent);   border-color: var(--oncc-accent); }
+.profile-role.collectivite { background: var(--oncc-faible-bg);   color: var(--oncc-faible);   border-color: var(--oncc-faible); }
+.profile-role.public       { background: var(--oncc-sunk);        color: var(--oncc-ink-soft); border-color: var(--oncc-rule-strong); }
+
+/* --------------------------------------------------------------------
+   Cartographie
+   -------------------------------------------------------------------- */
+
+.map-card .card-body { padding: 0; }
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--oncc-ink-mid);
+    padding: 0.2rem 0;
+}
+
+/* Chiffres dans une infobulle Leaflet. */
+.popup-stat {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid var(--oncc-rule);
+}
+
+.popup-content { min-width: 12rem; font-family: var(--oncc-body); }
+.popup-content h6 { font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+.popup-stat:last-child { border-bottom: none; }
+.popup-stat-label { font-size: 0.8rem; color: var(--oncc-ink-soft); }
+
+.popup-stat-value {
+    font-family: var(--oncc-data);
+    font-size: 0.82rem;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-surface);
+    color: var(--oncc-ink);
+}
+
+.leaflet-container { font-family: var(--oncc-body); font-size: 0.88rem; }
+.leaflet-popup-content { margin: 0.8rem 1.1rem; }
+
+#map { background: var(--oncc-sunk); z-index: 1; }
+#map:fullscreen { width: 100vw !important; height: 100vh !important; }
+
+.region-marker { background: none !important; border: none !important; }
+
+.legend-item.disabled { opacity: 0.4; text-decoration: line-through; }
+
+/* Une alerte porte un niveau : le filet gauche en donne la couleur,
+   la même que dans .badge-premium et la table alertes. */
+.alert-card {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-left: 3px solid var(--oncc-rule-strong);
+    border-radius: var(--oncc-radius);
+    padding: 0.8rem 0.9rem;
+    margin-bottom: 0.6rem;
+}
+
+.alert-card.success { border-left-color: var(--oncc-faible);   background: var(--oncc-faible-bg); }
+.alert-card.warning { border-left-color: var(--oncc-moyen);    background: var(--oncc-moyen-bg); }
+.alert-card.danger  { border-left-color: var(--oncc-critique); background: var(--oncc-critique-bg); }
+.alert-card.info    { border-left-color: var(--oncc-accent);   background: var(--oncc-accent-soft); }
+
+.region-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--oncc-sunk);
+    border-radius: var(--oncc-radius);
+    padding: 0.75rem 0.9rem;
+    margin-bottom: 0.6rem;
+}
+
+.region-stat-icon {
+    width: 2.1rem;
+    height: 2.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-surface);
+    color: var(--oncc-ink-soft);
+    flex-shrink: 0;
+}
+
+.region-stat-value,
+.value-number {
+    font-family: var(--oncc-data);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.region-stat-label,
+.value-label { font-size: 0.78rem; color: var(--oncc-ink-soft); }
+
+.value-display {
+    background: var(--oncc-sunk);
+    border-radius: var(--oncc-radius);
+    padding: 0.6rem;
+}
+
+#alertsList::-webkit-scrollbar { width: 6px; }
+#alertsList::-webkit-scrollbar-track { background: var(--oncc-sunk); }
+#alertsList::-webkit-scrollbar-thumb { background: var(--oncc-rule-strong); border-radius: 3px; }
 
 /* --------------------------------------------------------------------
    Accessibilité

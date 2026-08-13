@@ -2,28 +2,10 @@
 
 @section('title', 'Rapports système')
 
-@push('styles')
-<style>
-.premium-card .card-body {
-    padding: 2rem 2.5rem;
-}
-@media (max-width: 768px) {
-    .premium-card .card-body {
-        padding: 1.5rem;
-    }
-}
-</style>
-@endpush
-
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header admin-header" style="position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
+    <div class="page-header admin-header">
         <h1>
             <i class="fas fa-chart-pie me-2"></i>
             Rapports Système
@@ -42,7 +24,7 @@
         <!-- Statistiques des utilisateurs -->
         <div class="col-lg-6 mb-4">
             <div class="premium-card h-100">
-                <div class="card-header gradient-primary">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-users"></i>
@@ -101,7 +83,7 @@
         <!-- Statistiques des données -->
         <div class="col-lg-6 mb-4">
             <div class="premium-card h-100">
-                <div class="card-header gradient-success">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-database"></i>
@@ -187,7 +169,7 @@
         <!-- Actions disponibles -->
         <div class="col-lg-6 mb-4">
             <div class="premium-card h-100">
-                <div class="card-header gradient-info">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-tools"></i>
@@ -237,7 +219,7 @@
     <div class="row">
         <div class="col-lg-6 mb-4">
             <div class="premium-card">
-                <div class="card-header gradient-primary">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-chart-pie"></i>
@@ -256,7 +238,7 @@
 
         <div class="col-lg-6 mb-4">
             <div class="premium-card">
-                <div class="card-header gradient-success">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-chart-bar"></i>

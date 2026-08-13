@@ -2,83 +2,10 @@
 
 @section('title', 'Mon Profil')
 
-@push('styles')
-<style>
-    .profile-avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3rem;
-        color: white;
-        margin: 0 auto 1.5rem;
-        box-shadow: 0 10px 30px rgba(249, 115, 22, 0.4);
-    }
-    .profile-name {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--text-dark);
-        margin-bottom: 0.5rem;
-    }
-    .profile-role {
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        border-radius: 50px;
-        font-weight: 600;
-        font-size: 0.85rem;
-    }
-    .profile-role.admin { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; }
-    .profile-role.chercheur { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; }
-    .profile-role.collectivite { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); color: white; }
-    .profile-role.public { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; }
-    
-    .stat-mini-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.25rem;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        transition: all 0.3s ease;
-    }
-    .stat-mini-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    }
-    .stat-mini-card .icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 0.75rem;
-        font-size: 1.25rem;
-        color: white;
-    }
-    .stat-mini-card .value {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--text-dark);
-    }
-    .stat-mini-card .label {
-        font-size: 0.8rem;
-        color: var(--text-muted);
-    }
-</style>
-@endpush
-
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
     <div class="page-header" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
         <h1>
             <i class="fas fa-user-circle me-2"></i>
             Mon Profil
@@ -148,7 +75,7 @@
 
             <!-- Statistiques Mini -->
             <div class="premium-card mb-4">
-                <div class="card-header gradient-info">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-chart-pie"></i>
@@ -210,7 +137,7 @@
         <div class="col-lg-8">
             <!-- Informations du compte -->
             <div class="premium-card mb-4">
-                <div class="card-header gradient-primary">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-id-card"></i>
@@ -289,7 +216,7 @@
 
             <!-- Changement de mot de passe -->
             <div class="premium-card">
-                <div class="card-header gradient-warning">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-shield-alt"></i>

@@ -2,96 +2,6 @@
 
 @section('title', 'Cartographie')
 
-@push('styles')
-<style>
-    /* Padding card-body */
-    .premium-card .card-body {
-        padding: 2rem 2.5rem;
-    }
-    @media (max-width: 768px) {
-        .premium-card .card-body {
-            padding: 1.5rem;
-        }
-    }
-    
-    /* Styles spécifiques cartographie */
-    .legend-item:hover {
-        transform: translateX(5px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
-    .legend-item.disabled {
-        opacity: 0.4;
-        text-decoration: line-through;
-    }
-    
-    #map {
-        background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-    }
-    
-    /* Custom scrollbar for alerts */
-    #alertsList::-webkit-scrollbar {
-        width: 6px;
-    }
-    #alertsList::-webkit-scrollbar-track {
-        background: #f1f5f9;
-        border-radius: 3px;
-    }
-    #alertsList::-webkit-scrollbar-thumb {
-        background: linear-gradient(180deg, #10b981, #059669);
-        border-radius: 3px;
-    }
-    
-    /* Alert cards in list */
-    .alert-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 0.75rem;
-        border-left: 4px solid;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        transition: all 0.3s ease;
-    }
-    .alert-card:hover {
-        transform: translateX(4px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .alert-card.danger { border-color: #ef4444; background: linear-gradient(135deg, #fff 0%, #fef2f2 100%); }
-    .alert-card.warning { border-color: #f59e0b; background: linear-gradient(135deg, #fff 0%, #fffbeb 100%); }
-    .alert-card.info { border-color: #3b82f6; background: linear-gradient(135deg, #fff 0%, #eff6ff 100%); }
-    .alert-card.success { border-color: #10b981; background: linear-gradient(135deg, #fff 0%, #f0fdf4 100%); }
-    
-    /* Region data card styling */
-    .region-stat {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-    .region-stat-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-    }
-    .region-stat-value {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #1e293b;
-    }
-    .region-stat-label {
-        font-size: 0.8rem;
-        color: #64748b;
-    }
-</style>
-@endpush
-
 @section('content')
 <!-- Bloc JS global pour garantir la disponibilité des fonctions -->
 <script>
@@ -649,11 +559,6 @@ function showNotification(message, type = 'info') {
 <div class="container-fluid">
     <!-- Page Header Premium avec particules -->
     <div class="page-header map-header" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; color: white; position: relative; overflow: hidden;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
         <div style="position: absolute; top: 0; right: 0; width: 300px; height: 100%; opacity: 0.1;">
             <i class="fas fa-globe-africa" style="font-size: 15rem; position: absolute; right: -50px; top: -30px;"></i>
         </div>
@@ -675,7 +580,7 @@ function showNotification(message, type = 'info') {
     <div class="col-md-3">
         <!-- Carte Filtres Premium -->
         <div class="premium-card mb-4">
-            <div class="card-header gradient-primary">
+            <div class="card-header">
                 <div class="header-content">
                     <div class="header-icon">
                         <i class="fas fa-filter"></i>
@@ -735,7 +640,7 @@ function showNotification(message, type = 'info') {
         
         <!-- Légende Premium -->
         <div class="premium-card">
-            <div class="card-header gradient-info">
+            <div class="card-header">
                 <div class="header-content">
                     <div class="header-icon">
                         <i class="fas fa-palette"></i>
@@ -794,7 +699,7 @@ function showNotification(message, type = 'info') {
     <div class="col-md-9">
         <!-- Carte Premium -->
         <div class="premium-card mb-4">
-            <div class="card-header gradient-success">
+            <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="header-content">
                         <div class="header-icon">
@@ -840,7 +745,7 @@ function showNotification(message, type = 'info') {
             <!-- Alertes actives -->
             <div class="col-md-6">
                 <div class="premium-card h-100">
-                    <div class="card-header gradient-warning">
+                    <div class="card-header">
                         <div class="header-content">
                             <div class="header-icon">
                                 <i class="fas fa-exclamation-triangle"></i>
@@ -865,7 +770,7 @@ function showNotification(message, type = 'info') {
             <!-- Données région -->
             <div class="col-md-6">
                 <div class="premium-card h-100">
-                    <div class="card-header gradient-primary">
+                    <div class="card-header">
                         <div class="header-content">
                             <div class="header-icon">
                                 <i class="fas fa-chart-bar"></i>
@@ -893,81 +798,6 @@ function showNotification(message, type = 'info') {
 </div>
 </div>
 
-<style>
-#map {
-    border-radius: 0 0 8px 8px;
-    z-index: 1;
-    background: #f8f9fa;
-}
-
-.region-marker {
-    background: none !important;
-    border: none !important;
-}
-
-.marker-container {
-    transition: all 0.3s ease;
-}
-
-.marker-container:hover {
-    transform: scale(1.1);
-}
-
-.value-display {
-    background: #f8f9fa;
-    border-radius: 8px;
-    padding: 10px;
-}
-
-.value-number {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #1e6f5c;
-}
-
-.value-label {
-    font-size: 0.8rem;
-    color: #6c757d;
-    margin-top: 5px;
-}
-
-.leaflet-container {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-}
-
-.leaflet-popup-content {
-    margin: 13px 19px;
-}
-
-.leaflet-control-zoom {
-    margin-top: 10px !important;
-    margin-right: 10px !important;
-}
-
-/* Animation pour les notifications */
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-.alert.position-fixed {
-    animation: slideIn 0.3s ease-out;
-}
-
-/* Style pour le mode plein écran */
-#map:fullscreen {
-    width: 100vw !important;
-    height: 100vh !important;
-    border-radius: 0 !important;
-}
-</style>
 
 <script>
 // Initialiser la carte au chargement de la page

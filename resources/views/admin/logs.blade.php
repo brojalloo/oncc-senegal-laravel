@@ -2,28 +2,10 @@
 
 @section('title', 'Logs système')
 
-@push('styles')
-<style>
-.premium-card .card-body {
-    padding: 2rem 2.5rem;
-}
-@media (max-width: 768px) {
-    .premium-card .card-body {
-        padding: 1.5rem;
-    }
-}
-</style>
-@endpush
-
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
     <div class="page-header" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
         <h1>
             <i class="fas fa-clipboard-list me-2"></i>
             Logs Système

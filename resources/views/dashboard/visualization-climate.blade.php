@@ -8,12 +8,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header climate-header" style="position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
+    <div class="page-header climate-header">
         <h1>
             <i class="fas fa-cloud-sun-rain me-2"></i>
             Visualisation des Données Climatiques
@@ -55,7 +50,7 @@
         <!-- Évolution temporelle -->
         <div class="col-lg-8 mb-4">
             <div class="premium-card">
-                <div class="card-header gradient-info">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-chart-line"></i>
@@ -75,7 +70,7 @@
         <!-- Statistiques par indicateur -->
         <div class="col-lg-4 mb-4">
             <div class="premium-card">
-                <div class="card-header gradient-purple">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-chart-pie"></i>
@@ -97,7 +92,7 @@
         <!-- Tableau statistiques détaillées -->
         <div class="col-12">
             <div class="premium-card">
-                <div class="card-header gradient-dark">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-table"></i>

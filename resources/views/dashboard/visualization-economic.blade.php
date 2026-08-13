@@ -8,12 +8,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header economic-header" style="position: relative;">
-        <div class="particles-container">
-            @for($i = 0; $i < 8; $i++)
-            <div class="particle" style="left: {{ rand(0, 100) }}%; animation-delay: {{ rand(0, 10) }}s; animation-duration: {{ rand(10, 20) }}s;"></div>
-            @endfor
-        </div>
+    <div class="page-header economic-header">
         <h1>
             <i class="fas fa-coins me-2"></i>
             Visualisation des Données Économiques
@@ -55,7 +50,7 @@
         <!-- Évolution par secteur -->
         <div class="col-lg-8 mb-4">
             <div class="premium-card">
-                <div class="card-header gradient-success">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-chart-area"></i>
@@ -75,7 +70,7 @@
         <!-- Impact par secteur -->
         <div class="col-lg-4 mb-4">
             <div class="premium-card">
-                <div class="card-header gradient-warning">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-chart-bar"></i>
@@ -97,7 +92,7 @@
         <!-- Tableau impacts détaillés -->
         <div class="col-12">
             <div class="premium-card">
-                <div class="card-header gradient-dark">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon">
                             <i class="fas fa-table"></i>
