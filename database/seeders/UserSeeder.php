@@ -13,9 +13,13 @@ class UserSeeder extends Seeder
     /**
      * Comptes de démonstration, destinés au développement uniquement.
      *
+     * Publique parce que la commande users:rotate-password la lit : deux
+     * listes séparées finiraient par diverger, et la commande passerait
+     * alors à côté d'un compte à traiter.
+     *
      * @var list<array{email: string, nom: string, prenom: string, role: string, region: string, telephone: string}>
      */
-    private const DEMO_ACCOUNTS = [
+    public const DEMO_ACCOUNTS = [
         [
             'email' => 'admin@oncc-sn.com',
             'nom' => 'Administrateur',
