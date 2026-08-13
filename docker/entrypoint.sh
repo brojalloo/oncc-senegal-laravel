@@ -25,7 +25,6 @@ mkdir -p \
     storage/framework/views \
     storage/logs \
     bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache
 
 if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     echo "==> Migrations"
@@ -40,5 +39,13 @@ php artisan config:cache --no-ansi
 php artisan route:cache --no-ansi
 php artisan view:cache --no-ansi
 
-echo "==> Démarrage de nginx et php-fpm"
+# Le chown vient APRÈS les commandes Artisan, et non avant : celles-ci
+# s'exécutent en root et créent laravel.log, les vues compilées et les fichiers
+# de bootstrap/cache. Chowner d'abord les laisserait appartenir à root, et
+# php-fpm comme le worker — qui tournent en www-data — ne pourraient plus
+# écrire dans le journal. L'application continuerait de servir, sans plus
+# jamais journaliser.
+chown -R www-data:www-data storage bootstrap/cache
+
+echo "==> Démarrage de nginx, php-fpm et du worker"
 exec supervisord -c /etc/supervisord.conf
