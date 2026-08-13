@@ -67,6 +67,18 @@ sessions et des données chiffrées avec une clé absente.
 |---|---|---|
 | `RUN_MIGRATIONS` | `true` | Passez à `false` pour piloter les migrations depuis une étape de release dédiée |
 | `SEED_PASSWORD` | — | Développement uniquement. Le seeder de démonstration refuse de s'exécuter en production |
+| `FORCE_HTTPS` | `false` | Voir ci-dessous — normalement inutile |
+
+### HTTPS derrière un répartiteur
+
+Les plateformes d'hébergement terminent le TLS devant le conteneur et lui
+transmettent la requête en clair, avec l'en-tête `X-Forwarded-Proto`. Le
+middleware `TrustProxies` rétablit le protocole d'origine : les URL générées
+sont correctes et l'en-tête HSTS est bien émis, sans rien forcer.
+
+N'activez `FORCE_HTTPS` que si votre plateforme ne transmet pas cet en-tête, et
+**jamais** si le conteneur est réellement servi en HTTP : toutes les URL
+deviendraient injoignables.
 
 ## Base de données
 
@@ -126,8 +138,8 @@ refusé par le serveur SMTP est journalisé sans interrompre le reste du lot.
 - **En-têtes de sécurité** : CSP, `X-Frame-Options`, `X-Content-Type-Options`,
   `Referrer-Policy` sur toutes les réponses ; HSTS dès que la connexion est
   chiffrée.
-- **HTTPS forcé** hors développement local, pour que les URL générées ne
-  retombent pas en clair derrière un répartiteur de charge.
+- **Protocole d'origine rétabli** derrière un répartiteur (`TrustProxies`), pour
+  que les URL générées et l'en-tête HSTS reflètent le HTTPS vu par le visiteur.
 - **Sessions chiffrées**, cookie `secure` à activer via `SESSION_SECURE_COOKIE`.
 
 ## Ce qui n'est pas encore en place

@@ -34,6 +34,16 @@ RUN npm ci
 
 COPY vite.config.js ./
 COPY resources ./resources
+
+# resources/css/app.css déclare @source vers les vues de pagination de Laravel.
+# Sans elles, Tailwind ne voit pas les classes qu'elles utilisent et les
+# supprime : la pagination s'affiche alors sans style sur les trois pages qui
+# l'emploient. Tailwind n'avertit pas d'un @source introuvable — la seule trace
+# est un CSS plus léger de 24 classes.
+COPY --from=vendor \
+    /app/vendor/laravel/framework/src/Illuminate/Pagination/resources/views \
+    ./vendor/laravel/framework/src/Illuminate/Pagination/resources/views
+
 RUN npm run build
 
 

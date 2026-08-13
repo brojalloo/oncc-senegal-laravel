@@ -20,11 +20,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Derrière le répartiteur de charge d'un hébergeur, l'application voit
-        // souvent la requête en clair et génère alors des URL http://, ce qui
-        // provoque des avertissements de contenu mixte et des redirections
-        // vers HTTP. Hors développement local, on force le schéma.
-        if (! $this->app->environment('local', 'testing')) {
+        // Le protocole d'origine est normalement rétabli par TrustProxies, à
+        // partir de X-Forwarded-Proto : les URL générées sont alors correctes
+        // sans rien forcer, et un déploiement en HTTP simple continue de
+        // fonctionner.
+        //
+        // FORCE_HTTPS reste disponible pour les rares plateformes qui ne
+        // transmettent pas cet en-tête. Ne l'activez pas si le conteneur est
+        // servi en clair : toutes les URL deviendraient injoignables.
+        if (config('app.force_https')) {
             URL::forceScheme('https');
         }
     }
