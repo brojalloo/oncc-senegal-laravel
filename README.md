@@ -3,7 +3,7 @@
 ![Laravel](https://img.shields.io/badge/Laravel-12.66-red?style=for-the-badge&logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777bb4?style=for-the-badge&logo=php)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-85-1a6e42?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-113-1a6e42?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ## 📋 À propos
@@ -111,14 +111,38 @@ SEED_PASSWORD=un-mot-de-passe-de-developpement
 | `php artisan users:list-admins` | Liste les comptes administrateurs |
 | `php artisan users:promote {email}` | Promeut un compte au rôle administrateur |
 | `php artisan users:activate-all [--force]` | Active les comptes en attente de vérification |
+| `php artisan users:rotate-password [emails...] [--demo] [--generate]` | Change un mot de passe et ferme les sessions ouvertes du compte |
 
 C'est par `users:promote` qu'on désigne le premier administrateur après un
 déploiement, l'inscription publique ne le permettant pas.
 
+### Rotation d'un mot de passe compromis
+
+Changer le mot de passe ne suffit pas. Qui s'est déjà connecté avec l'ancien
+garde une session ouverte, et un cookie « se souvenir de moi » survit
+indépendamment du mot de passe. `users:rotate-password` coupe les trois :
+nouveau mot de passe, jeton de persistance regénéré, sessions supprimées.
+
+```bash
+# Les quatre comptes de démonstration, en une saisie
+php artisan users:rotate-password --demo
+
+# Un compte précis
+php artisan users:rotate-password admin@oncc-sn.com
+
+# Sans terminal (déploiement, script) : le mot de passe est tiré au sort
+# et affiché une seule fois
+php artisan users:rotate-password --demo --generate
+```
+
+Le mot de passe ne peut pas être passé en argument : il resterait dans
+l'historique du shell, ce qui annulerait l'intérêt de l'opération. La saisie
+est masquée et confirmée, et douze caractères sont exigés.
+
 ## ✅ Tests
 
 ```bash
-php artisan test          # 85 tests
+php artisan test          # 113 tests
 ./vendor/bin/pint --test  # style de code
 ```
 
@@ -163,7 +187,7 @@ docker compose up --build   # pile complète en local, PostgreSQL compris
 │   └── seeders/              # Données de démonstration
 ├── docker/                   # nginx, PHP-FPM, supervisord, entrypoint
 ├── resources/views/          # Vues Blade, dont les pages d'erreur
-├── tests/                    # 85 tests
+├── tests/                    # 113 tests
 └── public/                   # Racine web, assets compilés
 ```
 
