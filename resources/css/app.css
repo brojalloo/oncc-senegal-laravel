@@ -199,6 +199,434 @@
     }
 }
 
+/* ====================================================================
+   Système de design — « Gradient sahélien »
+   ====================================================================
+
+   Le Sénégal est traversé par un gradient d'aridité, du Sahara à Matam
+   jusqu'à la Casamance humide. Ce système en fait son échelle de
+   couleurs : la teinte porte la donnée au lieu de l'habiller.
+
+   L'indigo du chrome vient de la teinture ouest-africaine, et tient
+   l'interface en retrait pour que l'échelle d'aridité reste le seul
+   endroit coloré qui compte.
+
+   Ce fichier est chargé après Bootstrap : les surcharges --bs-* plus
+   bas redonnent son identité à tout le balisage existant sans qu'il
+   faille réécrire les vues.
+   ==================================================================== */
+
+:root {
+    /* Chrome */
+    --oncc-ground:       #F3F4F8;
+    --oncc-surface:      #FFFFFF;
+    --oncc-sunk:         #EAECF3;
+    --oncc-ink:          #131A2E;
+    --oncc-ink-mid:      #3E4867;
+    --oncc-ink-soft:     #6B7594;
+    --oncc-rule:         #D6DAE6;
+    --oncc-rule-strong:  #B4BBCE;
+    --oncc-chrome:       #1F2A4A;
+    --oncc-accent:       #3B2FA8;
+    --oncc-accent-soft:  #E6E4F7;
+    --oncc-on-accent:    #FFFFFF;
+
+    /* Aridité — nord vers sud. Réservée aux données. */
+    --oncc-ar-0: #E8DCC0;
+    --oncc-ar-1: #D4A855;
+    --oncc-ar-2: #A8A03C;
+    --oncc-ar-3: #5E8C3A;
+    --oncc-ar-4: #2C6B4F;
+
+    /* Niveaux — ceux de la table alertes */
+    --oncc-faible:      #2C6B4F;
+    --oncc-faible-bg:   #E3F0E9;
+    --oncc-moyen:       #8A6B12;
+    --oncc-moyen-bg:    #F7EFD6;
+    --oncc-eleve:       #A8501F;
+    --oncc-eleve-bg:    #FAE8DC;
+    --oncc-critique:    #8F2626;
+    --oncc-critique-bg: #F9E2E2;
+
+    --oncc-radius: 4px;
+    --oncc-display: "Archivo Expanded", "Archivo", "Arial Black", system-ui, sans-serif;
+    --oncc-body:    "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --oncc-data:    "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+
+[data-theme="dark"] {
+    --oncc-ground:       #0D1222;
+    --oncc-surface:      #151C31;
+    --oncc-sunk:         #1D2540;
+    --oncc-ink:          #E7EAF4;
+    --oncc-ink-mid:      #B3BBD4;
+    --oncc-ink-soft:     #8089A6;
+    --oncc-rule:         #2A3352;
+    --oncc-rule-strong:  #3B4569;
+    --oncc-chrome:       #C3CBE6;
+    --oncc-accent:       #9A90F5;
+    --oncc-accent-soft:  #241F52;
+    --oncc-on-accent:    #10152A;
+
+    --oncc-ar-0: #C8BC9E;
+    --oncc-ar-1: #C79B48;
+    --oncc-ar-2: #9A9337;
+    --oncc-ar-3: #5E8C3A;
+    --oncc-ar-4: #3C8A66;
+
+    --oncc-faible:      #63C795;
+    --oncc-faible-bg:   #12301F;
+    --oncc-moyen:       #DEB74A;
+    --oncc-moyen-bg:    #33290C;
+    --oncc-eleve:       #E38A52;
+    --oncc-eleve-bg:    #38200F;
+    --oncc-critique:    #E86A6A;
+    --oncc-critique-bg: #3A1616;
+}
+
+/* --------------------------------------------------------------------
+   Passerelle Bootstrap
+   --------------------------------------------------------------------
+   Bootstrap 5.3 expose ses couleurs en propriétés personnalisées : les
+   réécrire suffit à ce que les 79 cartes, 34 boutons et 22 tableaux
+   déjà en place adoptent l'identité, sans toucher au balisage.
+   -------------------------------------------------------------------- */
+
+:root,
+[data-bs-theme="light"] {
+    --bs-body-bg:        var(--oncc-ground);
+    --bs-body-color:     var(--oncc-ink);
+    --bs-emphasis-color: var(--oncc-ink);
+    --bs-secondary-color: var(--oncc-ink-soft);
+    --bs-border-color:   var(--oncc-rule);
+    --bs-border-radius:  var(--oncc-radius);
+    --bs-border-radius-sm: 3px;
+    --bs-border-radius-lg: 6px;
+
+    --bs-primary:     var(--oncc-accent);
+    --bs-primary-rgb: 59, 47, 168;
+    --bs-link-color:  var(--oncc-accent);
+    --bs-link-hover-color: var(--oncc-chrome);
+
+    --bs-success: var(--oncc-faible);
+    --bs-warning: var(--oncc-moyen);
+    --bs-danger:  var(--oncc-critique);
+    --bs-info:    var(--oncc-chrome);
+
+    --bs-font-sans-serif: var(--oncc-body);
+    --bs-body-font-family: var(--oncc-body);
+}
+
+[data-theme="dark"] {
+    --bs-body-bg:    var(--oncc-ground);
+    --bs-body-color: var(--oncc-ink);
+    --bs-border-color: var(--oncc-rule);
+    --bs-emphasis-color: var(--oncc-ink);
+}
+
+/* --------------------------------------------------------------------
+   Signature : la bande de latitude
+   --------------------------------------------------------------------
+   Situe une région sur le gradient. Elle n'est pas décorative : sa
+   couleur dit où se trouve la donnée dans le pays.
+   -------------------------------------------------------------------- */
+
+.bande-latitude {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: 5px;
+    width: 100%;
+}
+.bande-latitude > * { display: block; }
+.bande-latitude > :nth-child(1) { background: var(--oncc-ar-0); }
+.bande-latitude > :nth-child(2) { background: var(--oncc-ar-1); }
+.bande-latitude > :nth-child(3) { background: var(--oncc-ar-2); }
+.bande-latitude > :nth-child(4) { background: var(--oncc-ar-3); }
+.bande-latitude > :nth-child(5) { background: var(--oncc-ar-4); }
+
+/* Rail d'une région : à poser en tête d'une carte. */
+.rail-region { height: 4px; border-radius: var(--oncc-radius) var(--oncc-radius) 0 0; }
+.rail-nord      { background: var(--oncc-ar-0); }
+.rail-nord-ouest{ background: var(--oncc-ar-1); }
+.rail-centre    { background: var(--oncc-ar-2); }
+.rail-sud-est   { background: var(--oncc-ar-3); }
+.rail-sud       { background: var(--oncc-ar-4); }
+
+/* --------------------------------------------------------------------
+   Relevé — le parti pris du système
+   --------------------------------------------------------------------
+   Une valeur n'est jamais montrée nue : elle porte sa plage historique
+   et sa position dedans. 31,4 °C ne dit rien ; 31,4 °C en haut de la
+   plage décennale dit tout.
+   -------------------------------------------------------------------- */
+
+.releve {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    padding: 1.1rem 1.2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+.releve-libelle {
+    font-family: var(--oncc-data);
+    font-size: 0.66rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--oncc-ink-soft);
+}
+.releve-valeur {
+    font-family: var(--oncc-data);
+    font-size: 2rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--oncc-ink);
+}
+.releve-unite { font-size: 0.9rem; color: var(--oncc-ink-soft); margin-left: 0.2rem; }
+
+.releve-plage { display: flex; flex-direction: column; gap: 0.3rem; }
+.releve-piste {
+    height: 5px;
+    border-radius: 3px;
+    background: var(--oncc-sunk);
+    position: relative;
+}
+.releve-bande {
+    position: absolute; top: 0; bottom: 0;
+    background: var(--oncc-rule-strong);
+    border-radius: 3px;
+}
+.releve-position {
+    position: absolute; top: -3px; bottom: -3px;
+    width: 3px;
+    background: var(--oncc-ink);
+    border-radius: 2px;
+}
+.releve-bornes {
+    display: flex; justify-content: space-between;
+    font-family: var(--oncc-data);
+    font-size: 0.64rem;
+    color: var(--oncc-ink-soft);
+    font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------
+   Éléments restaurés
+   --------------------------------------------------------------------
+   Ces classes n'étaient définies que dans public/css/premium-design.css,
+   que le passage à Vite a cessé de charger : quatorze d'entre elles,
+   utilisées 172 fois dans les vues, s'affichaient sans aucun style.
+   Elles reviennent ici, dans le nouveau système.
+   -------------------------------------------------------------------- */
+
+.badge-premium {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--oncc-data);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 0.25rem 0.55rem;
+    border-radius: 2px;
+    border-left: 3px solid var(--oncc-ink-soft);
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-mid);
+    white-space: nowrap;
+}
+.badge-premium.success   { background: var(--oncc-faible-bg);   color: var(--oncc-faible);   border-color: var(--oncc-faible); }
+.badge-premium.warning   { background: var(--oncc-moyen-bg);    color: var(--oncc-moyen);    border-color: var(--oncc-moyen); }
+.badge-premium.danger    { background: var(--oncc-critique-bg); color: var(--oncc-critique); border-color: var(--oncc-critique); }
+.badge-premium.info      { background: var(--oncc-accent-soft); color: var(--oncc-accent);   border-color: var(--oncc-accent); }
+.badge-premium.primary   { background: var(--oncc-accent-soft); color: var(--oncc-accent);   border-color: var(--oncc-accent); }
+.badge-premium.secondary { background: var(--oncc-sunk);        color: var(--oncc-ink-soft); border-color: var(--oncc-rule-strong); }
+
+.alert-premium {
+    border: 1px solid var(--oncc-rule);
+    border-left: 4px solid var(--oncc-ink-soft);
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-surface);
+    color: var(--oncc-ink-mid);
+    padding: 0.85rem 1.1rem;
+}
+.alert-premium.success { border-left-color: var(--oncc-faible);   background: var(--oncc-faible-bg); }
+.alert-premium.warning { border-left-color: var(--oncc-moyen);    background: var(--oncc-moyen-bg); }
+.alert-premium.danger  { border-left-color: var(--oncc-critique); background: var(--oncc-critique-bg); }
+.alert-premium.info    { border-left-color: var(--oncc-accent);   background: var(--oncc-accent-soft); }
+
+.btn-premium {
+    font-family: var(--oncc-body);
+    font-size: 0.93rem;
+    font-weight: 600;
+    padding: 0.55rem 1.1rem;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    background: var(--oncc-accent);
+    color: var(--oncc-on-accent);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.btn-premium:hover { filter: brightness(1.12); color: var(--oncc-on-accent); }
+.btn-premium:focus-visible { outline: 2px solid var(--oncc-accent); outline-offset: 2px; }
+
+.stat-card {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    padding: 1.1rem 1.2rem;
+}
+
+.trend-badge {
+    font-family: var(--oncc-data);
+    font-size: 0.7rem;
+    font-variant-numeric: tabular-nums;
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-mid);
+}
+.trend-badge.success { background: var(--oncc-faible-bg);   color: var(--oncc-faible); }
+.trend-badge.danger  { background: var(--oncc-critique-bg); color: var(--oncc-critique); }
+
+.page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--oncc-ink);
+}
+.page-header h1, .page-header h2 {
+    font-family: var(--oncc-display);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: var(--oncc-chrome);
+    margin: 0;
+}
+
+.premium-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--oncc-surface);
+    font-size: 0.93rem;
+}
+.premium-table th {
+    font-family: var(--oncc-data);
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oncc-ink-soft);
+    background: var(--oncc-sunk);
+    font-weight: 500;
+    text-align: left;
+    padding: 0.65rem 0.9rem;
+}
+.premium-table td {
+    padding: 0.65rem 0.9rem;
+    border-bottom: 1px solid var(--oncc-rule);
+    color: var(--oncc-ink-mid);
+}
+.premium-table tbody tr:last-child td { border-bottom: none; }
+/* Les chiffres s'alignent en colonne : chasse fixe et fers à droite. */
+.premium-table td.num, .premium-table th.num {
+    font-family: var(--oncc-data);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.premium-form { display: flex; flex-direction: column; gap: 1rem; }
+.premium-form label {
+    font-family: var(--oncc-data);
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oncc-ink-soft);
+    margin-bottom: 0.25rem;
+}
+
+.chart-container {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    padding: 1.1rem;
+    position: relative;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    color: var(--oncc-ink-soft);
+    border: 1px dashed var(--oncc-rule-strong);
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-surface);
+}
+
+.premium-tabs {
+    display: flex;
+    gap: 0.25rem;
+    border-bottom: 1px solid var(--oncc-rule);
+    margin-bottom: 1.25rem;
+}
+.premium-tabs .nav-link, .premium-tabs > a {
+    font-family: var(--oncc-body);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--oncc-ink-soft);
+    padding: 0.55rem 0.9rem;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    text-decoration: none;
+}
+.premium-tabs .nav-link.active, .premium-tabs > a.active {
+    color: var(--oncc-accent);
+    border-bottom-color: var(--oncc-accent);
+}
+.tab-content { padding-top: 0.25rem; }
+
+/* Fil d'activité du tableau de bord */
+.premium-timeline { display: flex; flex-direction: column; gap: 0.1rem; }
+.timeline-item {
+    position: relative;
+    padding: 0.6rem 0 0.6rem 1.1rem;
+    border-left: 2px solid var(--oncc-rule);
+}
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 1.05rem;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--oncc-accent);
+    border: 2px solid var(--oncc-surface);
+}
+.timeline-item:last-child { border-left-color: transparent; }
+
+/* --------------------------------------------------------------------
+   Accessibilité
+   -------------------------------------------------------------------- */
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--oncc-accent);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+
 /* --- Arrière-plans photographiques ---------------------------------
    Portés depuis public/css/style.css, que ce layout ne charge plus :
    sans ce bloc, les photographies disparaîtraient du site.
