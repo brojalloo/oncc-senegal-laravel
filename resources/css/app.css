@@ -719,6 +719,341 @@ h3, .h3 { font-size: 1.25rem; }
 .timeline-item:last-child { border-left-color: transparent; }
 
 /* --------------------------------------------------------------------
+   Tableau de bord
+   --------------------------------------------------------------------
+   Ces composants vivaient dans 692 lignes de <style> en tête de la vue,
+   écrites avant le système : huit dégradés pour huit indicateurs, plus
+   quatre autres pour les en-têtes de carte, et onze variables héritées
+   qui n'existent plus — leurs déclarations tombaient donc en silence.
+
+   Ils sont repris ici sous une seule règle : une carte est une surface
+   neutre, et la couleur ne sert qu'à dire de quel indicateur il s'agit.
+   -------------------------------------------------------------------- */
+
+.dashboard-header {
+    background: var(--oncc-chrome);
+    color: #FFFFFF;
+    padding: 1.75rem 2rem;
+    margin: 1.5rem 0 1.75rem;
+    border-radius: var(--oncc-radius);
+    border-bottom: 3px solid transparent;
+    border-image: var(--oncc-lat) 1;
+}
+
+.dashboard-header h1 { color: #FFFFFF; margin-bottom: 0.4rem; }
+
+.dashboard-header p {
+    color: rgb(255 255 255 / 0.72);
+    font-size: 0.98rem;
+    max-width: 46rem;
+    margin-bottom: 1rem;
+}
+
+.user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.86rem;
+    color: rgb(255 255 255 / 0.85);
+}
+
+.user-badge .role-badge {
+    background: rgb(255 255 255 / 0.14);
+    border-radius: var(--oncc-radius);
+    padding: 0.2rem 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+}
+
+.filter-bar {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    padding: 0.85rem 1.15rem;
+    margin-bottom: 1.75rem;
+}
+
+.filter-bar label { font-size: 0.88rem; color: var(--oncc-ink-mid); }
+
+/* En-tête de section : un filet, pas une pastille de couleur. */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--oncc-rule);
+}
+
+.section-header h5 {
+    font-family: var(--oncc-display);
+    font-stretch: 112%;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.section-header .section-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-soft);
+    font-size: 0.85rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 576px)  { .stats-grid { grid-template-columns: 1fr; } }
+
+/* --------------------------------------------------------------------
+   Carte d'indicateur
+   --------------------------------------------------------------------
+   Toutes identiques : surface neutre, chiffre en chasse fixe, filet de
+   tête coloré selon ce que l'indicateur mesure. Le filet est la seule
+   couleur de la carte, et il est lisible — l'ocre dit l'aridité, le
+   rouge la perte — là où les huit dégradés d'origine ne disaient rien
+   d'autre que « ceci est une carte ».
+   -------------------------------------------------------------------- */
+
+.indicator-card {
+    position: relative;
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    border-top: 3px solid var(--oncc-rule-strong);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.indicator-card:hover { box-shadow: 0 4px 16px rgb(19 26 46 / 0.08); }
+
+.indicator-card .card-inner {
+    padding: 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    height: 100%;
+}
+
+.indicator-card .icon-wrapper {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-sunk);
+    color: var(--oncc-ink-soft);
+    font-size: 0.9rem;
+}
+
+.indicator-card .card-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oncc-ink-soft);
+    margin-bottom: 0.3rem;
+}
+
+.indicator-card .card-value {
+    font-family: var(--oncc-data);
+    font-size: 1.9rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.indicator-card .card-unit {
+    font-size: 0.78rem;
+    color: var(--oncc-ink-soft);
+    margin-top: 0.25rem;
+}
+
+/* La flèche de tendance : discrète, et colorée par son sens. */
+.indicator-card .trend-indicator {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    font-size: 0.75rem;
+    color: var(--oncc-ink-soft);
+}
+
+/* Le filet de tête, par indicateur. */
+.indicator-card.drought      { border-top-color: var(--oncc-ar-1); }
+.indicator-card.desert       { border-top-color: var(--oncc-ar-0); }
+.indicator-card.flood        { border-top-color: var(--oncc-ar-4); }
+.indicator-card.loss         { border-top-color: var(--oncc-critique); }
+.indicator-card.agriculture  { border-top-color: var(--oncc-ar-3); }
+.indicator-card.fishing      { border-top-color: var(--oncc-chrome); }
+.indicator-card.tourism      { border-top-color: var(--oncc-accent); }
+.indicator-card.energy       { border-top-color: var(--oncc-ar-2); }
+
+.indicator-card.drought .icon-wrapper,
+.indicator-card.desert  .icon-wrapper { background: var(--oncc-moyen-bg); color: var(--oncc-moyen); }
+.indicator-card.loss    .icon-wrapper { background: var(--oncc-critique-bg); color: var(--oncc-critique); }
+.indicator-card.flood   .icon-wrapper,
+.indicator-card.agriculture .icon-wrapper { background: var(--oncc-faible-bg); color: var(--oncc-faible); }
+.indicator-card.tourism .icon-wrapper { background: var(--oncc-accent-soft); color: var(--oncc-accent); }
+
+/* --------------------------------------------------------------------
+   Cartes du tableau de bord
+   -------------------------------------------------------------------- */
+
+.premium-card {
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    overflow: hidden;
+}
+
+.premium-header {
+    background: var(--oncc-sunk);
+    border-bottom: 1px solid var(--oncc-rule);
+    padding: 0.9rem 1.15rem;
+}
+
+.premium-header h5 { font-size: 1rem; color: var(--oncc-ink); margin: 0; }
+.premium-header small { color: var(--oncc-ink-soft); opacity: 1 !important; }
+
+.header-content { display: flex; align-items: center; gap: 0.75rem; }
+
+.header-icon {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.header-badge {
+    margin-left: auto;
+    font-family: var(--oncc-data);
+    font-size: 0.8rem;
+    color: var(--oncc-ink-soft);
+}
+
+/* Pertes agricoles par région : un classement, donc numéroté. */
+.losses-list { max-height: 250px; overflow-y: auto; }
+
+.loss-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem 0.25rem;
+    border-bottom: 1px solid var(--oncc-rule);
+}
+
+.loss-item:last-child { border-bottom: none; }
+
+.loss-rank {
+    width: 1.4rem;
+    font-family: var(--oncc-data);
+    font-size: 0.8rem;
+    color: var(--oncc-ink-soft);
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.loss-info { flex: 1; min-width: 0; }
+
+.loss-region {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--oncc-ink);
+    margin-bottom: 0.25rem;
+}
+
+.loss-bar-container {
+    height: 4px;
+    background: var(--oncc-sunk);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.loss-bar { height: 100%; background: var(--oncc-critique); }
+
+.loss-value {
+    font-family: var(--oncc-data);
+    font-size: 0.88rem;
+    color: var(--oncc-ink);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------
+   Actions rapides
+   -------------------------------------------------------------------- */
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.75rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
+    background: var(--oncc-surface);
+    border: 1px solid var(--oncc-rule);
+    border-radius: var(--oncc-radius);
+    color: var(--oncc-ink);
+    text-decoration: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.action-btn:hover {
+    border-color: var(--oncc-accent);
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-ink);
+}
+
+.action-btn .action-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--oncc-radius);
+    background: var(--oncc-accent-soft);
+    color: var(--oncc-accent);
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.action-text { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.action-title { font-weight: 600; font-size: 0.94rem; }
+.action-desc { font-size: 0.82rem; color: var(--oncc-ink-soft); }
+
+.action-arrow {
+    color: var(--oncc-ink-soft);
+    font-size: 0.8rem;
+    transition: transform 0.15s ease;
+}
+
+.action-btn:hover .action-arrow { transform: translateX(3px); color: var(--oncc-accent); }
+
+/* --------------------------------------------------------------------
    Accessibilité
    -------------------------------------------------------------------- */
 
