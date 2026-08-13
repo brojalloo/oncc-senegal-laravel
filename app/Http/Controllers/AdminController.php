@@ -7,6 +7,7 @@ use App\Models\Alerte;
 use App\Models\DonneeClimatique;
 use App\Models\DonneeEconomique;
 use App\Models\User;
+use App\Support\DatabaseSize;
 use App\Support\LogTail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +32,7 @@ class AdminController extends Controller
         $systemInfo = [
             'php_version' => PHP_VERSION,
             'laravel_version' => app()->version(),
-            'database_size' => $this->getDatabaseSize(),
+            'database_size' => DatabaseSize::human(),
         ];
 
         $recentUsers = User::orderBy('created_at', 'desc')
@@ -72,7 +73,7 @@ class AdminController extends Controller
                 'php_version' => PHP_VERSION,
                 'laravel_version' => app()->version(),
                 'database' => config('database.default'),
-                'database_size' => $this->getDatabaseSize(),
+                'database_size' => DatabaseSize::human(),
             ],
         ];
 
@@ -329,7 +330,6 @@ class AdminController extends Controller
         return null;
     }
 
-    // Helper: Obtenir la taille de la base de données
     /**
      * L'opération retirerait-elle le dernier administrateur actif ?
      *
@@ -355,22 +355,5 @@ class AdminController extends Controller
             ->count();
 
         return $remainingAdmins === 0;
-    }
-
-    private function getDatabaseSize()
-    {
-        try {
-            $database = config('database.connections.mysql.database');
-            $result = DB::selectOne('
-                SELECT 
-                    ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS size_mb
-                FROM information_schema.TABLES
-                WHERE table_schema = ?
-            ', [$database]);
-
-            return $result->size_mb.' MB';
-        } catch (\Exception $e) {
-            return 'N/A';
-        }
     }
 }
