@@ -110,4 +110,11 @@ RUN mkdir -p \
 ENV PORT=8080
 EXPOSE 8080
 
+# Si nginx ou php-fpm finit par abandonner, supervisord garde le conteneur en
+# vie mais celui-ci ne sert plus rien. Le healthcheck le rend visible pour que
+# la plateforme redémarre le conteneur plutôt que de router vers un service
+# mort.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD php -r 'exit(@file_get_contents("http://127.0.0.1:".(getenv("PORT")?:"8080")."/login") === false ? 1 : 0);'
+
 ENTRYPOINT ["entrypoint"]

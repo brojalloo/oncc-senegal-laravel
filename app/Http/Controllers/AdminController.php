@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendNewsletter;
 use App\Models\Alerte;
 use App\Models\DonneeClimatique;
 use App\Models\DonneeEconomique;
 use App\Models\User;
+use App\Support\LogTail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -13,6 +15,9 @@ use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
+    /** Nombre de lignes de journal affichées dans l'interface d'administration. */
+    private const LOG_LINES = 100;
+
     // Dashboard admin
     public function dashboard()
     {
@@ -82,19 +87,13 @@ class AdminController extends Controller
         $totalLines = 0;
 
         if (File::exists($logFile)) {
-            $content = File::get($logFile);
-            $lines = explode("\n", $content);
+            // Lecture par la fin : charger le fichier entier épuisait la
+            // mémoire dès que le journal de production atteignait quelques
+            // centaines de Mo.
+            $lines = LogTail::read($logFile, self::LOG_LINES);
             $totalLines = count($lines);
 
-            // Prendre les 100 dernières lignes
-            $lines = array_slice($lines, -100);
-
             foreach ($lines as $line) {
-                if (empty(trim($line))) {
-                    continue;
-                }
-
-                // Parser la ligne de log
                 $log = $this->parseLogLine($line);
                 if ($log) {
                     $logs[] = $log;
@@ -165,30 +164,17 @@ class AdminController extends Controller
             'target' => 'required|in:all,admin,chercheur,collectivite',
         ]);
 
-        try {
-            $query = User::whereNotNull('email_verified_at');
+        $recipients = User::whereNotNull('email_verified_at')
+            ->when($request->target !== 'all', fn ($q) => $q->where('role', $request->target))
+            ->count();
 
-            if ($request->target !== 'all') {
-                $query->where('role', $request->target);
-            }
+        // L'envoi part en file d'attente : le faire dans la requête expirait
+        // dès quelques dizaines de destinataires, laissant l'envoi à moitié
+        // fait sans qu'on sache où il s'était arrêté.
+        SendNewsletter::dispatch($request->subject, $request->content, $request->target);
 
-            $users = $query->get();
-            $sentCount = 0;
-
-            foreach ($users as $user) {
-                Mail::html($request->content, function ($message) use ($request, $user) {
-                    $message->to($user->email)
-                        ->subject($request->subject);
-                });
-                $sentCount++;
-            }
-
-            return redirect()->route('admin.emails')
-                ->with('newsletter_success', "Newsletter envoyée avec succès à {$sentCount} utilisateur(s).");
-        } catch (\Exception $e) {
-            return redirect()->route('admin.emails')
-                ->with('newsletter_error', 'Erreur lors de l\'envoi : '.$e->getMessage());
-        }
+        return redirect()->route('admin.emails')
+            ->with('newsletter_success', "Infolettre mise en file d'attente pour {$recipients} destinataire(s). L'envoi se poursuit en arrière-plan.");
     }
 
     // Page de validation des données
@@ -258,6 +244,12 @@ class AdminController extends Controller
             'role' => 'required|in:public,collectivite,chercheur,admin',
         ]);
 
+        if ($this->wouldRemoveLastAdmin($user, $request->role !== 'admin')) {
+            return redirect()->back()->withErrors([
+                'error' => 'Impossible de retirer le rôle administrateur au dernier administrateur : plus personne ne pourrait accéder à cette section.',
+            ]);
+        }
+
         $user->update(['role' => $request->role]);
 
         return redirect()->back()
@@ -278,6 +270,12 @@ class AdminController extends Controller
         $request->validate([
             'statut' => 'required|in:actif,inactif',
         ]);
+
+        if ($this->wouldRemoveLastAdmin($user, $request->statut !== 'actif')) {
+            return redirect()->back()->withErrors([
+                'error' => 'Impossible de désactiver le dernier administrateur actif : plus personne ne pourrait accéder à cette section.',
+            ]);
+        }
 
         $user->update(['statut' => $request->statut]);
 
@@ -332,6 +330,33 @@ class AdminController extends Controller
     }
 
     // Helper: Obtenir la taille de la base de données
+    /**
+     * L'opération retirerait-elle le dernier administrateur actif ?
+     *
+     * Rétrograder ou désactiver le seul compte administrateur ferme
+     * l'administration à tout le monde, sans moyen de revenir en arrière par
+     * l'interface : il faut alors passer par `php artisan users:promote`.
+     *
+     * @param  bool  $losesAdminAccess  L'opération prive-t-elle cet utilisateur de l'accès admin ?
+     */
+    private function wouldRemoveLastAdmin(User $user, bool $losesAdminAccess): bool
+    {
+        if (! $losesAdminAccess) {
+            return false;
+        }
+
+        if ($user->role !== 'admin' || $user->statut !== 'actif') {
+            return false;
+        }
+
+        $remainingAdmins = User::where('role', 'admin')
+            ->where('statut', 'actif')
+            ->where('id', '!=', $user->id)
+            ->count();
+
+        return $remainingAdmins === 0;
+    }
+
     private function getDatabaseSize()
     {
         try {

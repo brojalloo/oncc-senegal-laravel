@@ -16,6 +16,7 @@ réellement en production.
 |---|---|
 | Build | Dépendances PHP sans `--dev`, assets compilés par Vite, autoloader optimisé |
 | Serveur | nginx en frontal, PHP-FPM derrière, supervisé par supervisord |
+| File d'attente | Un worker `queue:work` supervisé dans le même conteneur |
 | Démarrage | Migrations, puis mise en cache de la configuration, des routes et des vues |
 | Base | PostgreSQL, via variables d'environnement |
 
@@ -100,6 +101,24 @@ Exécutez cette commande dans le conteneur (`docker exec`, ou la console de la
 plateforme). L'inscription publique ne permet pas de se créer directement un
 compte administrateur.
 
+## Emails et file d'attente
+
+Les emails de vérification d'adresse, de réinitialisation de mot de passe et
+l'infolettre partent **en file d'attente**, pas pendant la requête HTTP. Un
+worker `queue:work` tourne dans le conteneur aux côtés de nginx et PHP-FPM.
+
+Conséquence à connaître : **si ce worker ne tourne pas, aucun email ne part** —
+les messages s'accumulent en base sans erreur visible. Après un déploiement,
+vérifiez que la table `jobs` ne grossit pas indéfiniment :
+
+```bash
+php artisan queue:monitor database   # alerte si la file s'allonge
+php artisan queue:failed             # travaux en échec
+```
+
+L'infolettre est envoyée par lots de 100 destinataires ; un destinataire
+refusé par le serveur SMTP est journalisé sans interrompre le reste du lot.
+
 ## Protections en place
 
 - **Limitation des tentatives** : 5 requêtes par minute et par IP sur la
@@ -123,5 +142,5 @@ compte administrateur.
   vues comportant encore du code en ligne. La politique bloque l'injection de
   scripts distants, l'encadrement en iframe et le détournement de formulaire,
   mais pas un script injecté en ligne.
-- Mise en file d'attente des emails, pages d'erreur personnalisées et
-  protection du dernier compte administrateur (phase 3).
+- Optimisation des images et migration du framework vers Laravel 12 (phases
+  suivantes).

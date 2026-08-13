@@ -34,7 +34,9 @@ class AuthTest extends TestCase
         $this->assertNull($user->email_verified_at);
         $this->assertNotNull($user->verification_token);
 
-        Mail::assertSent(VerifyEmail::class, fn ($mail) => $mail->hasTo($user->email));
+        // Ce mailable implémente ShouldQueue : il est mis en file, pas envoyé
+        // dans la requête.
+        Mail::assertQueued(VerifyEmail::class, fn ($mail) => $mail->hasTo($user->email));
     }
 
     public function test_verify_email_activates_the_account_with_a_valid_token(): void
@@ -142,7 +144,7 @@ class AuthTest extends TestCase
 
         $response->assertSessionHas('success', 'Un lien de réinitialisation a été envoyé à votre email.');
         $this->assertNotNull($user->refresh()->reset_token);
-        Mail::assertSent(ResetPasswordEmail::class, fn ($mail) => $mail->hasTo($user->email));
+        Mail::assertQueued(ResetPasswordEmail::class, fn ($mail) => $mail->hasTo($user->email));
     }
 
     public function test_forgot_password_shows_a_generic_message_for_an_unknown_address(): void
@@ -152,7 +154,11 @@ class AuthTest extends TestCase
         $response = $this->post('/forgot-password', ['email' => 'inconnu@test.sn']);
 
         $response->assertSessionHas('success', 'Si cet email existe, un lien de réinitialisation a été envoyé.');
+
+        // Depuis la mise en file, « rien envoyé » ne suffit plus : un mail
+        // mis en file pour une adresse inconnue passerait inaperçu.
         Mail::assertNothingSent();
+        Mail::assertNothingQueued();
     }
 
     public function test_reset_password_updates_the_password_with_a_valid_token(): void
