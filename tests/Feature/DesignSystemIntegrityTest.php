@@ -95,6 +95,106 @@ class DesignSystemIntegrityTest extends TestCase
         ));
     }
 
+    /**
+     * Les couleurs écrites dans un attribut style="" échappent au système :
+     * elles ne suivent ni le thème, ni un changement de palette, et rien ne
+     * les signale. C'est par là que quatre bandeaux de titre ont gardé des
+     * dégradés vert, violet, orange et ardoise longtemps après que le reste
+     * de l'interface avait changé d'identité.
+     */
+    public function test_views_do_not_hardcode_colours_in_style_attributes(): void
+    {
+        $fautives = [];
+
+        foreach ($this->vues() as $chemin) {
+            $source = file_get_contents($chemin);
+
+            // Les gabarits autonomes ne peuvent pas dépendre de la feuille.
+            if (preg_match('/:root\s*[,{]/', $source)) {
+                continue;
+            }
+
+            // Les courriels non plus : les clients de messagerie ne gèrent pas
+            // les propriétés personnalisées, une couleur en dur y est le choix
+            // correct et non un oubli.
+            if (str_contains(str_replace('\\', '/', $chemin), '/views/emails/')) {
+                continue;
+            }
+
+            preg_match_all('/style="([^"]*)"/', $source, $attributs);
+
+            foreach ($attributs[1] as $declaration) {
+                if (preg_match('/linear-gradient|#[0-9A-Fa-f]{3,8}\b|:\s*white\b/', $declaration)) {
+                    $fautives[] = basename($chemin).' → '.mb_substr($declaration, 0, 70);
+                }
+            }
+        }
+
+        $this->assertSame([], $fautives, sprintf(
+            "%d attribut(s) style= portent une couleur en dur, hors du système :\n%s",
+            count($fautives),
+            implode("\n", $fautives)
+        ));
+    }
+
+    /**
+     * Un <option> ne rend que du texte : aucune icône ne peut s'y afficher,
+     * d'où le recours à l'emoji. Mais l'emoji ne suit ni la police, ni la
+     * palette, ni le thème — il est rendu par le système d'exploitation et
+     * change d'aspect d'une machine à l'autre. Les libellés portent donc leur
+     * icône, et les options restent du texte.
+     *
+     * Les courriels gardent les leurs : ils s'affichent dans un client de
+     * messagerie, hors du système.
+     */
+    public function test_application_views_do_not_use_emoji_as_icons(): void
+    {
+        $fautives = [];
+
+        foreach ($this->vues() as $chemin) {
+            if (str_contains(str_replace('\\', '/', $chemin), '/views/emails/')) {
+                continue;
+            }
+
+            foreach (explode("\n", file_get_contents($chemin)) as $numero => $ligne) {
+                // Les traces de développement ne parviennent pas à l'écran.
+                if (str_contains($ligne, 'console.')) {
+                    continue;
+                }
+
+                if (preg_match('/[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}]/u', $ligne)) {
+                    $fautives[] = basename($chemin).':'.($numero + 1);
+                }
+            }
+        }
+
+        $this->assertSame([], $fautives, sprintf(
+            "%d ligne(s) utilisent un emoji comme icône :\n%s",
+            count($fautives),
+            implode("\n", $fautives)
+        ));
+    }
+
+    public function test_every_page_header_uses_the_shared_band(): void
+    {
+        $variantes = [];
+
+        foreach ($this->vues() as $chemin) {
+            preg_match_all('/class="page-header([^"]*)"/', $chemin ? file_get_contents($chemin) : '', $usages);
+
+            foreach ($usages[1] as $suffixe) {
+                if (trim($suffixe) !== '') {
+                    $variantes[] = basename($chemin).' → page-header'.$suffixe;
+                }
+            }
+        }
+
+        $this->assertSame([], $variantes, sprintf(
+            "Des bandeaux de titre portent une classe de variante ; il n'y en a plus qu'un :\n%s",
+            implode("\n", $variantes)
+        ));
+    }
+
     public function test_the_chrome_band_stays_dark_in_both_themes(): void
     {
         // Six bandeaux utilisent --oncc-chrome en fond avec du texte clair

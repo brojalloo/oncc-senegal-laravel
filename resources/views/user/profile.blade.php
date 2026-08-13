@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); position: relative;">
+    <div class="page-header">
         <h1>
             <i class="fas fa-user-circle me-2"></i>
             Mon Profil
@@ -90,7 +90,7 @@
                     <div class="row g-3">
                         <div class="col-6">
                             <div class="stat-mini-card">
-                                <div class="icon" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                                <div class="icon">
                                     <i class="fas fa-cloud-sun"></i>
                                 </div>
                                 <div class="value">{{ $user->donneesClimatiques->count() }}</div>
@@ -99,7 +99,7 @@
                         </div>
                         <div class="col-6">
                             <div class="stat-mini-card">
-                                <div class="icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                <div class="icon">
                                     <i class="fas fa-chart-line"></i>
                                 </div>
                                 <div class="value">{{ $user->donneesEconomiques->count() }}</div>
@@ -108,7 +108,7 @@
                         </div>
                         <div class="col-6">
                             <div class="stat-mini-card">
-                                <div class="icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                                <div class="icon">
                                     <i class="fas fa-file-alt"></i>
                                 </div>
                                 <div class="value">{{ $user->rapports->count() }}</div>
@@ -117,7 +117,7 @@
                         </div>
                         <div class="col-6">
                             <div class="stat-mini-card">
-                                <div class="icon" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                                <div class="icon">
                                     <i class="fas fa-calendar-alt"></i>
                                 </div>
                                 {{-- Carbon 3 renvoie un flottant : sans arrondi, on afficherait « 5.2916666761806 ». --}}
@@ -157,7 +157,7 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-user text-primary"></i> Nom complet
+                                        <i class="fas fa-user"></i> Nom complet
                                     </label>
                                     <input type="text" name="nom" class="form-control @error('nom') is-invalid @enderror" 
                                            value="{{ old('nom', $user->nom) }}" required>
@@ -169,7 +169,7 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-envelope text-info"></i> Email
+                                        <i class="fas fa-envelope"></i> Email
                                     </label>
                                     <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
                                            value="{{ old('email', $user->email) }}" required>
@@ -184,7 +184,7 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-building text-success"></i> Organisation
+                                        <i class="fas fa-building"></i> Organisation
                                     </label>
                                     <input type="text" name="organisation" class="form-control @error('organisation') is-invalid @enderror" 
                                            value="{{ old('organisation', $user->organisation) }}" placeholder="Votre organisation">
@@ -196,7 +196,7 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-phone text-warning"></i> Téléphone
+                                        <i class="fas fa-phone"></i> Téléphone
                                     </label>
                                     <input type="text" name="telephone" class="form-control @error('telephone') is-invalid @enderror" 
                                            value="{{ old('telephone', $user->telephone) }}" placeholder="+221 XX XXX XX XX">
@@ -247,7 +247,7 @@
                             <div class="col-md-4">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-key text-warning"></i> Nouveau mot de passe
+                                        <i class="fas fa-key"></i> Nouveau mot de passe
                                     </label>
                                     <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
                                     @error('password')
@@ -259,7 +259,7 @@
                             <div class="col-md-4">
                                 <div class="mb-4">
                                     <label class="form-label">
-                                        <i class="fas fa-check-double text-success"></i> Confirmer
+                                        <i class="fas fa-check-double"></i> Confirmer
                                     </label>
                                     <input type="password" name="password_confirmation" class="form-control" required>
                                 </div>

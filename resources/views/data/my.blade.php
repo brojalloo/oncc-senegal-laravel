@@ -8,7 +8,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position: relative;">
+    <div class="page-header">
         <h1>
             <i class="fas fa-database me-2"></i>
             Mes Données

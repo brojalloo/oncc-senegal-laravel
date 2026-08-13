@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header admin-header">
+    <div class="page-header">
         <h1>
             <i class="fas fa-users me-2"></i>
             Gestion des Utilisateurs
@@ -124,7 +124,7 @@
                                     <td><strong>#{{ $user->id }}</strong></td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
-                                            <div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.85rem;">
+                                            <div style="width: 35px; height: 35px; border-radius: 50%; background: var(--oncc-accent-soft); color: var(--oncc-accent); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem;">
                                                 {{ strtoupper(substr($user->nom, 0, 1)) }}
                                             </div>
                                             <div>
@@ -219,8 +219,8 @@
                                             <!-- Modal pour modifier le rôle -->
                                             <div class="modal fade" id="roleModal{{ $user->id }}" tabindex="-1">
                                                 <div class="modal-dialog">
-                                                    <div class="modal-content" style="border-radius: 16px; overflow: hidden;">
-                                                        <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
                                                             <h5 class="modal-title">
                                                                 <i class="fas fa-user-edit me-2"></i>
                                                                 Modifier le rôle de {{ $user->nom }}
@@ -238,16 +238,16 @@
                                                                     <select name="role" class="form-select" required>
                                                                         <option value="">-- Sélectionner un rôle --</option>
                                                                         <option value="public" {{ $user->role === 'public' ? 'selected' : '' }}>
-                                                                            👤 Public
+                                                                            Public
                                                                         </option>
                                                                         <option value="collectivite" {{ $user->role === 'collectivite' ? 'selected' : '' }}>
-                                                                            🏛️ Collectivité
+                                                                            Collectivité
                                                                         </option>
                                                                         <option value="chercheur" {{ $user->role === 'chercheur' ? 'selected' : '' }}>
-                                                                            🔬 Chercheur
+                                                                            Chercheur
                                                                         </option>
                                                                         <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>
-                                                                            👑 Administrateur
+                                                                            Administrateur
                                                                         </option>
                                                                     </select>
                                                                 </div>

@@ -16,6 +16,29 @@
 }
 
 /* ====================================================================
+   Collision Tailwind / Bootstrap
+   ====================================================================
+
+   Les deux feuilles définissent .collapse, et pas pour la même chose :
+   chez Bootstrap c'est un panneau repliable, masqué par display:none
+   tant qu'il ne porte pas .show ; chez Tailwind c'est l'utilitaire
+   visibility:collapse.
+
+   Cette feuille étant chargée après Bootstrap, l'utilitaire s'appliquait
+   par-dessus et rendait invisibles, à toute largeur, le panneau latéral
+   et le menu de la barre haute. Sans les retirer du flux : la colonne
+   du panneau restait en place, vide.
+
+   Aucune vue n'utilise .collapse comme utilitaire Tailwind ; la classe
+   n'apparaît que sur les composants Bootstrap.
+
+   La règle est hors couche, ce qui la fait primer sur @layer utilities
+   quel que soit l'ordre des fichiers.
+   ==================================================================== */
+
+.collapse { visibility: visible; }
+
+/* ====================================================================
    Système de design — « Gradient sahélien »
    ====================================================================
 
@@ -692,20 +715,56 @@ h3, .h3 { font-size: 1.25rem; }
 .trend-badge.success { background: var(--oncc-faible-bg);   color: var(--oncc-faible); }
 .trend-badge.danger  { background: var(--oncc-critique-bg); color: var(--oncc-critique); }
 
+/* --------------------------------------------------------------------
+   Bandeau de titre
+   --------------------------------------------------------------------
+   Un seul traitement pour les treize pages. Il existait auparavant en
+   cinq versions — quatre classes de variante plus des dégradés écrits
+   en attribut style : vert pour la cartographie, violet pour « mes
+   données », orange pour le profil, ardoise pour les journaux. Rien ne
+   justifiait qu'une page ait sa couleur propre, et le résultat était
+   qu'aucune ne ressemblait aux autres.
+   -------------------------------------------------------------------- */
+
 .page-header {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid var(--oncc-ink);
+    background: var(--oncc-chrome);
+    color: var(--oncc-on-chrome);
+    padding: 1.5rem 1.75rem;
+    margin: 1.5rem 0;
+    border-radius: var(--oncc-radius);
+    border-bottom: 3px solid transparent;
+    border-image: var(--oncc-lat) 1;
 }
+
 .page-header h1, .page-header h2 {
     font-family: var(--oncc-display);
+    font-stretch: 112%;
     font-weight: 800;
     letter-spacing: -0.015em;
-    color: var(--oncc-chrome);
+    color: var(--oncc-on-chrome);
     margin: 0;
+}
+
+.page-header p {
+    color: var(--oncc-on-chrome-soft);
+    margin: 0;
+    max-width: 52rem;
+}
+
+.page-header .eyebrow { color: var(--oncc-on-chrome-dim); }
+.page-header .pulse-dot { background: var(--oncc-ar-1); }
+
+.page-header .header-badge {
+    align-self: flex-start;
+    margin: 0.5rem 0 0;
+    background: var(--oncc-chrome-veil-plus);
+    border-radius: var(--oncc-radius);
+    padding: 0.3rem 0.65rem;
+    font-size: 0.82rem;
+    color: var(--oncc-on-chrome);
 }
 
 .premium-table {
@@ -819,34 +878,16 @@ h3, .h3 { font-size: 1.25rem; }
    neutre, et la couleur ne sert qu'à dire de quel indicateur il s'agit.
    -------------------------------------------------------------------- */
 
-.dashboard-header {
-    background: var(--oncc-chrome);
-    color: var(--oncc-on-chrome);
-    padding: 1.75rem 2rem;
-    margin: 1.5rem 0 1.75rem;
-    border-radius: var(--oncc-radius);
-    border-bottom: 3px solid transparent;
-    border-image: var(--oncc-lat) 1;
-}
-
-.dashboard-header h1 { color: var(--oncc-on-chrome); margin-bottom: 0.4rem; }
-
-.dashboard-header p {
-    color: var(--oncc-on-chrome-soft);
-    font-size: 0.98rem;
-    max-width: 46rem;
-    margin-bottom: 1rem;
-}
-
-.user-badge {
+.page-header .user-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
     font-size: 0.86rem;
     color: var(--oncc-on-chrome-soft);
+    margin-top: 0.5rem;
 }
 
-.user-badge .role-badge {
+.page-header .user-badge .role-badge {
     background: var(--oncc-chrome-veil-plus);
     border-radius: var(--oncc-radius);
     padding: 0.2rem 0.55rem;
@@ -1150,29 +1191,6 @@ h3, .h3 { font-size: 1.25rem; }
    au PR #20 — laissaient encore sans style : leurs éléments internes.
    -------------------------------------------------------------------- */
 
-.page-header.admin-header {
-    background: var(--oncc-chrome);
-    color: var(--oncc-on-chrome);
-    padding: 1.5rem 1.75rem;
-    margin-top: 1.5rem;
-    border-radius: var(--oncc-radius);
-    border-bottom: 3px solid transparent;
-    border-image: var(--oncc-lat) 1;
-}
-
-.page-header.admin-header h1 { color: var(--oncc-on-chrome); }
-.page-header.admin-header p { color: var(--oncc-on-chrome-soft); margin: 0; }
-
-.page-header.admin-header .header-badge {
-    align-self: flex-start;
-    margin: 0.5rem 0 0;
-    background: var(--oncc-chrome-veil-plus);
-    border-radius: var(--oncc-radius);
-    padding: 0.3rem 0.65rem;
-    font-size: 0.82rem;
-    color: var(--oncc-on-chrome);
-}
-
 /* Signale une file d'attente : la couleur dit « à traiter ». */
 .pulse-dot {
     display: inline-block;
@@ -1183,8 +1201,6 @@ h3, .h3 { font-size: 1.25rem; }
     margin-right: 0.45rem;
     vertical-align: middle;
 }
-
-.page-header.admin-header .pulse-dot { background: var(--oncc-ar-1); }
 
 /* Contenu d'une carte de statistique. */
 .stat-card { position: relative; display: flex; align-items: flex-start; gap: 0.85rem; }
@@ -1369,28 +1385,6 @@ h3, .h3 { font-size: 1.25rem; }
 
 .text-accent { color: var(--oncc-accent) !important; }
 .bg-sunk { background: var(--oncc-sunk); }
-
-/* Les deux pages de visualisation ouvrent sur la même bande que
-   l'administration. */
-.page-header.climate-header,
-.page-header.economic-header {
-    background: var(--oncc-chrome);
-    color: var(--oncc-on-chrome);
-    padding: 1.5rem 1.75rem;
-    margin-top: 1.5rem;
-    border-radius: var(--oncc-radius);
-    border-bottom: 3px solid transparent;
-    border-image: var(--oncc-lat) 1;
-}
-
-.page-header.climate-header h1,
-.page-header.economic-header h1 { color: var(--oncc-on-chrome); }
-
-.page-header.climate-header p,
-.page-header.economic-header p { color: var(--oncc-on-chrome-soft); margin: 0; }
-
-.page-header.climate-header .pulse-dot,
-.page-header.economic-header .pulse-dot { background: var(--oncc-ar-1); }
 
 /* --------------------------------------------------------------------
    Profil

@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header economic-header">
+    <div class="page-header">
         <h1>
             <i class="fas fa-coins me-2"></i>
             Ajouter des Données Économiques
@@ -52,14 +52,14 @@
                     <div class="col-md-6">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-map-marker-alt text-danger"></i> 
+                                <i class="fas fa-map-marker-alt"></i> 
                                 Région <span class="text-danger">*</span>
                             </label>
                             <select name="region_id" class="form-select @error('region_id') is-invalid @enderror" required>
-                                <option value="">🌍 Sélectionner une région</option>
+                                <option value="">Sélectionner une région</option>
                                 @foreach($regions as $region)
                                     <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>
-                                        📍 {{ $region->nom }}
+                                        {{ $region->nom }}
                                     </option>
                                 @endforeach
                             </select>
@@ -72,7 +72,7 @@
                     <div class="col-md-6">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-calendar-alt text-primary"></i> 
+                                <i class="fas fa-calendar-alt"></i> 
                                 Année <span class="text-danger">*</span>
                             </label>
                             <input type="number" name="annee" class="form-control @error('annee') is-invalid @enderror" 
@@ -88,17 +88,17 @@
                     <div class="col-md-6">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-industry text-success"></i> 
+                                <i class="fas fa-industry"></i> 
                                 Secteur <span class="text-danger">*</span>
                             </label>
                             <select name="secteur" class="form-select @error('secteur') is-invalid @enderror" required>
-                                <option value="">📊 Sélectionner un secteur</option>
-                                <option value="agriculture" {{ old('secteur') == 'agriculture' ? 'selected' : '' }}>🚜 Agriculture</option>
-                                <option value="peche" {{ old('secteur') == 'peche' ? 'selected' : '' }}>🐟 Pêche</option>
-                                <option value="tourisme" {{ old('secteur') == 'tourisme' ? 'selected' : '' }}>✈️ Tourisme</option>
-                                <option value="energie" {{ old('secteur') == 'energie' ? 'selected' : '' }}>⚡ Énergie</option>
-                                <option value="elevage" {{ old('secteur') == 'elevage' ? 'selected' : '' }}>🐄 Élevage</option>
-                                <option value="foret" {{ old('secteur') == 'foret' ? 'selected' : '' }}>🌲 Forêt</option>
+                                <option value="">Sélectionner un secteur</option>
+                                <option value="agriculture" {{ old('secteur') == 'agriculture' ? 'selected' : '' }}>Agriculture</option>
+                                <option value="peche" {{ old('secteur') == 'peche' ? 'selected' : '' }}>Pêche</option>
+                                <option value="tourisme" {{ old('secteur') == 'tourisme' ? 'selected' : '' }}>Tourisme</option>
+                                <option value="energie" {{ old('secteur') == 'energie' ? 'selected' : '' }}>Énergie</option>
+                                <option value="elevage" {{ old('secteur') == 'elevage' ? 'selected' : '' }}>Élevage</option>
+                                <option value="foret" {{ old('secteur') == 'foret' ? 'selected' : '' }}>Forêt</option>
                             </select>
                             @error('secteur')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -109,14 +109,14 @@
                     <div class="col-md-6">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-balance-scale text-warning"></i> 
+                                <i class="fas fa-balance-scale"></i> 
                                 Impact <span class="text-danger">*</span>
                             </label>
                             <select name="impact" class="form-select @error('impact') is-invalid @enderror" required>
-                                <option value="">📈 Sélectionner le type d'impact</option>
-                                <option value="positif" {{ old('impact') == 'positif' ? 'selected' : '' }}>✅ Positif</option>
-                                <option value="negatif" {{ old('impact') == 'negatif' ? 'selected' : '' }}>❌ Négatif</option>
-                                <option value="neutre" {{ old('impact') == 'neutre' ? 'selected' : '' }}>➖ Neutre</option>
+                                <option value="">Sélectionner le type d'impact</option>
+                                <option value="positif" {{ old('impact') == 'positif' ? 'selected' : '' }}>Positif</option>
+                                <option value="negatif" {{ old('impact') == 'negatif' ? 'selected' : '' }}>Négatif</option>
+                                <option value="neutre" {{ old('impact') == 'neutre' ? 'selected' : '' }}>Neutre</option>
                             </select>
                             @error('impact')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -129,21 +129,21 @@
                     <div class="col-md-6">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-tag text-info"></i> 
+                                <i class="fas fa-tag"></i> 
                                 Type d'Indicateur <span class="text-danger">*</span>
                             </label>
                             <select name="type_indicateur" id="type_indicateur" class="form-select @error('type_indicateur') is-invalid @enderror" required>
-                                <option value="">📊 Sélectionner un indicateur</option>
-                                <option value="pertes_agricoles" data-unite="FCFA" {{ old('type_indicateur') == 'pertes_agricoles' ? 'selected' : '' }}>🌾 Pertes agricoles</option>
-                                <option value="pib_regional" data-unite="Milliards FCFA" {{ old('type_indicateur') == 'pib_regional' ? 'selected' : '' }}>📈 PIB régional</option>
-                                <option value="revenus_peche" data-unite="FCFA" {{ old('type_indicateur') == 'revenus_peche' ? 'selected' : '' }}>🐟 Revenus de la pêche</option>
-                                <option value="revenus_tourisme" data-unite="FCFA" {{ old('type_indicateur') == 'revenus_tourisme' ? 'selected' : '' }}>✈️ Revenus du tourisme</option>
-                                <option value="couts_energie" data-unite="FCFA" {{ old('type_indicateur') == 'couts_energie' ? 'selected' : '' }}>⚡ Coûts énergétiques</option>
-                                <option value="pertes_elevage" data-unite="FCFA" {{ old('type_indicateur') == 'pertes_elevage' ? 'selected' : '' }}>🐄 Pertes élevage</option>
-                                <option value="production_forestiere" data-unite="FCFA" {{ old('type_indicateur') == 'production_forestiere' ? 'selected' : '' }}>🌲 Production forestière</option>
-                                <option value="investissements_climat" data-unite="FCFA" {{ old('type_indicateur') == 'investissements_climat' ? 'selected' : '' }}>💰 Investissements climat</option>
-                                <option value="emplois_verts" data-unite="Emplois" {{ old('type_indicateur') == 'emplois_verts' ? 'selected' : '' }}>👷 Emplois verts</option>
-                                <option value="exportations" data-unite="FCFA" {{ old('type_indicateur') == 'exportations' ? 'selected' : '' }}>📦 Exportations</option>
+                                <option value="">Sélectionner un indicateur</option>
+                                <option value="pertes_agricoles" data-unite="FCFA" {{ old('type_indicateur') == 'pertes_agricoles' ? 'selected' : '' }}>Pertes agricoles</option>
+                                <option value="pib_regional" data-unite="Milliards FCFA" {{ old('type_indicateur') == 'pib_regional' ? 'selected' : '' }}>PIB régional</option>
+                                <option value="revenus_peche" data-unite="FCFA" {{ old('type_indicateur') == 'revenus_peche' ? 'selected' : '' }}>Revenus de la pêche</option>
+                                <option value="revenus_tourisme" data-unite="FCFA" {{ old('type_indicateur') == 'revenus_tourisme' ? 'selected' : '' }}>Revenus du tourisme</option>
+                                <option value="couts_energie" data-unite="FCFA" {{ old('type_indicateur') == 'couts_energie' ? 'selected' : '' }}>Coûts énergétiques</option>
+                                <option value="pertes_elevage" data-unite="FCFA" {{ old('type_indicateur') == 'pertes_elevage' ? 'selected' : '' }}>Pertes élevage</option>
+                                <option value="production_forestiere" data-unite="FCFA" {{ old('type_indicateur') == 'production_forestiere' ? 'selected' : '' }}>Production forestière</option>
+                                <option value="investissements_climat" data-unite="FCFA" {{ old('type_indicateur') == 'investissements_climat' ? 'selected' : '' }}>Investissements climat</option>
+                                <option value="emplois_verts" data-unite="Emplois" {{ old('type_indicateur') == 'emplois_verts' ? 'selected' : '' }}>Emplois verts</option>
+                                <option value="exportations" data-unite="FCFA" {{ old('type_indicateur') == 'exportations' ? 'selected' : '' }}>Exportations</option>
                             </select>
                             @error('type_indicateur')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -154,7 +154,7 @@
                     <div class="col-md-3">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-money-bill-wave text-success"></i> 
+                                <i class="fas fa-money-bill-wave"></i> 
                                 Valeur <span class="text-danger">*</span>
                             </label>
                             <input type="number" step="0.01" name="valeur" class="form-control @error('valeur') is-invalid @enderror" 
@@ -168,11 +168,11 @@
                     <div class="col-md-3">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-ruler text-warning"></i> 
+                                <i class="fas fa-ruler"></i> 
                                 Unité
                             </label>
                             <input type="text" name="unite" id="unite" class="form-control @error('unite') is-invalid @enderror" 
-                                   value="{{ old('unite') }}" placeholder="Auto" readonly style="background-color: #f8fafc;">
+                                   value="{{ old('unite') }}" placeholder="Auto" readonly style="background-color: var(--oncc-sunk);">
                             @error('unite')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

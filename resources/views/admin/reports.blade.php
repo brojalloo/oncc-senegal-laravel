@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header admin-header">
+    <div class="page-header">
         <h1>
             <i class="fas fa-chart-pie me-2"></i>
             Rapports Système
@@ -38,14 +38,14 @@
                 <div class="card-body">
                     <div class="row text-center mb-4">
                         <div class="col-6">
-                            <div class="stat-mini" style="background: linear-gradient(135deg, #3b82f620 0%, #2563eb20 100%); border-radius: 12px; padding: 1.25rem;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #3b82f6;">{{ $stats['users']['total'] }}</div>
+                            <div class="stat-mini">
+                                <div class="stat-value" style="font-size: 1.8rem;">{{ $stats['users']['total'] }}</div>
                                 <small class="text-muted">Total utilisateurs</small>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="stat-mini" style="background: linear-gradient(135deg, #10b98120 0%, #05966920 100%); border-radius: 12px; padding: 1.25rem;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #10b981;">{{ $stats['users']['active'] }}</div>
+                            <div class="stat-mini">
+                                <div class="stat-value" style="font-size: 1.8rem;">{{ $stats['users']['active'] }}</div>
                                 <small class="text-muted">Utilisateurs actifs</small>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                                     'public' => 'secondary'
                                 ];
                             @endphp
-                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded" style="background: #f8fafc;">
+                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded bg-sunk">
                                 <span><i class="fas fa-circle text-{{ $badgeClass[$roleData->role] ?? 'secondary' }} me-2" style="font-size: 0.5rem;"></i>{{ $roleLabels[$roleData->role] ?? $roleData->role }}</span>
                                 <span class="badge-premium {{ $badgeClass[$roleData->role] ?? 'secondary' }}">{{ $roleData->count }}</span>
                             </div>
@@ -97,14 +97,14 @@
                 <div class="card-body">
                     <div class="row text-center mb-4">
                         <div class="col-6">
-                            <div class="stat-mini" style="background: linear-gradient(135deg, #0ea5e920 0%, #0284c720 100%); border-radius: 12px; padding: 1.25rem;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #0ea5e9;">{{ $stats['climate']['total'] }}</div>
+                            <div class="stat-mini">
+                                <div class="stat-value" style="font-size: 1.8rem;">{{ $stats['climate']['total'] }}</div>
                                 <small class="text-muted">Données climatiques</small>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="stat-mini" style="background: linear-gradient(135deg, #10b98120 0%, #05966920 100%); border-radius: 12px; padding: 1.25rem;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #10b981;">{{ $stats['economic']['total'] }}</div>
+                            <div class="stat-mini">
+                                <div class="stat-value" style="font-size: 1.8rem;">{{ $stats['economic']['total'] }}</div>
                                 <small class="text-muted">Données économiques</small>
                             </div>
                         </div>
@@ -114,7 +114,7 @@
                     <h6 class="mb-3"><i class="fas fa-tags me-2"></i>Par indicateur climatique :</h6>
                     <div style="max-height: 200px; overflow-y: auto;">
                         @foreach($stats['climate']['by_indicator'] as $item)
-                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded" style="background: #f8fafc;">
+                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded bg-sunk">
                                 <small>{{ ucfirst($item->type_indicateur) }}</small>
                                 <span class="badge-premium success">{{ $item->count }}</span>
                             </div>
@@ -130,7 +130,7 @@
         <!-- Informations système -->
         <div class="col-lg-6 mb-4">
             <div class="premium-card h-100">
-                <div class="card-header" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white;">
+                <div class="card-header">
                     <div class="header-content">
                         <div class="header-icon" style="background: rgba(255,255,255,0.2);">
                             <i class="fas fa-server"></i>
@@ -142,23 +142,23 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded" style="background: #f8fafc;">
+                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded bg-sunk">
                         <span><i class="fab fa-php text-info me-2"></i><strong>Version PHP</strong></span>
                         <span class="badge-premium info">{{ $stats['system']['php_version'] }}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded" style="background: #f8fafc;">
+                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded bg-sunk">
                         <span><i class="fab fa-laravel text-danger me-2"></i><strong>Version Laravel</strong></span>
                         <span class="badge-premium danger">{{ $stats['system']['laravel_version'] }}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded" style="background: #f8fafc;">
+                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded bg-sunk">
                         <span><i class="fas fa-database text-success me-2"></i><strong>Base de données</strong></span>
                         <span class="text-muted">{{ $stats['system']['database'] }}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded" style="background: #f8fafc;">
+                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded bg-sunk">
                         <span><i class="fas fa-hdd text-warning me-2"></i><strong>Taille BDD</strong></span>
                         <span class="badge-premium warning">{{ $stats['system']['database_size'] }}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded" style="background: #f8fafc;">
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded bg-sunk">
                         <span><i class="fas fa-clock text-secondary me-2"></i><strong>Date du rapport</strong></span>
                         <span class="text-muted">{{ now()->format('d/m/Y H:i:s') }}</span>
                     </div>
@@ -204,7 +204,7 @@
                         </button>
                     </div>
 
-                    <div class="text-center mt-4 p-3 rounded" style="background: #f8fafc;">
+                    <div class="text-center mt-4 p-3 rounded bg-sunk">
                         <small class="text-muted">
                             <i class="fas fa-info-circle me-1"></i>
                             Ce rapport est généré automatiquement

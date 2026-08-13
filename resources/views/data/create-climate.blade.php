@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header climate-header">
+    <div class="page-header">
         <h1>
             <i class="fas fa-cloud-sun-rain me-2"></i>
             Ajouter des Données Climatiques
@@ -52,14 +52,14 @@
                     <div class="col-md-6">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-map-marker-alt text-danger"></i> 
+                                <i class="fas fa-map-marker-alt"></i> 
                                 Région <span class="text-danger">*</span>
                             </label>
                             <select name="region_id" class="form-select @error('region_id') is-invalid @enderror" required>
-                                <option value="">🌍 Sélectionner une région</option>
+                                <option value="">Sélectionner une région</option>
                                 @foreach($regions as $region)
                                     <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>
-                                        📍 {{ $region->nom }}
+                                        {{ $region->nom }}
                                     </option>
                                 @endforeach
                             </select>
@@ -72,7 +72,7 @@
                     <div class="col-md-6">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-calendar-alt text-primary"></i> 
+                                <i class="fas fa-calendar-alt"></i> 
                                 Année <span class="text-danger">*</span>
                             </label>
                             <input type="number" name="annee" class="form-control @error('annee') is-invalid @enderror" 
@@ -88,17 +88,17 @@
                     <div class="col-md-6">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-thermometer-half text-warning"></i> 
+                                <i class="fas fa-thermometer-half"></i> 
                                 Type d'Indicateur <span class="text-danger">*</span>
                             </label>
                             <select name="type_indicateur" id="type_indicateur" class="form-select @error('type_indicateur') is-invalid @enderror" required>
-                                <option value="">📊 Sélectionner un indicateur</option>
-                                <option value="secheresse" data-unite="indice" {{ old('type_indicateur') == 'secheresse' ? 'selected' : '' }}>☀️ Sécheresse</option>
-                                <option value="inondation" data-unite="mm" {{ old('type_indicateur') == 'inondation' ? 'selected' : '' }}>🌊 Inondation</option>
-                                <option value="desertification" data-unite="%" {{ old('type_indicateur') == 'desertification' ? 'selected' : '' }}>🏜️ Désertification</option>
-                                <option value="temperature" data-unite="°C" {{ old('type_indicateur') == 'temperature' ? 'selected' : '' }}>🌡️ Température</option>
-                                <option value="pluviometrie" data-unite="mm" {{ old('type_indicateur') == 'pluviometrie' ? 'selected' : '' }}>🌧️ Pluviométrie</option>
-                                <option value="pollution_air" data-unite="µg/m³" {{ old('type_indicateur') == 'pollution_air' ? 'selected' : '' }}>💨 Pollution de l'air</option>
+                                <option value="">Sélectionner un indicateur</option>
+                                <option value="secheresse" data-unite="indice" {{ old('type_indicateur') == 'secheresse' ? 'selected' : '' }}>Sécheresse</option>
+                                <option value="inondation" data-unite="mm" {{ old('type_indicateur') == 'inondation' ? 'selected' : '' }}>Inondation</option>
+                                <option value="desertification" data-unite="%" {{ old('type_indicateur') == 'desertification' ? 'selected' : '' }}>Désertification</option>
+                                <option value="temperature" data-unite="°C" {{ old('type_indicateur') == 'temperature' ? 'selected' : '' }}>Température</option>
+                                <option value="pluviometrie" data-unite="mm" {{ old('type_indicateur') == 'pluviometrie' ? 'selected' : '' }}>Pluviométrie</option>
+                                <option value="pollution_air" data-unite="µg/m³" {{ old('type_indicateur') == 'pollution_air' ? 'selected' : '' }}>Pollution de l'air</option>
                             </select>
                             @error('type_indicateur')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -109,7 +109,7 @@
                     <div class="col-md-3">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-hashtag text-success"></i> 
+                                <i class="fas fa-hashtag"></i> 
                                 Valeur <span class="text-danger">*</span>
                             </label>
                             <input type="number" step="0.01" name="valeur" class="form-control @error('valeur') is-invalid @enderror" 
@@ -123,11 +123,11 @@
                     <div class="col-md-3">
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-ruler text-info"></i> 
+                                <i class="fas fa-ruler"></i> 
                                 Unité
                             </label>
                             <input type="text" name="unite" id="unite" class="form-control @error('unite') is-invalid @enderror" 
-                                   value="{{ old('unite') }}" placeholder="Auto" readonly style="background-color: #f8fafc;">
+                                   value="{{ old('unite') }}" placeholder="Auto" readonly style="background-color: var(--oncc-sunk);">
                             @error('unite')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
