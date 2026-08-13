@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header admin-header">
+    <div class="page-header">
         <h1>
             <i class="fas fa-envelope me-2"></i>
             Gestion des Emails

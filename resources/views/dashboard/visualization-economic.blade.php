@@ -8,7 +8,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header economic-header">
+    <div class="page-header">
         <h1>
             <i class="fas fa-coins me-2"></i>
             Visualisation des Données Économiques

@@ -557,22 +557,17 @@ function showNotification(message, type = 'info') {
 </script>
 
 <div class="container-fluid">
-    <!-- Page Header Premium avec particules -->
-    <div class="page-header map-header" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; color: white; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: 0; right: 0; width: 300px; height: 100%; opacity: 0.1;">
-            <i class="fas fa-globe-africa" style="font-size: 15rem; position: absolute; right: -50px; top: -30px;"></i>
-        </div>
-        <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; position: relative; z-index: 1;">
+    <div class="page-header">
+        <h1>
             <i class="fas fa-map-marked-alt me-2"></i>
             Cartographie Interactive
         </h1>
-        <p style="opacity: 0.9; margin-bottom: 0.5rem; position: relative; z-index: 1;">
-            <span class="pulse-dot"></span>
+        <p>
             Visualisation géographique des indicateurs climatiques par région du Sénégal
         </p>
-        <div class="header-badge" style="position: relative; z-index: 1;">
+        <div class="header-badge">
             <i class="fas fa-map me-1"></i>
-            14 Régions du Sénégal
+            14 régions
         </div>
     </div>
 
@@ -652,38 +647,38 @@ function showNotification(message, type = 'info') {
                 </div>
             </div>
             <div class="card-body">
-                <div class="legend-item mb-3 p-2 rounded" data-risk-level="faible" onclick="filterByRiskLevel('faible')" style="cursor: pointer; background: #f0fdf4; transition: all 0.3s;">
+                <div class="legend-item mb-3 p-2 rounded" data-risk-level="faible" onclick="filterByRiskLevel('faible')" style="cursor: pointer; background: var(--oncc-faible-bg); transition: all 0.3s;">
                     <div class="d-flex align-items-center">
-                        <div style="background: linear-gradient(135deg, #10b981, #059669); width: 24px; height: 24px; margin-right: 12px; border-radius: 6px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);"></div>
+                        <div style="background: var(--oncc-faible); width: 24px; height: 24px; margin-right: 12px; border-radius: 6px;"></div>
                         <div>
-                            <strong style="color: #059669;">Faible</strong>
+                            <strong style="color: var(--oncc-faible);">Faible</strong>
                             <small class="d-block text-muted">0-25%</small>
                         </div>
                     </div>
                 </div>
-                <div class="legend-item mb-3 p-2 rounded" data-risk-level="modere" onclick="filterByRiskLevel('modere')" style="cursor: pointer; background: #fefce8; transition: all 0.3s;">
+                <div class="legend-item mb-3 p-2 rounded" data-risk-level="modere" onclick="filterByRiskLevel('modere')" style="cursor: pointer; background: var(--oncc-moyen-bg); transition: all 0.3s;">
                     <div class="d-flex align-items-center">
-                        <div style="background: linear-gradient(135deg, #fbbf24, #f59e0b); width: 24px; height: 24px; margin-right: 12px; border-radius: 6px; box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);"></div>
+                        <div style="background: var(--oncc-moyen); width: 24px; height: 24px; margin-right: 12px; border-radius: 6px;"></div>
                         <div>
-                            <strong style="color: #d97706;">Modéré</strong>
+                            <strong style="color: var(--oncc-moyen);">Modéré</strong>
                             <small class="d-block text-muted">25-50%</small>
                         </div>
                     </div>
                 </div>
-                <div class="legend-item mb-3 p-2 rounded" data-risk-level="eleve" onclick="filterByRiskLevel('eleve')" style="cursor: pointer; background: #fff7ed; transition: all 0.3s;">
+                <div class="legend-item mb-3 p-2 rounded" data-risk-level="eleve" onclick="filterByRiskLevel('eleve')" style="cursor: pointer; background: var(--oncc-eleve-bg); transition: all 0.3s;">
                     <div class="d-flex align-items-center">
-                        <div style="background: linear-gradient(135deg, #fb923c, #f97316); width: 24px; height: 24px; margin-right: 12px; border-radius: 6px; box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);"></div>
+                        <div style="background: var(--oncc-eleve); width: 24px; height: 24px; margin-right: 12px; border-radius: 6px;"></div>
                         <div>
-                            <strong style="color: #ea580c;">Élevé</strong>
+                            <strong style="color: var(--oncc-eleve);">Élevé</strong>
                             <small class="d-block text-muted">50-75%</small>
                         </div>
                     </div>
                 </div>
-                <div class="legend-item p-2 rounded" data-risk-level="critique" onclick="filterByRiskLevel('critique')" style="cursor: pointer; background: #fef2f2; transition: all 0.3s;">
+                <div class="legend-item p-2 rounded" data-risk-level="critique" onclick="filterByRiskLevel('critique')" style="cursor: pointer; background: var(--oncc-critique-bg); transition: all 0.3s;">
                     <div class="d-flex align-items-center">
-                        <div style="background: linear-gradient(135deg, #f87171, #ef4444); width: 24px; height: 24px; margin-right: 12px; border-radius: 6px; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);"></div>
+                        <div style="background: var(--oncc-critique); width: 24px; height: 24px; margin-right: 12px; border-radius: 6px;"></div>
                         <div>
-                            <strong style="color: #dc2626;">Critique</strong>
+                            <strong style="color: var(--oncc-critique);">Critique</strong>
                             <small class="d-block text-muted">75-100%</small>
                         </div>
                     </div>
@@ -729,7 +724,7 @@ function showNotification(message, type = 'info') {
             <div class="card-body p-0">
                 <div id="map" style="height: 500px; width: 100%; position: relative; z-index: 1; border-radius: 0 0 16px 16px;"></div>
             </div>
-            <div class="card-footer" style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border-radius: 0 0 16px 16px;">
+            <div class="card-footer">
                 <div class="d-flex justify-content-between align-items-center">
                     <small class="text-muted">
                         <i class="fas fa-info-circle me-1 text-success"></i> Cliquez sur un marqueur pour voir les détails
@@ -784,7 +779,7 @@ function showNotification(message, type = 'info') {
                     <div class="card-body">
                         <div id="regionData">
                             <div class="text-center py-5">
-                                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                                <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--oncc-sunk); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
                                     <i class="fas fa-mouse-pointer text-muted" style="font-size: 1.5rem;"></i>
                                 </div>
                                 <p class="text-muted mb-0">Cliquez sur une région<br>pour voir ses données</p>

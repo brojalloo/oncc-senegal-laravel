@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); position: relative;">
+    <div class="page-header">
         <h1>
             <i class="fas fa-clipboard-list me-2"></i>
             Logs Système
@@ -21,7 +21,7 @@
     </div>
 
     <div class="premium-card">
-        <div class="card-header" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white;">
+        <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="header-content">
                     <div class="header-icon" style="background: rgba(255,255,255,0.2);">
@@ -102,7 +102,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <code style="font-size: 0.85em; word-break: break-all; white-space: pre-wrap; color: #64748b;">{{ $log['message'] ?? '' }}</code>
+                                        <code style="font-size: 0.85em; word-break: break-all; white-space: pre-wrap; color: var(--oncc-ink-mid);">{{ $log['message'] ?? '' }}</code>
                                     </td>
                                 </tr>
                             @endforeach
@@ -110,7 +110,7 @@
                     </table>
                 </div>
 
-                <div class="mt-4 p-3 rounded-3" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+                <div class="mt-4 p-3 rounded-3 bg-sunk">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                         <span class="text-muted">
                             <i class="fas fa-database me-2"></i>

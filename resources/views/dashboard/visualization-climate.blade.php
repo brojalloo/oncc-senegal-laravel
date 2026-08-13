@@ -8,7 +8,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header climate-header">
+    <div class="page-header">
         <h1>
             <i class="fas fa-cloud-sun-rain me-2"></i>
             Visualisation des Données Climatiques

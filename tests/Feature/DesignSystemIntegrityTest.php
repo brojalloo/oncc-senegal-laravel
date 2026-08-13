@@ -95,6 +95,68 @@ class DesignSystemIntegrityTest extends TestCase
         ));
     }
 
+    /**
+     * Les couleurs écrites dans un attribut style="" échappent au système :
+     * elles ne suivent ni le thème, ni un changement de palette, et rien ne
+     * les signale. C'est par là que quatre bandeaux de titre ont gardé des
+     * dégradés vert, violet, orange et ardoise longtemps après que le reste
+     * de l'interface avait changé d'identité.
+     */
+    public function test_views_do_not_hardcode_colours_in_style_attributes(): void
+    {
+        $fautives = [];
+
+        foreach ($this->vues() as $chemin) {
+            $source = file_get_contents($chemin);
+
+            // Les gabarits autonomes ne peuvent pas dépendre de la feuille.
+            if (preg_match('/:root\s*[,{]/', $source)) {
+                continue;
+            }
+
+            // Les courriels non plus : les clients de messagerie ne gèrent pas
+            // les propriétés personnalisées, une couleur en dur y est le choix
+            // correct et non un oubli.
+            if (str_contains(str_replace('\\', '/', $chemin), '/views/emails/')) {
+                continue;
+            }
+
+            preg_match_all('/style="([^"]*)"/', $source, $attributs);
+
+            foreach ($attributs[1] as $declaration) {
+                if (preg_match('/linear-gradient|#[0-9A-Fa-f]{3,8}\b|:\s*white\b/', $declaration)) {
+                    $fautives[] = basename($chemin).' → '.mb_substr($declaration, 0, 70);
+                }
+            }
+        }
+
+        $this->assertSame([], $fautives, sprintf(
+            "%d attribut(s) style= portent une couleur en dur, hors du système :\n%s",
+            count($fautives),
+            implode("\n", $fautives)
+        ));
+    }
+
+    public function test_every_page_header_uses_the_shared_band(): void
+    {
+        $variantes = [];
+
+        foreach ($this->vues() as $chemin) {
+            preg_match_all('/class="page-header([^"]*)"/', $chemin ? file_get_contents($chemin) : '', $usages);
+
+            foreach ($usages[1] as $suffixe) {
+                if (trim($suffixe) !== '') {
+                    $variantes[] = basename($chemin).' → page-header'.$suffixe;
+                }
+            }
+        }
+
+        $this->assertSame([], $variantes, sprintf(
+            "Des bandeaux de titre portent une classe de variante ; il n'y en a plus qu'un :\n%s",
+            implode("\n", $variantes)
+        ));
+    }
+
     public function test_the_chrome_band_stays_dark_in_both_themes(): void
     {
         // Six bandeaux utilisent --oncc-chrome en fond avec du texte clair

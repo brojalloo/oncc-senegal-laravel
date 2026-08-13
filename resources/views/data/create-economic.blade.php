@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header economic-header">
+    <div class="page-header">
         <h1>
             <i class="fas fa-coins me-2"></i>
             Ajouter des Données Économiques
@@ -172,7 +172,7 @@
                                 Unité
                             </label>
                             <input type="text" name="unite" id="unite" class="form-control @error('unite') is-invalid @enderror" 
-                                   value="{{ old('unite') }}" placeholder="Auto" readonly style="background-color: #f8fafc;">
+                                   value="{{ old('unite') }}" placeholder="Auto" readonly style="background-color: var(--oncc-sunk);">
                             @error('unite')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

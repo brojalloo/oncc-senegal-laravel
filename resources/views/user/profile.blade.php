@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); position: relative;">
+    <div class="page-header">
         <h1>
             <i class="fas fa-user-circle me-2"></i>
             Mon Profil
@@ -90,7 +90,7 @@
                     <div class="row g-3">
                         <div class="col-6">
                             <div class="stat-mini-card">
-                                <div class="icon" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                                <div class="icon">
                                     <i class="fas fa-cloud-sun"></i>
                                 </div>
                                 <div class="value">{{ $user->donneesClimatiques->count() }}</div>
@@ -99,7 +99,7 @@
                         </div>
                         <div class="col-6">
                             <div class="stat-mini-card">
-                                <div class="icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                <div class="icon">
                                     <i class="fas fa-chart-line"></i>
                                 </div>
                                 <div class="value">{{ $user->donneesEconomiques->count() }}</div>
@@ -108,7 +108,7 @@
                         </div>
                         <div class="col-6">
                             <div class="stat-mini-card">
-                                <div class="icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                                <div class="icon">
                                     <i class="fas fa-file-alt"></i>
                                 </div>
                                 <div class="value">{{ $user->rapports->count() }}</div>
@@ -117,7 +117,7 @@
                         </div>
                         <div class="col-6">
                             <div class="stat-mini-card">
-                                <div class="icon" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                                <div class="icon">
                                     <i class="fas fa-calendar-alt"></i>
                                 </div>
                                 {{-- Carbon 3 renvoie un flottant : sans arrondi, on afficherait « 5.2916666761806 ». --}}

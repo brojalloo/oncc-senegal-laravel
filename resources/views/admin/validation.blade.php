@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header avec particules -->
-    <div class="page-header admin-header">
+    <div class="page-header">
         <h1>
             <i class="fas fa-check-double me-2"></i>
             Validation des Données
@@ -131,7 +131,7 @@
                                             <td>{{ $data->unite ?? '-' }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.75rem;">
+                                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: var(--oncc-accent-soft); color: var(--oncc-accent); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.75rem;">
                                                         {{ $data->utilisateur ? strtoupper(substr($data->utilisateur->nom, 0, 1)) : 'S' }}
                                                     </div>
                                                     <span>{{ $data->utilisateur ? $data->utilisateur->nom : 'Système' }}</span>
@@ -232,7 +232,7 @@
                                             <td><strong>{{ number_format($data->valeur, 0, ',', ' ') }}</strong></td>
                                             <td>
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.75rem;">
+                                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: var(--oncc-accent-soft); color: var(--oncc-accent); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.75rem;">
                                                         {{ $data->utilisateur ? strtoupper(substr($data->utilisateur->nom, 0, 1)) : 'S' }}
                                                     </div>
                                                     <span>{{ $data->utilisateur ? $data->utilisateur->nom : 'Système' }}</span>
