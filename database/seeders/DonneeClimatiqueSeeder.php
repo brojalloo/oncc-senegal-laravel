@@ -53,9 +53,15 @@ class DonneeClimatiqueSeeder extends Seeder
                             'unite' => $unite,
                             'annee' => $annee,
                             'source' => $sources[array_rand($sources)],
-                            'statut' => rand(1, 10) > 1 ? 'valide' : 'en_attente',
-                            'created_at' => now()->subDays(rand(1, 365)),
-                            'updated_at' => now(),
+                            'statut' => $statut = rand(1, 10) > 1 ? 'valide' : 'en_attente',
+                            'created_at' => $saisieLe = now()->subDays(rand(1, 365)),
+                            // Une donnée validée l'a été après sa saisie, pas à
+                            // l'instant du seeding : dater toutes les lignes de
+                            // « maintenant » les faisait apparaître comme un mur
+                            // de validations simultanées dans le fil d'activité.
+                            'updated_at' => $statut === 'valide'
+                                ? min((clone $saisieLe)->addHours(rand(1, 72)), now())
+                                : $saisieLe,
                         ]);
                     }
                 }

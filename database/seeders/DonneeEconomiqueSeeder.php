@@ -86,10 +86,12 @@ class DonneeEconomiqueSeeder extends Seeder
                                 'annee' => $annee,
                                 'impact' => $impacts[array_rand($impacts)],
                                 'description' => $description,
-                                'statut' => rand(1, 10) > 1 ? 'valide' : 'en_attente',
+                                'statut' => $statut = rand(1, 10) > 1 ? 'valide' : 'en_attente',
                                 'utilisateur_id' => rand(1, 4),
-                                'created_at' => now()->subDays(rand(1, 365)),
-                                'updated_at' => now(),
+                                'created_at' => $saisieLe = now()->subDays(rand(1, 365)),
+                                'updated_at' => $statut === 'valide'
+                                    ? min((clone $saisieLe)->addHours(rand(1, 72)), now())
+                                    : $saisieLe,
                             ]);
                         }
                     }

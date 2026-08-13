@@ -45,7 +45,9 @@ class AlerteSeeder extends Seeder
                     'date_debut' => $dateDebut,
                     'date_fin' => $dateDebut->copy()->addDays(rand(5, 60)),
                     'created_at' => $dateDebut,
-                    'updated_at' => now(),
+                    // Une alerte n'est jamais « revue » : sa date de
+                    // modification ne doit pas être postérieure.
+                    'updated_at' => $dateDebut,
                 ]);
             }
         }
