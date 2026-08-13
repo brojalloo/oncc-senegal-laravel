@@ -76,4 +76,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rapport::class, 'createur_id');
     }
+
+    /**
+     * Qui peut déposer quoi.
+     *
+     * Ces deux méthodes sont la référence unique côté vues : sans elles, la
+     * condition se retrouvait recopiée dans le panneau latéral, le pied de
+     * page, le tableau de bord et « mes données », où elle finissait par
+     * diverger — c'est ainsi que le pied de page proposait à un compte en
+     * lecture seule des formulaires que le serveur refuse.
+     *
+     * Les listes de rôles des routes doivent rester alignées sur celles-ci ;
+     * ServerSideAuthorizationTest échoue si elles s'écartent.
+     */
+    public function peutSaisirClimatique(): bool
+    {
+        return in_array($this->role, ['chercheur', 'admin'], true);
+    }
+
+    public function peutSaisirEconomique(): bool
+    {
+        return in_array($this->role, ['chercheur', 'collectivite', 'admin'], true);
+    }
 }

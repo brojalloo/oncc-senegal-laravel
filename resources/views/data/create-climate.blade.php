@@ -152,8 +152,10 @@
                         <i class="fas fa-comment-alt text-secondary"></i> 
                         Commentaire
                     </label>
-                    <textarea name="commentaire" class="form-control @error('commentaire') is-invalid @enderror" 
-                              rows="4" placeholder="Informations complémentaires...">{{ old('commentaire') }}</textarea>
+                    <textarea name="commentaire" maxlength="2000" rows="4"
+                              class="form-control @error('commentaire') is-invalid @enderror"
+                              placeholder="Informations complémentaires...">{{ old('commentaire') }}</textarea>
+                    <small class="text-muted">2000 caractères au maximum.</small>
                     @error('commentaire')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

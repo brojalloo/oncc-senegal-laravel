@@ -80,9 +80,11 @@
                         <h5 class="mb-0">
                             <i class="fas fa-snowflake text-info me-2"></i>Mes Données Climatiques
                         </h5>
-                        <a href="{{ route('data.climate.create') }}" class="btn-premium primary">
-                            <i class="fas fa-plus"></i> Ajouter des données
-                        </a>
+                        @if(Auth::user()->peutSaisirClimatique())
+                            <a href="{{ route('data.climate.create') }}" class="btn-premium primary">
+                                <i class="fas fa-plus"></i> Ajouter des données
+                            </a>
+                        @endif
                     </div>
 
                     @if($climatiques->count() > 0)
@@ -146,8 +148,8 @@
                             </div>
                             <div>
                                 <strong>Aucune donnée</strong>
-                                <p class="mb-0">Vous n'avez pas encore ajouté de données climatiques.
-                                    <a href="{{ route('data.climate.create') }}" class="alert-link">Cliquez ici pour commencer</a>.
+                                <p class="mb-0">Vous n'avez pas encore ajouté de données climatiques.@if(Auth::user()->peutSaisirClimatique())
+                                    <a href="{{ route('data.climate.create') }}" class="alert-link">Cliquez ici pour commencer</a>.@endif
                                 </p>
                             </div>
                         </div>
@@ -160,9 +162,11 @@
                         <h5 class="mb-0">
                             <i class="fas fa-coins text-success me-2"></i>Mes Données Économiques
                         </h5>
-                        <a href="{{ route('data.economic.create') }}" class="btn-premium success">
-                            <i class="fas fa-plus"></i> Ajouter des données
-                        </a>
+                        @if(Auth::user()->peutSaisirEconomique())
+                            <a href="{{ route('data.economic.create') }}" class="btn-premium success">
+                                <i class="fas fa-plus"></i> Ajouter des données
+                            </a>
+                        @endif
                     </div>
 
                     @if($economiques->count() > 0)
@@ -240,8 +244,8 @@
                             </div>
                             <div>
                                 <strong>Aucune donnée</strong>
-                                <p class="mb-0">Vous n'avez pas encore ajouté de données économiques.
-                                    <a href="{{ route('data.economic.create') }}" class="alert-link">Cliquez ici pour commencer</a>.
+                                <p class="mb-0">Vous n'avez pas encore ajouté de données économiques.@if(Auth::user()->peutSaisirEconomique())
+                                    <a href="{{ route('data.economic.create') }}" class="alert-link">Cliquez ici pour commencer</a>.@endif
                                 </p>
                             </div>
                         </div>

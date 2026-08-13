@@ -3,7 +3,7 @@
 ![Laravel](https://img.shields.io/badge/Laravel-12.66-red?style=for-the-badge&logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777bb4?style=for-the-badge&logo=php)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-118-1a6e42?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-136-1a6e42?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ## 📋 À propos
@@ -18,6 +18,11 @@ visualisation des données climatiques et économiques du Sénégal.
 - Inscription, connexion, vérification d'adresse et réinitialisation de mot de passe
 - Quatre rôles : administrateur, chercheur, collectivité, public
 - L'inscription publique ne permet pas de se créer un compte administrateur
+- Ce que chaque rôle peut déposer est appliqué par le serveur, pas seulement
+  masqué dans les vues : le public consulte, la collectivité saisit
+  l'économique, le chercheur saisit tout
+- Désactiver un compte interrompt sa session en cours, sans attendre son
+  expiration
 
 ### 📊 Données
 - **Climatiques** : température, précipitations, humidité, vent
@@ -142,7 +147,7 @@ est masquée et confirmée, et douze caractères sont exigés.
 ## ✅ Tests
 
 ```bash
-php artisan test          # 118 tests
+php artisan test          # 136 tests
 ./vendor/bin/pint --test  # style de code
 ```
 
@@ -187,7 +192,7 @@ docker compose up --build   # pile complète en local, PostgreSQL compris
 │   └── seeders/              # Données de démonstration
 ├── docker/                   # nginx, PHP-FPM, supervisord, entrypoint
 ├── resources/views/          # Vues Blade, dont les pages d'erreur
-├── tests/                    # 118 tests
+├── tests/                    # 136 tests
 └── public/                   # Racine web, assets compilés
 ```
 

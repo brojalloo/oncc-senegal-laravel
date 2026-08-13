@@ -28,7 +28,9 @@ class DataController extends Controller
             'valeur' => 'required|numeric',
             'unite' => 'nullable|string|max:50',
             'source' => 'nullable|string|max:255',
-            'commentaire' => 'nullable|string',
+            // Un champ de contexte, pas un article : borner évite qu'un
+            // compte authentifié écrive des chaînes arbitrairement longues.
+            'commentaire' => 'nullable|string|max:2000',
         ]);
 
         DonneeClimatique::create([
@@ -65,7 +67,7 @@ class DataController extends Controller
             'valeur' => 'required|numeric',
             'unite' => 'nullable|string|max:50',
             'impact' => 'nullable|in:positif,negatif,neutre',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:2000',
         ]);
 
         DonneeEconomique::create([

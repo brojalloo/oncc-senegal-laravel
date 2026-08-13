@@ -22,8 +22,14 @@
                     <ul class="footer-links list-unstyled">
                         <li><a href="{{ route('dashboard') }}"><i class="fas fa-chevron-right me-2"></i> Accueil</a></li>
                         <li><a href="{{ route('cartography') }}"><i class="fas fa-chevron-right me-2"></i> Cartographie</a></li>
-                        <li><a href="{{ route('data.climate.create') }}"><i class="fas fa-chevron-right me-2"></i> Données Climat</a></li>
-                        <li><a href="{{ route('data.economic.create') }}"><i class="fas fa-chevron-right me-2"></i> Données Économiques</a></li>
+                        @auth
+                            @if(Auth::user()->peutSaisirClimatique())
+                                <li><a href="{{ route('data.climate.create') }}"><i class="fas fa-chevron-right me-2"></i> Données Climat</a></li>
+                            @endif
+                            @if(Auth::user()->peutSaisirEconomique())
+                                <li><a href="{{ route('data.economic.create') }}"><i class="fas fa-chevron-right me-2"></i> Données Économiques</a></li>
+                            @endif
+                        @endauth
                     </ul>
                 </div>
 

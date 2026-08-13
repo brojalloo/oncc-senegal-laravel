@@ -157,7 +157,10 @@ class AdminController extends Controller
     {
         $request->validate([
             'subject' => 'required|string|max:255',
-            'content' => 'required|string',
+            // Un corps de courriel a besoin de place, mais la mise en file
+            // le recopie pour chaque destinataire : sans borne, un seul envoi
+            // peut peser lourd multiplié par le nombre d'inscrits.
+            'content' => 'required|string|max:20000',
             'target' => 'required|in:all,admin,chercheur,collectivite',
         ]);
 
