@@ -9,6 +9,7 @@ use App\Models\DonneeEconomique;
 use App\Models\User;
 use App\Support\DatabaseSize;
 use App\Support\LogTail;
+use App\Support\RecentActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -39,12 +40,7 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
-        $recentActivities = [
-            ['time' => now()->subMinutes(5)->diffForHumans(), 'message' => 'Nouvel utilisateur inscrit', 'color' => 'success'],
-            ['time' => now()->subMinutes(30)->diffForHumans(), 'message' => 'Données climatiques validées', 'color' => 'info'],
-            ['time' => now()->subHours(2)->diffForHumans(), 'message' => 'Alerte créée pour Dakar', 'color' => 'warning'],
-            ['time' => now()->subHours(5)->diffForHumans(), 'message' => 'Rapport généré', 'color' => 'primary'],
-        ];
+        $recentActivities = RecentActivity::latest();
 
         return view('admin.dashboard', compact('stats', 'systemInfo', 'recentUsers', 'recentActivities'));
     }
