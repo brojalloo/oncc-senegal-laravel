@@ -1,87 +1,84 @@
-# 🌍 ONCC Sénégal - Observatoire National sur les Changements Climatiques
+# 🌍 ONCC Sénégal — Observatoire National sur les Changements Climatiques
 
-![Laravel](https://img.shields.io/badge/Laravel-10.48-red?style=for-the-badge&logo=laravel)
+![Laravel](https://img.shields.io/badge/Laravel-12.66-red?style=for-the-badge&logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777bb4?style=for-the-badge&logo=php)
-![SQLite](https://img.shields.io/badge/SQLite-003b57?style=for-the-badge&logo=sqlite)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-85-1a6e42?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ## 📋 À propos
 
-L'**Observatoire National sur les Changements Climatiques du Sénégal (ONCC-SN)** est une plateforme web développée avec Laravel pour la collecte, l'analyse et la visualisation des données climatiques et économiques du Sénégal.
+L'**Observatoire National sur les Changements Climatiques du Sénégal (ONCC-SN)**
+est une plateforme web développée avec Laravel pour la collecte, l'analyse et la
+visualisation des données climatiques et économiques du Sénégal.
 
 ## ✨ Fonctionnalités
 
-### 🔐 **Système d'authentification complet**
-- Inscription/Connexion sécurisée
-- Vérification d'email
-- Réinitialisation de mot de passe
-- Gestion des rôles utilisateurs (Admin, Chercheur, Collectivité, Public)
+### 🔐 Authentification et rôles
+- Inscription, connexion, vérification d'adresse et réinitialisation de mot de passe
+- Quatre rôles : administrateur, chercheur, collectivité, public
+- L'inscription publique ne permet pas de se créer un compte administrateur
 
-### 📊 **Gestion des données**
-- **Données climatiques** : Température, précipitations, humidité, vent
-- **Données économiques** : Impact économique par secteur
-- **Validation des données** par les administrateurs
-- **Alertes** météorologiques automatisées
+### 📊 Données
+- **Climatiques** : température, précipitations, humidité, vent
+- **Économiques** : impact par secteur
+- Saisie par les utilisateurs, puis validation ou rejet par un administrateur
 
-### 🗺️ **Cartographie interactive**
-- Visualisation géographique des données
-- Intégration des 14 régions du Sénégal
-- Cartes thématiques par indicateur
+### 🗺️ Cartographie
+- Carte interactive Leaflet des **14 régions** du Sénégal
+- Fond OpenStreetMap et CARTO
 
-### 📈 **Tableau de bord et analyses**
-- Statistiques en temps réel
-- Graphiques de tendances
-- Rapports automatisés
-- Export des données
+### 📈 Visualisation
+- Graphiques Chart.js sur le tableau de bord et les pages de visualisation
+- Statistiques agrégées par rôle, indicateur et secteur
+- Alertes climatiques affichées par région
 
-### ⚙️ **Administration**
-- Gestion des utilisateurs
-- Logs système
-- Configuration email
-- Validation des données
+### ⚙️ Administration
+- Gestion des comptes : rôle et statut, avec garde-fou contre le retrait du
+  dernier administrateur
+- Consultation des journaux applicatifs
+- Envoi d'une infolettre, mise en file d'attente
 
-## 🚀 Installation
+> Ces fonctionnalités sont celles réellement implémentées. La génération de
+> rapports planifiés, l'export de données et la création automatique d'alertes
+> **n'existent pas** : les alertes proviennent des données de démonstration.
+
+## 🚀 Installation locale
 
 ### Prérequis
-- PHP 8.2+
+
+- PHP 8.2 ou plus
 - Composer
-- Node.js & NPM
-- SQLite
+- Node.js et npm
 
-### Étapes d'installation
+SQLite suffit en développement — aucun serveur de base à installer.
 
-1. **Cloner le repository**
+### Étapes
+
 ```bash
 git clone https://github.com/brojalloo/oncc-senegal-laravel.git
 cd oncc-senegal-laravel
-```
 
-2. **Installer les dépendances**
-```bash
 composer install
 npm install
-```
 
-3. **Configuration environnement**
-```bash
 cp .env.example .env
 php artisan key:generate
-```
 
-4. **Base de données**
-```bash
+touch database/database.sqlite
 php artisan migrate
 php artisan db:seed
-```
 
-5. **Compiler les assets**
-```bash
 npm run build
+php artisan serve
 ```
 
-6. **Lancer le serveur**
+Le site répond alors sur <http://localhost:8000>.
+
+Pour développer avec rechargement à chaud des assets et suivi des journaux :
+
 ```bash
-php artisan serve
+composer dev
 ```
 
 ## 👥 Comptes de démonstration
@@ -107,83 +104,141 @@ SEED_PASSWORD=un-mot-de-passe-de-developpement
 > lorsque `APP_ENV=production`, y compris avec `--force`. Ne renseignez jamais
 > `SEED_PASSWORD` sur un environnement déployé.
 
+## 🔧 Commandes Artisan
+
+| Commande | Effet |
+|---|---|
+| `php artisan users:list-admins` | Liste les comptes administrateurs |
+| `php artisan users:promote {email}` | Promeut un compte au rôle administrateur |
+| `php artisan users:activate-all [--force]` | Active les comptes en attente de vérification |
+
+C'est par `users:promote` qu'on désigne le premier administrateur après un
+déploiement, l'inscription publique ne le permettant pas.
+
+## ✅ Tests
+
+```bash
+php artisan test          # 85 tests
+./vendor/bin/pint --test  # style de code
+```
+
+Les tests s'exécutent sur une base SQLite en mémoire ; ils ne touchent ni votre
+base locale ni votre `.env`.
+
+Trois workflows tournent sur chaque proposition de modification : la suite de
+tests, le style de code, et **la construction réelle de l'image conteneur**,
+exécutée contre un PostgreSQL puis vérifiée sur dix-sept points (processus
+supervisés, droits d'écriture des journaux, en-têtes de sécurité, limitation des
+tentatives, consommation effective de la file d'attente, persistance des données
+après redémarrage).
+
+## 🚢 Déploiement
+
+Le déploiement se fait par conteneur : nginx et PHP-FPM sur PostgreSQL, décrits
+par le seul `Dockerfile` à la racine. Voir **[DEPLOYMENT.md](DEPLOYMENT.md)**
+pour les variables d'environnement et la procédure.
+
+```bash
+docker compose up --build   # pile complète en local, PostgreSQL compris
+```
+
+> N'utilisez pas SQLite en production : le disque d'un conteneur est éphémère,
+> la base disparaîtrait à chaque redéploiement.
+
 ## 📁 Structure du projet
 
 ```
 ├── app/
+│   ├── Console/Commands/     # Commandes Artisan (gestion des comptes)
 │   ├── Http/Controllers/     # Contrôleurs
-│   ├── Models/              # Modèles Eloquent
-│   ├── Mail/                # Classes de mail
-│   └── Http/Middleware/     # Middlewares
+│   ├── Http/Middleware/      # Rôle admin, en-têtes de sécurité, proxys
+│   ├── Jobs/                 # Traitements en file d'attente
+│   ├── Mail/                 # Courriels
+│   ├── Models/               # Modèles Eloquent
+│   ├── Providers/            # Fournisseurs de services
+│   └── Support/              # Utilitaires (taille de base, lecture de journaux)
 ├── database/
-│   ├── migrations/          # Migrations
-│   └── seeders/            # Seeders
-├── resources/
-│   ├── views/              # Vues Blade
-│   ├── css/                # Styles CSS
-│   └── js/                 # Scripts JavaScript
-└── public/
-    ├── css/                # Assets CSS publics
-    ├── js/                 # Assets JS publics
-    └── img/                # Images
+│   ├── factories/            # Fabriques de test
+│   ├── migrations/           # Migrations
+│   └── seeders/              # Données de démonstration
+├── docker/                   # nginx, PHP-FPM, supervisord, entrypoint
+├── resources/views/          # Vues Blade, dont les pages d'erreur
+├── tests/                    # 85 tests
+└── public/                   # Racine web, assets compilés
 ```
 
-## 🌟 Technologies utilisées
+## 🌟 Technologies
 
-- **Backend** : Laravel 10.48, PHP 8.2+
-- **Base de données** : SQLite
-- **Frontend** : Bootstrap 5.3, JavaScript ES6
-- **Cartes** : Leaflet.js
-- **Build** : Vite, TailwindCSS 4.0
-- **Email** : Laravel Mail
+- **Backend** : Laravel 12.66, PHP 8.2+
+- **Base de données** : PostgreSQL en production, SQLite en développement
+- **Frontend** : Bootstrap 5.3, Chart.js, Leaflet
+- **Build** : Vite, Tailwind CSS 4
+- **Conteneur** : nginx, PHP-FPM, supervisord
 
-## 📧 Configuration Email
-
-Pour activer l'envoi d'emails, configurez dans `.env` :
+## 📧 Configuration des courriels
 
 ```env
 MAIL_MAILER=smtp
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=587
-MAIL_USERNAME=votre-email@gmail.com
-MAIL_PASSWORD=votre-mot-de-passe-app
+MAIL_USERNAME=votre-email@example.com
+MAIL_PASSWORD=votre-mot-de-passe-application
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=votre-email@gmail.com
+MAIL_FROM_ADDRESS=votre-email@example.com
 MAIL_FROM_NAME="ONCC Sénégal"
 ```
 
+Les courriels partent **en file d'attente**, pas pendant la requête. En
+production, un worker `queue:work` tourne dans le conteneur ; sans lui, rien
+n'est envoyé et les messages s'accumulent en base. En développement,
+`MAIL_MAILER=log` écrit les messages dans `storage/logs/laravel.log`.
+
+Détails dans [CONFIG_EMAIL.md](CONFIG_EMAIL.md).
+
 ## 🛡️ Sécurité
 
-- Protection CSRF sur tous les formulaires
-- Validation des données côté serveur
-- Hachage sécurisé des mots de passe
-- Middleware d'autorisation
-- Logging des tentatives d'accès
+Mesures en place, chacune couverte par des tests :
+
+- **Protection CSRF** sur tous les formulaires
+- **Mots de passe** hachés avec bcrypt
+- **Limitation des tentatives** : 5 requêtes par minute et par IP sur la
+  connexion, l'inscription et la réinitialisation
+- **En-têtes** : `Content-Security-Policy`, `X-Frame-Options`,
+  `X-Content-Type-Options`, `Referrer-Policy`, et HSTS sur connexion chiffrée
+- **Sessions chiffrées**, cookie `secure` en production
+- **Protocole d'origine** rétabli derrière un répartiteur de charge
+- **Journalisation** des tentatives d'accès non autorisées
+- **Aucun identifiant** dans le dépôt : les comptes de démonstration reçoivent
+  un mot de passe aléatoire et ne sont jamais créés en production
+
+Limite connue : la politique de sécurité du contenu autorise encore
+`'unsafe-inline'`, plusieurs vues comportant du script en ligne. Elle bloque
+l'injection de scripts distants, l'encadrement en iframe et le détournement de
+formulaire, mais pas un script injecté en ligne.
+
+Pour signaler une vulnérabilité, voir [SECURITY.md](SECURITY.md).
 
 ## 📝 Licence
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
-
-## 👨‍💻 Auteur
-
-**ONCC Sénégal Development Team**
-- GitHub: [@brojalloo](https://github.com/brojalloo)
+Ce projet est sous licence MIT. Voir [LICENSE](LICENSE).
 
 ## 🤝 Contribution
 
-Les contributions sont les bienvenues ! Pour contribuer :
+Voir [CONTRIBUTING.md](CONTRIBUTING.md). En résumé :
 
-1. Fork le projet
-2. Créez votre branche feature (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
+1. Créez une branche depuis `main`
+2. Ajoutez des tests pour ce que vous changez
+3. Vérifiez avec `php artisan test` et `./vendor/bin/pint`
+4. Ouvrez une pull request — les trois workflows doivent passer
+
+## 👨‍💻 Auteur
+
+**ONCC Sénégal Development Team** — [@brojalloo](https://github.com/brojalloo)
 
 ## 📞 Support
 
-Pour toute question ou support :
-- Créer une [issue](https://github.com/brojalloo/oncc-senegal-laravel/issues)
-- Email : support@oncc-senegal.org
+- [Ouvrir une issue](https://github.com/brojalloo/oncc-senegal-laravel/issues)
+- support@oncc-senegal.org
 
 ---
 
