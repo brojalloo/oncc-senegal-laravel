@@ -304,14 +304,19 @@
             </div>
             <div class="card-body">
                 <div class="actions-grid">
-                    @if($user->role === 'chercheur' || $user->role === 'collectivite')
-                        <a href="{{ route('data.climate.create') }}" class="action-btn action-data">
+                    {{-- Le raccourci mène au formulaire que le rôle peut réellement
+                         ouvrir : une collectivité saisit l'économique, pas le climat. --}}
+                    @if($user->peutSaisirEconomique())
+                        @php($saisie = $user->role === 'collectivite'
+                            ? ['route' => 'data.economic.create', 'desc' => 'Ajouter des données économiques']
+                            : ['route' => 'data.climate.create', 'desc' => 'Ajouter de nouvelles données'])
+                        <a href="{{ route($saisie['route']) }}" class="action-btn action-data">
                             <div class="action-icon">
                                 <i class="fas fa-edit"></i>
                             </div>
                             <div class="action-text">
                                 <span class="action-title">Saisir des données</span>
-                                <span class="action-desc">Ajouter de nouvelles données</span>
+                                <span class="action-desc">{{ $saisie['desc'] }}</span>
                             </div>
                             <i class="fas fa-arrow-right action-arrow"></i>
                         </a>

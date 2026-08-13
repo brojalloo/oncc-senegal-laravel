@@ -40,7 +40,10 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 // Routes protégées par authentification
-Route::middleware('auth')->group(function () {
+// « actif » complète « auth » : la connexion refuse déjà un compte
+// désactivé, mais elle ne s'exécute qu'une fois — sans cette vérification
+// à chaque requête, une session ouverte survivrait à la désactivation.
+Route::middleware(['auth', 'actif'])->group(function () {
 
     // Dashboard
     Route::controller(DashboardController::class)->group(function () {
@@ -52,11 +55,24 @@ Route::middleware('auth')->group(function () {
     });
 
     // Gestion des données
+    //
+    // La répartition suit ce qu'annonce le formulaire d'inscription : le
+    // public consulte, la collectivité saisit l'économique, le chercheur
+    // saisit tout. Elle n'était jusqu'ici appliquée que par les vues, qui
+    // masquaient les boutons sans que les routes refusent la requête.
     Route::controller(DataController::class)->prefix('data')->name('data.')->group(function () {
-        Route::get('/climate/create', 'createClimate')->name('climate.create');
-        Route::post('/climate', 'storeClimate')->name('climate.store');
-        Route::get('/economic/create', 'createEconomic')->name('economic.create');
-        Route::post('/economic', 'storeEconomic')->name('economic.store');
+        Route::middleware('role:chercheur,admin')->group(function () {
+            Route::get('/climate/create', 'createClimate')->name('climate.create');
+            Route::post('/climate', 'storeClimate')->name('climate.store');
+        });
+
+        Route::middleware('role:chercheur,collectivite,admin')->group(function () {
+            Route::get('/economic/create', 'createEconomic')->name('economic.create');
+            Route::post('/economic', 'storeEconomic')->name('economic.store');
+        });
+
+        // Chacun consulte ses propres dépôts, y compris un compte public
+        // dont le rôle a changé depuis.
         Route::get('/my-data', 'myData')->name('my');
     });
 

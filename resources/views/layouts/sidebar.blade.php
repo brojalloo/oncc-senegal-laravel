@@ -37,16 +37,22 @@
                     <i class="fas fa-database me-2"></i> Mes Données
                 </a>
             </li>
-            <li class="nav-item mb-1">
-                <a class="nav-link" href="{{ route('data.climate.create') }}">
-                    <i class="fas fa-plus-circle me-2"></i> Ajouter Données Climat
-                </a>
-            </li>
-            <li class="nav-item mb-1">
-                <a class="nav-link" href="{{ route('data.economic.create') }}">
-                    <i class="fas fa-plus-circle me-2"></i> Ajouter Données Éco
-                </a>
-            </li>
+            {{-- Les mêmes conditions que les middlewares des routes : un lien
+                 visible qui répondrait 403 est une impasse pour l'utilisateur. --}}
+            @if(Auth::user()->peutSaisirClimatique())
+                <li class="nav-item mb-1">
+                    <a class="nav-link" href="{{ route('data.climate.create') }}">
+                        <i class="fas fa-plus-circle me-2"></i> Ajouter Données Climat
+                    </a>
+                </li>
+            @endif
+            @if(Auth::user()->peutSaisirEconomique())
+                <li class="nav-item mb-1">
+                    <a class="nav-link" href="{{ route('data.economic.create') }}">
+                        <i class="fas fa-plus-circle me-2"></i> Ajouter Données Éco
+                    </a>
+                </li>
+            @endif
 
             @if(Auth::user()->role === 'admin')
                 <hr class="my-3">
