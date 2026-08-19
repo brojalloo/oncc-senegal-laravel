@@ -276,3 +276,6 @@ Voir [CONTRIBUTING.md](CONTRIBUTING.md). En résumé :
 </div>
 
 Test webhook GitHub Jenkins.
+# ONCC Sénégal
+
+Pipeline DevSecOps automatisé avec Jenkins.
