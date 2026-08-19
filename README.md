@@ -274,3 +274,5 @@ Voir [CONTRIBUTING.md](CONTRIBUTING.md). En résumé :
 <div align="center">
   <strong>🌍 Pour un Sénégal résilient face aux changements climatiques 🌱</strong>
 </div>
+
+Test webhook GitHub Jenkins.
