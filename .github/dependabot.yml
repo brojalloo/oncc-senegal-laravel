@@ -1,22 +1,26 @@
 version: 2
 updates:
-  - package-ecosystem: "composer"
+  - package-ecosystem: composer
     directory: "/"
+    target-branch: dev
     schedule:
-      interval: "daily"
+      interval: daily
     open-pull-requests-limit: 10
     allow:
-      - dependency-type: "direct"
+      - dependency-type: direct
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: npm
     directory: "/"
+    target-branch: dev
     schedule:
-      interval: "daily"
+      interval: daily
     open-pull-requests-limit: 10
     allow:
-      - dependency-type: "direct"
-
-# Optionally enable versioning strategy and reviewers
-    # versioning-strategy: "increase"
-    # reviewers:
-    #   - team: 'frontend'
+      - dependency-type: direct
+    groups:
+      vite-toolchain:
+        patterns:
+          - "vite"
+          - "laravel-vite-plugin"
+          - "@tailwindcss/vite"
+          - "tailwindcss"
