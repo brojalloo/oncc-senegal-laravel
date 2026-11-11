@@ -1,98 +1,59 @@
-name: Deploy to Production
+name: Déploiement en production
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-env:
-  COMPOSER_PROCESS_TIMEOUT: 0
-  COMPOSER_NO_INTERACTION: 1
+  workflow_call:
+    inputs:
+      image:
+        description: Image de production référencée par empreinte
+        required: true
+        type: string
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, curl, openssl, tokenizer, fileinfo
-        coverage: none
-        tools: composer:v2
-
-    - name: Validate composer.json
-      run: composer validate --strict
-
-    - name: Get Composer Cache Directory
-      id: composer-cache
-      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-    - name: Cache Composer dependencies
-      uses: actions/cache@v4
-      with:
-        path: ${{ steps.composer-cache.outputs.dir }}
-        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: ${{ runner.os }}-composer-
-
-    - name: Copy .env
-      run: cp .env.example .env
-
-    - name: Install Dependencies
-      run: composer install --prefer-dist --no-progress --optimize-autoloader
-
-    - name: Generate Application Key
-      run: php artisan key:generate
-
-    - name: Create SQLite Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-
-    - name: Directory Permissions
-      run: chmod -R 775 storage bootstrap/cache
-
-    - name: Run Database Migrations
-      run: php artisan migrate --force
-
-    - name: Run Database Seeders
-      run: php artisan db:seed --force
-
-    - name: Run Tests
-      run: php artisan test
-
   deploy:
-    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
+    timeout-minutes: 45
+    environment: production
+    concurrency:
+      group: oncc-production
+      cancel-in-progress: false
+    permissions:
+      actions: read
+      contents: read
     steps:
-    - uses: actions/checkout@v4
+      - name: Vérifier l'approbation de la production et la révision
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OWNER_ID: ${{ github.repository_owner_id }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/approvals" |
+            jq -e --arg owner "$OWNER_ID" 'any(.[]; .state == "approved" and (.user.id | tostring) == $owner and any(.environments[]; .name == "production"))' ||
+            { echo "::error::Approbation de l'environnement production par le propriétaire requise."; exit 1; }
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, curl, openssl
-        tools: composer:v2
+          current_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)
+          if [[ "$current_sha" != "$GITHUB_SHA" ]]; then
+            echo "::error::Cette révision a été remplacée sur main."
+            exit 1
+          fi
 
-    - name: Install Dependencies (Production)
-      run: composer install --prefer-dist --no-dev --no-progress --optimize-autoloader
-
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22'
-        cache: npm
-
-    - name: Build Assets
-      run: |
-        npm ci
-        npm run build
-
-    - name: Deploy Ready
-      run: echo "✅ Application is ready for deployment!"
+      - name: Déployer l'image validée sur le VPS
+        env:
+          IMAGE: ${{ inputs.image }}
+          SSH_HOST: ${{ vars.SSH_HOST }}
+          SSH_USER: ${{ vars.SSH_USER }}
+          SSH_PORT: ${{ vars.SSH_PORT || '22' }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          expected_repository="ghcr.io/${GITHUB_REPOSITORY,,}"
+          [[ "$IMAGE" == "$expected_repository"@sha256:* && "$IMAGE" =~ @sha256:[a-f0-9]{64}$ ]]
+          [[ "$SSH_HOST" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ && "$SSH_USER" =~ ^[a-zA-Z_][a-zA-Z0-9_-]*$ ]]
+          [[ "$SSH_PORT" =~ ^[0-9]{1,5}$ && -n "$SSH_PRIVATE_KEY" && -n "$SSH_KNOWN_HOSTS" ]]
+          umask 077
+          ssh_dir=$(mktemp -d)
+          trap 'rm -rf "$ssh_dir"' EXIT
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$ssh_dir/key"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$ssh_dir/known_hosts"
+          ssh -o BatchMode=yes -o ConnectTimeout=15 -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$ssh_dir/known_hosts" \
+            -i "$ssh_dir/key" -p "$SSH_PORT" "${SSH_USER}@${SSH_HOST}" "deploy-oncc $IMAGE"

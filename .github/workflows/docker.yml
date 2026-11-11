@@ -6,14 +6,21 @@ name: Image Docker
 # rien de l'image.
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_call:
+    outputs:
+      image:
+        description: Référence immuable de l'image testée et publiée
+        value: ${{ jobs.build-and-smoke-test.outputs.image }}
 
 jobs:
   build-and-smoke-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.publish.outputs.image }}
 
     services:
       postgres:
@@ -32,9 +39,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Construire l'image
-        run: docker build -t oncc:ci .
+        run: |
+          touch .env deploy/dev-local/.env
+          docker build -t oncc:ci .
+
+      - name: Scanner l'image de production
+        uses: ./.github/actions/trivy
+        with:
+          target-type: image
+          target: oncc:ci
 
       - name: Vérifier que le CSS compilé contient les classes de pagination
         run: |
@@ -51,7 +68,7 @@ jobs:
         run: |
           # .env et bootstrap/cache/config.php contiennent APP_KEY et les mots
           # de passe : ils ne doivent jamais entrer dans une couche.
-          if docker run --rm oncc:ci sh -c 'test -f .env'; then
+          if docker run --rm oncc:ci sh -c 'test -f .env || test -f deploy/dev-local/.env'; then
             echo "::error::un fichier .env a été copié dans l'image"; exit 1
           fi
           if docker run --rm oncc:ci sh -c 'test -f bootstrap/cache/config.php'; then
@@ -222,3 +239,18 @@ jobs:
       - name: Journal du conteneur en cas d'échec
         if: failure()
         run: docker logs oncc || true
+
+      - name: Publier l'image testée
+        id: publish
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          repository="ghcr.io/${GITHUB_REPOSITORY,,}"
+          image="$repository:$GITHUB_SHA"
+          echo "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          docker tag oncc:ci "$image"
+          docker push "$image"
+          digest=$(docker image inspect "$image" --format '{{range .RepoDigests}}{{println .}}{{end}}' | grep -F "$repository@sha256:")
+          [[ "$digest" =~ @sha256:[a-f0-9]{64}$ ]]
+          echo "image=$digest" >> "$GITHUB_OUTPUT"

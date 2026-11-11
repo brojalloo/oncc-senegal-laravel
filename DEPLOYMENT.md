@@ -1,7 +1,7 @@
 # Déploiement — ONCC Sénégal
 
 L'application se déploie par conteneur. Le `Dockerfile` à la racine est la
-**seule** description du déploiement : il fonctionne sur toute plateforme
+description de l’image applicative : il fonctionne sur toute plateforme
 capable de lancer un conteneur et d'injecter un port (Railway, Render, Fly.io,
 Scaleway, Clever Cloud, ou un VPS avec Docker).
 
@@ -9,6 +9,27 @@ Les configurations spécifiques à une plateforme (`railway.json`, `render.yaml`
 `nixpacks.toml`, `app.json`, `Procfile`) ont été retirées : elles se
 contredisaient entre elles et rendaient impossible de savoir ce qui tournait
 réellement en production.
+
+## GitHub Actions et VPS
+
+Les pull requests vers `dev` ou `main` lancent les tests, les audits de dépendances et Trivy. Un push sur `dev` publie l'image de développement dans GHCR. Windows la récupère via la [tâche locale](deploy/dev-local/README.md). Un push sur `main` publie l'image de production testée sous son SHA, puis GitHub attend l'approbation de `brojalloo`. Le VPS récupère cette image par empreinte.
+
+1. Dans **Settings → Environments**, crée `production`. Ajoute `brojalloo` dans **Required reviewers**, limite les branches autorisées à `main` et désactive le contournement par les administrateurs. Laisse **Prevent self-review** désactivé pour que le propriétaire puisse valider un déploiement qu'il a déclenché.
+2. Dans cet environnement, crée les variables `SSH_HOST`, `SSH_USER` et, si nécessaire, `SSH_PORT`. Ajoute les secrets `SSH_PRIVATE_KEY` (clé dédiée) et `SSH_KNOWN_HOSTS` (clé d'hôte vérifiée sur le VPS, entrée `[hôte]:port` si le port diffère de 22).
+3. Sur un VPS Linux avec Docker Compose v2 et `flock`, installe `deploy/production/compose.yaml` et `deploy/production/deploy.sh` dans `/opt/oncc`. Donne au compte de déploiement l'accès à ce dossier et au moteur Docker. Dans son fichier `authorized_keys`, limite la clé GitHub à cette commande via `restrict,command="/opt/oncc/deploy.sh"` avant la clé publique. Si le paquet GHCR est privé, authentifie ce compte sur GHCR avec un accès de lecture au paquet.
+4. Crée `/opt/oncc/.env` (permissions 0600) avec la configuration ci-dessous. Configure le reverse proxy HTTPS vers `127.0.0.1:18081`, en écrasant les en-têtes de transfert reçus du client. Le port local peut être ajusté via `ONCC_BIND_PORT`. Rends PostgreSQL accessible depuis le conteneur et prévois une sauvegarde restaurable avant les migrations.
+5. Dans **Actions**, ouvre l'exécution du push sur `main`, puis **Review deployments → production → Approve and deploy**. Le job vérifie l'identité de l'approbateur, le commit courant de `main` et la clé d'hôte SSH. Il échoue avant toute connexion si la revue requise manque.
+
+Le script VPS attend l'état de santé du conteneur. En cas d'échec, il remet la dernière image validée lorsqu'elle existe. Les migrations PostgreSQL restent appliquées après ce retour arrière. Prépare des migrations compatibles avec la version précédente et teste séparément la restauration de PostgreSQL. Pour un retour manuel à une image précédente, exécute `/opt/oncc/deploy.sh ghcr.io/brojalloo/oncc-senegal-laravel@sha256:<empreinte>` sur le VPS.
+
+Pour initialiser le référentiel sur une base neuve, exécute depuis `/opt/oncc` :
+
+```bash
+ONCC_IMAGE="$(cat .current-image)" docker compose --env-file .env -f compose.yaml exec app \
+  php artisan db:seed --class=RegionSeeder --force
+```
+
+Les autres seeders génèrent des données de démonstration.
 
 ## Ce que fait l'image
 
@@ -142,17 +163,7 @@ refusé par le serveur SMTP est journalisé sans interrompre le reste du lot.
   que les URL générées et l'en-tête HSTS reflètent le HTTPS vu par le visiteur.
 - **Sessions chiffrées**, cookie `secure` à activer via `SESSION_SECURE_COOKIE`.
 
-## Ce qui n'est pas encore en place
+## Durcissement restant
 
-- **Trois avis de sécurité sur `laravel/framework`**, dont un de niveau élevé
-  (injection CRLF dans la règle de validation `email`, utilisée par les
-  formulaires de connexion, d'inscription et de réinitialisation). Ils ne sont
-  corrigés qu'à partir de Laravel 12.60 : aucune version des lignes 10 ou 11
-  n'apporte de correctif. Fermer ces avis suppose une montée de version majeure
-  du framework.
-- **La CSP autorise `'unsafe-inline'`** pour les scripts et les styles, neuf
-  vues comportant encore du code en ligne. La politique bloque l'injection de
-  scripts distants, l'encadrement en iframe et le détournement de formulaire,
-  mais pas un script injecté en ligne.
-- Optimisation des images et migration du framework vers Laravel 12 (phases
-  suivantes).
+- La CSP autorise encore certains scripts et styles en ligne. Migrer vers des nonces ou des fichiers compilés demande de vérifier les vues dans le navigateur.
+- Trivy affiche les vulnérabilités et bloque les alertes HIGH et CRITICAL pour lesquelles un correctif est disponible. Composer et npm conservent leurs audits séparés.

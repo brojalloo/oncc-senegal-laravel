@@ -13,6 +13,7 @@ services:
       PORT: 8080
       APP_NAME: ONCC Sénégal
       APP_ENV: local
+      ONCC_SKIP_EMAIL_VERIFICATION: "true"
       APP_DEBUG: "false"
       APP_URL: http://127.0.0.1:8080
       APP_LOCALE: fr
