@@ -1,0 +1,52 @@
+name: oncc-senegal-dev-local
+
+services:
+  app:
+    image: ${DEV_IMAGE:-ghcr.io/brojalloo/oncc-senegal-dev:dev}
+    build:
+      context: ../..
+      target: runtime
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      PORT: 8080
+      APP_NAME: ONCC Sénégal
+      APP_ENV: local
+      APP_DEBUG: "false"
+      APP_URL: http://127.0.0.1:8080
+      APP_LOCALE: fr
+      APP_KEY: ${ONCC_APP_KEY:?Lancez Sync-Dev.ps1 pour initialiser la configuration locale}
+      DB_CONNECTION: pgsql
+      DB_HOST: database
+      DB_DATABASE: oncc
+      DB_USERNAME: oncc
+      DB_PASSWORD: oncc-local
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      MAIL_MAILER: log
+    volumes:
+      - files:/app/storage/app
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: oncc
+      POSTGRES_USER: oncc
+      POSTGRES_PASSWORD: oncc-local
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -h 127.0.0.1 -U oncc -d oncc"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  db-data:
+  files:

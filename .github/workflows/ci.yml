@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -22,7 +25,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
 
       - name: Install Composer deps
         run: composer install --no-progress --no-suggest --prefer-dist
@@ -59,3 +62,57 @@ jobs:
 
       - name: Run npm audit
         run: npm audit --audit-level=moderate || true
+
+  docker-dev:
+    name: Docker local et publication dev
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      packages: write
+    concurrency:
+      group: docker-dev-${{ github.ref }}
+      cancel-in-progress: true
+    env:
+      COMPOSE_FILE: deploy/dev-local/compose.yaml
+      DEV_IMAGE: oncc-senegal-dev:ci
+      ONCC_APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Construire et démarrer les conteneurs
+        run: docker compose up --build --wait --wait-timeout 180
+
+      - name: Vérifier l’application via le port local
+        run: |
+          curl --fail --silent --show-error http://127.0.0.1:8080/login -o /tmp/login.html
+          grep -q 'name="_token"' /tmp/login.html
+          docker compose exec -T app php artisan migrate:status --no-ansi
+
+      - name: Journaux du démarrage
+        if: failure()
+        run: docker compose logs --no-color
+
+      - name: Arrêter la pile de test
+        if: always()
+        run: docker compose down --volumes
+
+      - name: Publier les images validées sur GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          registry="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}"
+          image="$registry/oncc-senegal-dev"
+          echo "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+
+          docker tag "$DEV_IMAGE" "$image:$GITHUB_SHA"
+          docker push "$image:$GITHUB_SHA"
+          if [ "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/dev" --jq .object.sha)" = "$GITHUB_SHA" ]; then
+            docker tag "$image:$GITHUB_SHA" "$image:dev"
+            docker push "$image:dev"
+          fi
