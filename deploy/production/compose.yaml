@@ -1,0 +1,27 @@
+name: oncc-senegal-production
+
+services:
+  app:
+    image: ${ONCC_IMAGE:?Lancez deploy.sh avec l'empreinte de l'image de production}
+    restart: unless-stopped
+    stop_grace_period: 11m
+    ports:
+      - "127.0.0.1:${ONCC_BIND_PORT:-18081}:8080"
+    env_file: .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      ONCC_SKIP_EMAIL_VERIFICATION: "false"
+      SESSION_SECURE_COOKIE: "true"
+      SESSION_ENCRYPT: "true"
+      DB_QUEUE_RETRY_AFTER: "660"
+      PORT: 8080
+    volumes:
+      - files:/app/storage/app
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  files:

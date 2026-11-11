@@ -1,0 +1,36 @@
+name: Scan Trivy
+description: Affiche les vulnérabilités et bloque les alertes HIGH ou CRITICAL corrigibles.
+inputs:
+  target-type:
+    description: Type de cible (fs ou image)
+    required: true
+  target:
+    description: Chemin ou image locale à analyser
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Installer Trivy et vérifier son empreinte
+      shell: bash
+      run: |
+        version=0.76.2
+        archive="trivy_${version}_Linux-64bit.tar.gz"
+        work=$(mktemp -d)
+        curl -fsSL --retry 3 -o "$work/$archive" "https://github.com/aquasecurity/trivy/releases/download/v$version/$archive"
+        echo "bc0fc726e017b8927a62b2d3531d7a84ee01769daf5c99ed866dced54089fdbf  $work/$archive" | sha256sum --check
+        tar -xzf "$work/$archive" -C "$work" trivy
+        echo "$work" >> "$GITHUB_PATH"
+
+    - name: Analyser les vulnérabilités
+      shell: bash
+      env:
+        TARGET_TYPE: ${{ inputs.target-type }}
+        TARGET: ${{ inputs.target }}
+        TRIVY_CACHE_DIR: ${{ runner.temp }}/oncc-trivy
+      run: |
+        options=()
+        if [[ "$TARGET_TYPE" == fs ]]; then
+          options+=(--include-dev-deps)
+        fi
+        trivy "$TARGET_TYPE" "${options[@]}" --scanners vuln --timeout 10m --exit-code 0 "$TARGET"
+        trivy "$TARGET_TYPE" "${options[@]}" --scanners vuln --timeout 10m --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 "$TARGET"

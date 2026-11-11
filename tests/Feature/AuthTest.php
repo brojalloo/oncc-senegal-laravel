@@ -39,6 +39,55 @@ class AuthTest extends TestCase
         Mail::assertQueued(VerifyEmail::class, fn ($mail) => $mail->hasTo($user->email));
     }
 
+    public function test_local_registration_can_sign_in_without_verifying_email(): void
+    {
+        $this->app->instance('env', 'local');
+        config(['auth.skip_email_verification' => true]);
+        $this->withSession(['_token' => 'csrf-test-token']);
+        Mail::fake();
+
+        $this->post('/register', [
+            '_token' => 'csrf-test-token',
+            'email' => 'demo@example.test',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'nom' => 'Diallo',
+            'prenom' => 'Awa',
+            'role' => 'chercheur',
+        ])->assertRedirect(route('login'));
+
+        $user = User::where('email', 'demo@example.test')->firstOrFail();
+        $this->assertSame('actif', $user->statut);
+        $this->assertNull($user->email_verified_at);
+        $this->assertNull($user->verification_token);
+        Mail::assertNothingQueued();
+
+        $this->post('/login', [
+            '_token' => 'csrf-test-token',
+            'email' => $user->email,
+            'password' => 'password123',
+        ])->assertRedirect(route('dashboard'));
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_production_blocks_unverified_login_even_when_the_local_option_is_enabled(): void
+    {
+        $this->app->instance('env', 'production');
+        config(['auth.skip_email_verification' => true]);
+        $this->withSession(['_token' => 'csrf-test-token']);
+        $user = User::factory()->unverified()->create([
+            'statut' => 'actif',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $this->post('/login', [
+            '_token' => 'csrf-test-token',
+            'email' => $user->email,
+            'password' => 'password123',
+        ])->assertSessionHasErrors('email');
+        $this->assertGuest();
+    }
+
     public function test_verify_email_activates_the_account_with_a_valid_token(): void
     {
         $user = User::factory()->unverified()->create([

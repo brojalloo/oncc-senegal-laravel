@@ -45,7 +45,9 @@ try {
     } else {
         $repository = 'ghcr.io/brojalloo/oncc-senegal-dev'
         Invoke-Docker pull "${repository}:dev"
-        $image = Invoke-Docker image inspect "${repository}:dev" --format '{{index .RepoDigests 0}}'
+        $image = Invoke-Docker image inspect "${repository}:dev" --format '{{range .RepoDigests}}{{println .}}{{end}}' |
+            Where-Object { $_ -like "$repository@sha256:*" } |
+            Select-Object -First 1
         if ($image -notlike "$repository@sha256:*") {
             throw "Empreinte de l'image introuvable pour $repository."
         }
