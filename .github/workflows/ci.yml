@@ -15,6 +15,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -63,9 +65,23 @@ jobs:
       - name: Run npm audit
         run: npm audit --audit-level=moderate
 
+  trivy-source:
+    name: Trivy (dépendances)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/trivy
+        with:
+          target-type: fs
+          target: .
+
   docker-dev:
     name: Docker local et publication dev
-    needs: build
+    needs: [build, trivy-source]
+    if: github.ref == 'refs/heads/dev' || github.base_ref == 'dev'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
@@ -86,6 +102,12 @@ jobs:
 
       - name: Construire et démarrer les conteneurs
         run: docker compose up --build --wait --wait-timeout 180
+
+      - name: Scanner l'image de développement
+        uses: ./.github/actions/trivy
+        with:
+          target-type: image
+          target: oncc-senegal-dev:ci
 
       - name: Vérifier l’application via le port local
         run: |
@@ -116,3 +138,21 @@ jobs:
             docker tag "$image:$GITHUB_SHA" "$image:dev"
             docker push "$image:dev"
           fi
+
+  docker-production:
+    needs: [build, trivy-source]
+    if: github.ref == 'refs/heads/main' || github.base_ref == 'main'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/docker.yml
+
+  deploy-production:
+    needs: docker-production
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      actions: read
+      contents: read
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image: ${{ needs.docker-production.outputs.image }}

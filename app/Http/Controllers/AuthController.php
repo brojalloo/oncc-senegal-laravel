@@ -37,7 +37,7 @@ class AuthController extends Controller
         }
 
         // Vérifier si le compte est activé
-        if (! $user->email_verified_at) {
+        if (! $user->email_verified_at && ! $this->skipsEmailVerification()) {
             return back()->withErrors(['email' => 'Votre compte n\'est pas encore activé. Veuillez vérifier votre email.'])
                 ->with('show_resend_activation', true)
                 ->with('resend_email', $user->email);
@@ -78,8 +78,7 @@ class AuthController extends Controller
             'telephone' => 'nullable|string|max:20',
         ]);
 
-        // Créer le token de vérification
-        $verificationToken = Str::random(64);
+        $skipVerification = $this->skipsEmailVerification();
 
         $user = User::create([
             'email' => $request->email,
@@ -89,13 +88,17 @@ class AuthController extends Controller
             'role' => $request->role,
             'region' => $request->region,
             'telephone' => $request->telephone,
-            'statut' => 'inactif',
+            'statut' => $skipVerification ? 'actif' : 'inactif',
             'email_verified_at' => null,
-            'verification_token' => $verificationToken,
-            'verification_token_expires' => now()->addHours(24),
+            'verification_token' => $skipVerification ? null : Str::random(64),
+            'verification_token_expires' => $skipVerification ? null : now()->addHours(24),
         ]);
 
-        // Envoyer l'email de vérification
+        if ($skipVerification) {
+            return redirect()->route('login')
+                ->with('success', 'Inscription réussie ! Vous pouvez maintenant vous connecter.');
+        }
+
         $this->sendVerificationEmail($user);
 
         return redirect()->route('login')
@@ -196,6 +199,11 @@ class AuthController extends Controller
 
         return redirect()->route('login')
             ->with('success', 'Vous avez été déconnecté avec succès.');
+    }
+
+    private function skipsEmailVerification(): bool
+    {
+        return app()->environment('local') && config('auth.skip_email_verification');
     }
 
     // Envoyer l'email de vérification
