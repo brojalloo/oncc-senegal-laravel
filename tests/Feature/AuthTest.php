@@ -43,9 +43,11 @@ class AuthTest extends TestCase
     {
         $this->app->instance('env', 'local');
         config(['auth.skip_email_verification' => true]);
+        $this->withSession(['_token' => 'csrf-test-token']);
         Mail::fake();
 
         $this->post('/register', [
+            '_token' => 'csrf-test-token',
             'email' => 'demo@example.test',
             'password' => 'password123',
             'password_confirmation' => 'password123',
@@ -61,6 +63,7 @@ class AuthTest extends TestCase
         Mail::assertNothingQueued();
 
         $this->post('/login', [
+            '_token' => 'csrf-test-token',
             'email' => $user->email,
             'password' => 'password123',
         ])->assertRedirect(route('dashboard'));
@@ -71,12 +74,14 @@ class AuthTest extends TestCase
     {
         $this->app->instance('env', 'production');
         config(['auth.skip_email_verification' => true]);
+        $this->withSession(['_token' => 'csrf-test-token']);
         $user = User::factory()->unverified()->create([
             'statut' => 'actif',
             'password' => bcrypt('password123'),
         ]);
 
         $this->post('/login', [
+            '_token' => 'csrf-test-token',
             'email' => $user->email,
             'password' => 'password123',
         ])->assertSessionHasErrors('email');
