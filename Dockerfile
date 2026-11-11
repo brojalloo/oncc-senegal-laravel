@@ -67,6 +67,7 @@ RUN apk add --no-cache nginx supervisor postgresql-libs \
         bcmath \
         zip \
         opcache \
+        pcntl \
     && apk del .build-deps \
     && apk add --no-cache libzip
 
