@@ -10,6 +10,8 @@ Ouvre [127.0.0.1:8080](http://127.0.0.1:8080). La commande télécharge la derni
 
 Si le paquet GHCR est privé, lance `docker --context desktop-linux login ghcr.io --username brojalloo` et utilise un jeton GitHub classique avec `read:packages` à l’invite du mot de passe. Tant que la première publication de `dev` n’a pas réussi, utilise la construction locale ci-dessous.
 
+Si une ancienne instance ONCC utilise déjà le port 8080, arrête-la avec `docker --context desktop-linux compose -f docker-compose.yml stop` depuis son propre dossier avant de démarrer celle-ci.
+
 ## Développer avec Docker
 
 Après avoir modifié le code, reconstruis l’image depuis le dépôt.
