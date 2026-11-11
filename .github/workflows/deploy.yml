@@ -83,6 +83,12 @@ jobs:
     - name: Install Dependencies (Production)
       run: composer install --prefer-dist --no-dev --no-progress --optimize-autoloader
 
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: npm
+
     - name: Build Assets
       run: |
         npm ci
